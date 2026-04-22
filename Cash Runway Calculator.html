@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cash Runway Calculator</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #F2EDE6;
+    --surface: #FAF7F2;
+    --surface2: #EDE6DA;
+    --border: #D5CABC;
+    --text: #1A1410;
+    --text2: #5C4F42;
+    --text3: #9A8E82;
+    --accent: #2A4A2E;
+    --navy: #1C2E45;
+    --burgundy: #6B1F2A;
+    --warn: #7A4A10;
+    --warn-light: #F5EDDB;
+    --danger-light: #F2E5E7;
+  }
+
+  body { font-family: 'Geist', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 2rem; }
+  .container { max-width: 900px; margin: 0 auto; }
+
+  header { margin-bottom: 2rem; }
+  header h1 { font-size: 1.1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--navy); margin-bottom: 0.3rem; }
+  header p { font-size: 0.82rem; color: var(--text3); }
+
+  .section-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text3); margin-bottom: 0.75rem; font-weight: 500; }
+
+  .top-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1rem; }
+  .card.navy-top { border-top: 3px solid var(--navy); }
+
+  .card label.field-label { display: block; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text3); margin-bottom: 0.5rem; font-weight: 500; }
+
+  input[type="number"], input[type="date"] {
+    width: 100%;
+    font-family: 'Geist Mono', monospace;
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: var(--text);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  input:focus { border-color: var(--navy); }
+
+  .toggle-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+
+  .toggle-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .toggle-card.active { border-color: var(--navy); }
+
+  .toggle-header { display: flex; align-items: center; justify-content: space-between; padding: 0.85rem 1rem; cursor: pointer; user-select: none; gap: 12px; }
+  .toggle-header:hover { background: var(--surface2); }
+
+  .toggle-title { font-size: 0.85rem; font-weight: 600; color: var(--text); }
+  .toggle-sub { font-size: 0.72rem; color: var(--text3); margin-top: 1px; }
+
+  .toggle-switch { position: relative; width: 36px; height: 20px; flex-shrink: 0; }
+  .toggle-switch input { opacity: 0; width: 0; height: 0; position: absolute; }
+  .toggle-track { position: absolute; inset: 0; background: var(--border); border-radius: 10px; transition: background 0.2s; cursor: pointer; }
+  .toggle-switch input:checked + .toggle-track { background: var(--navy); }
+  .toggle-knob { position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; background: white; border-radius: 50%; transition: transform 0.2s; pointer-events: none; }
+  .toggle-switch input:checked ~ .toggle-knob { transform: translateX(16px); }
+
+  .toggle-body { display: none; padding: 0.85rem 1rem 1rem; border-top: 1px solid var(--border); background: var(--surface2); }
+  .toggle-body.open { display: block; }
+
+  .field-row { display: grid; gap: 0.6rem; }
+  .field-row.two-col { grid-template-columns: 1fr 1fr; }
+  .field-row.three-col { grid-template-columns: 1fr 1fr 1fr; }
+  .field-row + .field-row { margin-top: 0.6rem; }
+
+  .field label.field-label { display: block; font-size: 0.63rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text3); margin-bottom: 0.3rem; font-weight: 500; }
+  .field input { font-size: 0.88rem; padding: 0.38rem 0.55rem; }
+
+  .metrics-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+  .metric { background: var(--surface); border: 1px solid var(--border); border-top: 3px solid var(--accent); border-radius: 10px; padding: 1rem; }
+  .metric-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text3); margin-bottom: 0.4rem; font-weight: 500; }
+  .metric-value { font-family: 'Geist Mono', monospace; font-size: 1.25rem; font-weight: 500; letter-spacing: -0.02em; }
+  .metric-value.good { color: var(--accent); }
+  .metric-value.warn { color: var(--warn); }
+  .metric-value.danger { color: var(--burgundy); }
+
+  .chart-card { background: var(--surface); border: 1px solid var(--border); border-top: 3px solid var(--navy); border-radius: 10px; padding: 1.5rem; margin-bottom: 1.5rem; }
+  .chart-wrapper { position: relative; height: 280px; }
+
+  .table-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 1.5rem; }
+  table { width: 100%; border-collapse: collapse; }
+  thead tr { background: var(--surface2); }
+  th { text-align: left; padding: 0.6rem 0.8rem; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text3); font-weight: 500; border-bottom: 1px solid var(--border); }
+  td { padding: 0.55rem 0.8rem; border-bottom: 1px solid var(--border); color: var(--text); font-size: 0.83rem; }
+  tr:last-child td { border-bottom: none; }
+  tr.row-warn td { background: var(--warn-light); }
+  tr.row-danger td { background: var(--danger-light); }
+  td.num { text-align: right; font-family: 'Geist Mono', monospace; font-size: 0.8rem; }
+  td.events { color: var(--text2); font-size: 0.77rem; }
+
+  .note { font-size: 0.78rem; color: var(--text3); background: var(--surface2); border-radius: 8px; padding: 0.75rem 1rem; border-left: 3px solid var(--border); margin-bottom: 1rem; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <h1>Cash Runway Calculator</h1>
+    <p>Toggle income and relief scenarios to model your runway in real time.</p>
+  </header>
+
+  <p class="section-label">Starting position</p>
+  <div class="top-grid">
+    <div class="card navy-top">
+      <label class="field-label">Starting cash balance ($)</label>
+      <input type="number" id="startCash" value="0" step="500" min="0">
+    </div>
+    <div class="card navy-top">
+      <label class="field-label">Start date</label>
+      <input type="date" id="startDate" value="">
+    </div>
+  </div>
+
+  <p class="section-label">Monthly expenses</p>
+  <div class="top-grid">
+    <div class="card navy-top">
+      <label class="field-label">Rent / mortgage ($)</label>
+      <input type="number" id="expMortgage" value="0" step="50" min="0">
+    </div>
+    <div class="card navy-top">
+      <label class="field-label">All other expenses ($)</label>
+      <input type="number" id="expOther" value="0" step="50" min="0">
+    </div>
+    <div class="card navy-top">
+      <label class="field-label">Health insurance ($)</label>
+      <input type="number" id="expHealth" value="0" step="25" min="0">
+    </div>
+    <div class="card navy-top">
+      <label class="field-label">Health insurance start date</label>
+      <input type="date" id="expHealthStart" value="">
+    </div>
+  </div>
+
+  <p class="section-label">Income &amp; relief scenarios</p>
+  <div class="toggle-cards">
+
+    <div class="toggle-card" id="card-forbear">
+      <div class="toggle-header" onclick="toggleCard('forbear')">
+        <div>
+          <div class="toggle-title">Mortgage forbearance</div>
+          <div class="toggle-sub">Temporarily pause mortgage payments</div>
+        </div>
+        <label class="toggle-switch" onclick="event.stopPropagation()">
+          <input type="checkbox" id="chk-forbear" onchange="syncCard('forbear'); render()">
+          <div class="toggle-track"></div>
+          <div class="toggle-knob"></div>
+        </label>
+      </div>
+      <div class="toggle-body" id="body-forbear">
+        <div class="field-row two-col">
+          <div class="field">
+            <label class="field-label">Start date</label>
+            <input type="date" id="forbear-start" value="" oninput="render()">
+          </div>
+          <div class="field">
+            <label class="field-label"># of months</label>
+            <input type="number" id="forbear-months" value="3" min="1" max="24" step="1" oninput="render()">
+          </div>
+        </div>
+        <div class="field-row" style="margin-top:0.6rem;">
+          <div class="field">
+            <label class="field-label">Monthly mortgage amount ($)</label>
+            <input type="number" id="forbear-amount" value="0" step="50" min="0" oninput="render()">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="toggle-card" id="card-unemp">
+      <div class="toggle-header" onclick="toggleCard('unemp')">
+        <div>
+          <div class="toggle-title">Unemployment benefits</div>
+          <div class="toggle-sub">Regular payments for a set period</div>
+        </div>
+        <label class="toggle-switch" onclick="event.stopPropagation()">
+          <input type="checkbox" id="chk-unemp" onchange="syncCard('unemp'); render()">
+          <div class="toggle-track"></div>
+          <div class="toggle-knob"></div>
+        </label>
+      </div>
+      <div class="toggle-body" id="body-unemp">
+        <div class="field-row">
+          <div class="field">
+            <label class="field-label">$/mo</label>
+            <input type="number" id="unemp-amount" value="0" step="25" min="0" oninput="render()">
+          </div>
+        </div>
+        <div class="field-row two-col" style="margin-top:0.6rem;">
+          <div class="field">
+            <label class="field-label">Start date</label>
+            <input type="date" id="unemp-start" value="" oninput="render()">
+          </div>
+          <div class="field">
+            <label class="field-label">End date</label>
+            <input type="date" id="unemp-end" value="" oninput="render()">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="toggle-card" id="card-consult">
+      <div class="toggle-header" onclick="toggleCard('consult')">
+        <div>
+          <div class="toggle-title">Consulting income</div>
+          <div class="toggle-sub">Regular monthly income from clients</div>
+        </div>
+        <label class="toggle-switch" onclick="event.stopPropagation()">
+          <input type="checkbox" id="chk-consult" onchange="syncCard('consult'); render()">
+          <div class="toggle-track"></div>
+          <div class="toggle-knob"></div>
+        </label>
+      </div>
+      <div class="toggle-body" id="body-consult">
+        <div class="field-row">
+          <div class="field">
+            <label class="field-label">$/mo</label>
+            <input type="number" id="consult-amount" value="0" step="250" min="0" oninput="render()">
+          </div>
+        </div>
+        <div class="field-row two-col" style="margin-top:0.6rem;">
+          <div class="field">
+            <label class="field-label">Start date</label>
+            <input type="date" id="consult-start" value="" oninput="render()">
+          </div>
+          <div class="field">
+            <label class="field-label">End date</label>
+            <input type="date" id="consult-end" value="" oninput="render()">
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="metrics-row">
+    <div class="metric">
+      <div class="metric-label">Starting balance</div>
+      <div class="metric-value" id="m-start">—</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Runway</div>
+      <div class="metric-value" id="m-runway">—</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Projected zero</div>
+      <div class="metric-value" id="m-zero">—</div>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <div class="chart-wrapper">
+      <canvas id="chart" role="img" aria-label="Line chart showing projected cash balance over time"></canvas>
+    </div>
+  </div>
+
+  <div class="note" id="scenario-note">Base scenario: expenses only, no additional income or relief.</div>
+
+  <div class="table-card">
+    <table>
+      <thead>
+        <tr>
+          <th>Month</th>
+          <th>Events</th>
+          <th class="num">Income</th>
+          <th class="num">Expenses</th>
+          <th class="num">Balance</th>
+        </tr>
+      </thead>
+      <tbody id="table-body"></tbody>
+    </table>
+  </div>
+
+  <p style="font-size:0.75rem; color:var(--text3); text-align:center;">Cash Runway Calculator &middot; Open in any browser &middot; No login required &middot; Free to use and share</p>
+
+</div>
+<script>
+const MAX_MONTHS = 24;
+let chartInstance = null;
+
+function syncCard(key) {
+  const open = document.getElementById('chk-' + key).checked;
+  document.getElementById('body-' + key).classList.toggle('open', open);
+  document.getElementById('card-' + key).classList.toggle('active', open);
+}
+
+function toggleCard(key) {
+  const chk = document.getElementById('chk-' + key);
+  chk.checked = !chk.checked;
+  syncCard(key);
+  render();
+}
+
+function parseDate(id) {
+  const v = document.getElementById(id).value;
+  if (!v) return null;
+  const [y, m, d] = v.split('-').map(Number);
+  return new Date(y, m - 1, d || 1);
+}
+
+function monthKey(d) { return d.getFullYear() * 100 + d.getMonth(); }
+
+function monthLabel(base, offset) {
+  const d = new Date(base.getFullYear(), base.getMonth() + offset, 1);
+  return d.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
+}
+
+function fmt(n) {
+  if (n < 0) return '-$' + Math.round(Math.abs(n)).toLocaleString();
+  return '$' + Math.round(n).toLocaleString();
+}
+
+function buildRows() {
+  const startCash  = parseFloat(document.getElementById('startCash').value);
+  if (!startCash || startCash <= 0) return [];
+  const mortgage   = parseFloat(document.getElementById('expMortgage').value) || 0;
+  const other      = parseFloat(document.getElementById('expOther').value) || 0;
+  const health     = parseFloat(document.getElementById('expHealth').value) || 0;
+  const healthStart = parseDate('expHealthStart');
+  const startDate  = parseDate('startDate') || new Date(2026, 3, 1);
+
+  const useForbear = document.getElementById('chk-forbear').checked;
+  const useUnemp   = document.getElementById('chk-unemp').checked;
+  const useConsult = document.getElementById('chk-consult').checked;
+
+  const forbearStart  = parseDate('forbear-start');
+  const forbearMonths = parseInt(document.getElementById('forbear-months').value) || 1;
+  const forbearAmt    = parseFloat(document.getElementById('forbear-amount').value) || 0;
+
+  const unempAmt   = parseFloat(document.getElementById('unemp-amount').value) || 0;
+  const unempStart = parseDate('unemp-start');
+  const unempEnd   = parseDate('unemp-end');
+
+  const consultAmt   = parseFloat(document.getElementById('consult-amount').value) || 0;
+  const consultStart = parseDate('consult-start');
+  const consultEnd   = parseDate('consult-end');
+
+  let balance = startCash;
+  const rows = [];
+
+  for (let i = 0; i < MAX_MONTHS; i++) {
+    const cur    = new Date(startDate.getFullYear(), startDate.getMonth() + i, 1);
+    const curKey = monthKey(cur);
+    const events = [];
+    let inflow = 0;
+    let saved  = 0;
+
+    if (useForbear && forbearStart) {
+      const fStart = monthKey(forbearStart);
+      const fEnd   = monthKey(new Date(forbearStart.getFullYear(), forbearStart.getMonth() + forbearMonths, 1));
+      if (curKey >= fStart && curKey < fEnd) {
+        saved += forbearAmt;
+        events.push('Forbearance saves ' + fmt(forbearAmt));
+      }
+    }
+
+    if (useUnemp && unempStart && unempEnd) {
+      if (curKey >= monthKey(unempStart) && curKey <= monthKey(unempEnd)) {
+        inflow += unempAmt;
+        events.push('Unemployment ' + fmt(unempAmt));
+      }
+    }
+
+    if (useConsult && consultStart && consultEnd) {
+      if (curKey >= monthKey(consultStart) && curKey <= monthKey(consultEnd)) {
+        inflow += consultAmt;
+        events.push('Consulting ' + fmt(consultAmt));
+      }
+    }
+
+    const healthActive = healthStart && curKey >= monthKey(healthStart);
+    const baseExp = mortgage + other + (healthActive ? health : 0);
+    if (healthActive && health > 0 && monthKey(healthStart) === curKey) events.push('Health insurance starts');
+    const outflow = baseExp - saved;
+    balance = balance + inflow - outflow;
+
+    rows.push({ label: monthLabel(startDate, i), events: events.join(' · ') || '\u2014', inflow, outflow, balance });
+    if (balance <= 0) break;
+  }
+  return rows;
+}
+
+function buildNote() {
+  const parts = [];
+  if (document.getElementById('chk-forbear').checked) parts.push('mortgage forbearance');
+  if (document.getElementById('chk-unemp').checked) parts.push('unemployment');
+  if (document.getElementById('chk-consult').checked) parts.push('consulting income');
+  return parts.length === 0
+    ? 'Base scenario — expenses only, no additional income or relief.'
+    : 'Active scenarios: ' + parts.join(', ') + '. All fields update the projection instantly.';
+}
+
+function render() {
+  const startCash = parseFloat(document.getElementById('startCash').value);
+  const rows = buildRows();
+
+  if (!startCash || startCash <= 0 || rows.length === 0) {
+    document.getElementById('m-start').textContent = '—';
+    document.getElementById('m-runway').textContent = '—';
+    document.getElementById('m-runway').className = 'metric-value';
+    document.getElementById('m-zero').textContent = '—';
+    document.getElementById('m-zero').className = 'metric-value';
+    document.getElementById('scenario-note').textContent = 'Enter a starting balance above to begin.';
+    document.getElementById('table-body').innerHTML = '';
+    if (chartInstance) { chartInstance.destroy(); chartInstance = null; }
+    return;
+  }
+  const last = rows[rows.length - 1];
+  const depleted = last.balance <= 0;
+  const months = rows.length;
+
+  document.getElementById('m-start').textContent = fmt(startCash);
+  document.getElementById('scenario-note').textContent = buildNote();
+
+  const cls = months <= 8 ? 'danger' : months <= 13 ? 'warn' : 'good';
+  const runEl  = document.getElementById('m-runway');
+  const zeroEl = document.getElementById('m-zero');
+  runEl.textContent  = depleted ? months + ' months' : months + '+ months';
+  zeroEl.textContent = depleted ? last.label : 'Beyond ' + months + ' mo';
+  runEl.className    = 'metric-value ' + (depleted ? cls : 'good');
+  zeroEl.className   = 'metric-value ' + (depleted ? cls : 'good');
+
+  const labels = rows.map(r => r.label);
+  const data   = rows.map(r => Math.max(r.balance, 0));
+  const pts    = rows.map(r => r.balance <= 0 ? '#6B1F2A' : r.balance < 10000 ? '#7A4A10' : '#2A4A2E');
+
+  if (chartInstance) chartInstance.destroy();
+  chartInstance = new Chart(document.getElementById('chart'), {
+    type: 'line',
+    data: { labels, datasets: [{ label: 'Cash balance', data, borderColor: '#1C2E45', backgroundColor: 'rgba(28,46,69,0.07)', pointBackgroundColor: pts, pointRadius: 5, pointHoverRadius: 7, tension: 0.3, fill: true, borderWidth: 2 }] },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { backgroundColor: '#1A1410', titleFont: { family: 'Geist', size: 11 }, bodyFont: { family: 'Geist Mono', size: 12 }, callbacks: { label: ctx => '  Balance: ' + fmt(ctx.raw) } } },
+      scales: {
+        y: { beginAtZero: true, ticks: { callback: v => '$' + Math.round(v/1000) + 'k', color: '#9A8E82', font: { family: 'Geist Mono', size: 11 } }, grid: { color: 'rgba(0,0,0,0.06)' } },
+        x: { ticks: { color: '#9A8E82', font: { family: 'Geist', size: 10 }, autoSkip: false, maxRotation: 45 }, grid: { display: false } }
+      }
+    }
+  });
+
+  document.getElementById('table-body').innerHTML = rows.map(r => `
+    <tr class="${r.balance <= 0 ? 'row-danger' : r.balance < 10000 ? 'row-warn' : ''}">
+      <td style="font-family:'Geist Mono',monospace;font-size:0.8rem;">${r.label}</td>
+      <td class="events">${r.events}</td>
+      <td class="num" style="color:#2A4A2E;">${r.inflow > 0 ? fmt(r.inflow) : '\u2014'}</td>
+      <td class="num" style="color:#6B1F2A;">${fmt(-r.outflow)}</td>
+      <td class="num" style="font-weight:500;">${fmt(r.balance)}</td>
+    </tr>`).join('');
+}
+
+['startCash','startDate','expMortgage','expOther','expHealth','expHealthStart'].forEach(id => {
+  document.getElementById(id).addEventListener('input', render);
+  document.getElementById(id).addEventListener('change', render);
+});
+
+render();
+</script>
+</body>
+</html>
