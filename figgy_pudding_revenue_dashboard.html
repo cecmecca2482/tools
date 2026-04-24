@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figgy Pudding — Revenue Opportunity</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green-dark: #27500A;
+    --green-mid: #3B6D11;
+    --green-light: #EAF3DE;
+    --green-accent: #97C459;
+    --pink-dark: #72243E;
+    --pink-light: #FBEAF0;
+    --coral-dark: #712B13;
+    --coral-light: #FAECE7;
+    --purple-dark: #3C3489;
+    --purple-light: #EEEDFB;
+    --gray-dark: #2C2C2A;
+    --gray-mid: #5F5E5A;
+    --gray-light: #F5F4F2;
+    --gray-border: #D0CEC9;
+    --white: #FFFFFF;
+    --cream: #FDFCFA;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--cream);
+    color: var(--gray-dark);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    background: var(--green-dark);
+    padding: 28px 48px 24px;
+    border-bottom: 3px solid var(--green-accent);
+  }
+  .site-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: -0.5px;
+  }
+  .site-header p {
+    font-size: 13px;
+    color: rgba(255,255,255,0.65);
+    margin-top: 4px;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  /* ── TABS ── */
+  .tab-bar {
+    background: var(--white);
+    border-bottom: 1px solid var(--gray-border);
+    display: flex;
+    padding: 0 48px;
+    gap: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .tab-btn {
+    padding: 16px 24px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gray-mid);
+    border: none;
+    border-bottom: 3px solid transparent;
+    background: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    font-size: 12px;
+  }
+  .tab-btn:hover { color: var(--green-mid); }
+  .tab-btn.active {
+    color: var(--green-dark);
+    border-bottom-color: var(--green-mid);
+  }
+
+  /* ── PANELS ── */
+  .tab-panel { display: none; padding: 40px 48px 60px; max-width: 1100px; margin: 0 auto; }
+  .tab-panel.active { display: block; }
+
+  /* ── TYPOGRAPHY ── */
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--green-dark);
+    margin-bottom: 8px;
+    margin-top: 40px;
+  }
+  .section-title:first-child { margin-top: 0; }
+  .section-sub {
+    font-size: 14px;
+    color: var(--gray-mid);
+    margin-bottom: 24px;
+    font-weight: 300;
+  }
+  .body-text {
+    font-size: 15px;
+    color: var(--gray-dark);
+    line-height: 1.75;
+    margin-bottom: 16px;
+    max-width: 72ch;
+  }
+
+  /* ── METRIC CARDS ── */
+  .metric-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .metric-card {
+    background: var(--white);
+    border: 1px solid var(--gray-border);
+    border-radius: 10px;
+    padding: 20px 24px;
+    border-top: 3px solid var(--green-mid);
+  }
+  .metric-card.coral { border-top-color: var(--coral-dark); }
+  .metric-card.pink  { border-top-color: var(--pink-dark); }
+  .metric-card.green { border-top-color: var(--green-mid); }
+  .metric-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--gray-mid); font-weight: 600; margin-bottom: 6px; }
+  .metric-value { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; line-height: 1; }
+  .metric-card.coral .metric-value { color: var(--coral-dark); }
+  .metric-card.pink  .metric-value { color: var(--pink-dark); }
+  .metric-card.green .metric-value { color: var(--green-dark); }
+  .metric-sub { font-size: 12px; color: var(--gray-mid); margin-top: 4px; }
+
+  /* ── SCENARIO TOGGLE ── */
+  .scenario-toggle {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+  }
+  .scn-btn {
+    padding: 8px 20px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1.5px solid transparent;
+    transition: all 0.18s;
+  }
+  .scn-btn.min { background: var(--coral-light); color: var(--coral-dark); border-color: var(--coral-dark); }
+  .scn-btn.min.inactive { background: var(--white); color: var(--gray-mid); border-color: var(--gray-border); }
+  .scn-btn.mod { background: var(--pink-light); color: var(--pink-dark); border-color: var(--pink-dark); }
+  .scn-btn.mod.inactive { background: var(--white); color: var(--gray-mid); border-color: var(--gray-border); }
+  .scn-btn.hi  { background: var(--green-light); color: var(--green-dark); border-color: var(--green-mid); }
+  .scn-btn.hi.inactive  { background: var(--white); color: var(--gray-mid); border-color: var(--gray-border); }
+
+  /* ── TABLES ── */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin-bottom: 32px;
+  }
+  .data-table th {
+    background: var(--green-dark);
+    color: var(--white);
+    padding: 10px 14px;
+    text-align: right;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.3px;
+  }
+  .data-table th:first-child { text-align: left; min-width: 180px; }
+  .data-table td {
+    padding: 9px 14px;
+    text-align: right;
+    border-bottom: 1px solid var(--gray-border);
+  }
+  .data-table td:first-child { text-align: left; font-weight: 400; }
+  .data-table tr:nth-child(even) td { background: var(--gray-light); }
+  .data-table tr.section-row td {
+    background: var(--green-light);
+    color: var(--green-dark);
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 7px 14px;
+  }
+  .data-table tr.total-row td {
+    background: var(--green-dark);
+    color: var(--white);
+    font-weight: 700;
+    font-size: 15px;
+    border-bottom: none;
+  }
+  .data-table tr.memo-row td {
+    background: var(--gray-light);
+    color: var(--gray-mid);
+    font-size: 12px;
+    font-style: italic;
+    padding: 6px 14px;
+  }
+  .data-table tr:hover td:not(.section-row td) { background: rgba(59,109,17,0.04); }
+  .data-table tr.total-row:hover td { background: var(--green-dark); }
+
+  /* ── CHART CONTAINERS ── */
+  .chart-wrap {
+    background: var(--white);
+    border: 1px solid var(--gray-border);
+    border-radius: 10px;
+    padding: 28px 28px 20px;
+    margin-bottom: 28px;
+  }
+  .chart-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--green-dark);
+    margin-bottom: 4px;
+  }
+  .chart-sub {
+    font-size: 12px;
+    color: var(--gray-mid);
+    margin-bottom: 20px;
+  }
+  .chart-canvas-wrap {
+    position: relative;
+    width: 100%;
+  }
+
+  /* ── LEGEND ── */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 16px;
+    font-size: 12px;
+    color: var(--gray-mid);
+  }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-swatch { width: 12px; height: 12px; border-radius: 2px; flex-shrink: 0; }
+
+  /* ── INSIGHT CARDS ── */
+  .insight-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 32px; }
+  .insight-card {
+    background: var(--white);
+    border: 1px solid var(--gray-border);
+    border-radius: 10px;
+    padding: 20px 22px;
+    border-left: 4px solid var(--green-mid);
+  }
+  .insight-card:nth-child(2) { border-left-color: var(--pink-dark); }
+  .insight-card:nth-child(3) { border-left-color: var(--coral-dark); }
+  .insight-card:nth-child(4) { border-left-color: var(--purple-dark); }
+  .insight-card:nth-child(5) { border-left-color: var(--green-mid); grid-column: 1 / -1; }
+  .insight-title { font-weight: 600; font-size: 14px; margin-bottom: 8px; color: var(--gray-dark); }
+  .insight-body { font-size: 13px; color: var(--gray-mid); line-height: 1.65; }
+
+  /* ── DIVIDER ── */
+  .divider { border: none; border-top: 1px solid var(--gray-border); margin: 32px 0; }
+
+  /* ── REQUIREMENT GRID ── */
+  .req-grid { display: grid; grid-template-columns: 120px 1fr; gap: 0; border: 1px solid var(--gray-border); border-radius: 10px; overflow: hidden; margin-bottom: 32px; }
+  .req-label { background: var(--green-dark); color: var(--white); font-weight: 600; font-size: 13px; padding: 14px 16px; display: flex; align-items: center; }
+  .req-value { background: var(--white); padding: 14px 18px; font-size: 14px; color: var(--gray-dark); border-bottom: 1px solid var(--gray-border); }
+  .req-label:last-of-type, .req-value:last-of-type { border-bottom: none; }
+  .req-grid > div:nth-child(4n+3) .req-value,
+  .req-grid > div:nth-child(4n+4) { background: var(--gray-light); }
+
+  /* ── CONFIDENTIAL FOOTER ── */
+  .doc-footer {
+    background: var(--green-dark);
+    color: rgba(255,255,255,0.5);
+    text-align: center;
+    padding: 16px;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+  }
+
+  @media (max-width: 700px) {
+    .site-header, .tab-bar, .tab-panel { padding-left: 20px; padding-right: 20px; }
+    .metric-row, .insight-grid { grid-template-columns: 1fr; }
+    .insight-card:nth-child(5) { grid-column: 1; }
+    .req-grid { grid-template-columns: 100px 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <h1>Figgy Pudding</h1>
+  <p>Revenue Opportunity &nbsp;·&nbsp; Five-Year Model &nbsp;·&nbsp; April 2026 &nbsp;·&nbsp; Confidential</p>
+</header>
+
+<nav class="tab-bar">
+  <button class="tab-btn active" onclick="showTab('summary', this)">Executive Summary</button>
+  <button class="tab-btn" onclick="showTab('model', this)">Revenue Model</button>
+  <button class="tab-btn" onclick="showTab('charts', this)">Charts</button>
+</nav>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- TAB 1: EXECUTIVE SUMMARY                              -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="tab-summary" class="tab-panel active">
+
+  <p class="body-text">Figgy Pudding is a premium Christmas editorial, planning, and retail platform targeting the passionate Christmas enthusiast market. US holiday retail spending surpassed $1 trillion in 2025. The global Christmas decoration market exceeds $7 billion annually. Despite this scale, no single destination combines editorial content, personal planning tools, community, local discovery, and retail in one beautifully made product.</p>
+  <p class="body-text">The business model is diversified across ten revenue streams. No single stream carries the model — each reinforces the others as the audience grows.</p>
+
+  <hr class="divider">
+  <h2 class="section-title">Three-Scenario Overview — Year 5</h2>
+  <p class="section-sub">Gross revenue before operating expenses. Full year-by-year detail on the Revenue Model tab.</p>
+
+  <div class="metric-row">
+    <div class="metric-card coral">
+      <div class="metric-label">Minimal scenario</div>
+      <div class="metric-value">$171k</div>
+      <div class="metric-sub">2,500 members · 88k sessions/mo</div>
+    </div>
+    <div class="metric-card pink">
+      <div class="metric-label">Modest scenario</div>
+      <div class="metric-value">$1.21M</div>
+      <div class="metric-sub">12,000 members · 420k sessions/mo</div>
+    </div>
+    <div class="metric-card green">
+      <div class="metric-label">High success scenario</div>
+      <div class="metric-value">$7.53M</div>
+      <div class="metric-sub">50,000 members · 1.75M sessions/mo</div>
+    </div>
+  </div>
+
+  <div class="metric-row">
+    <div class="metric-card coral">
+      <div class="metric-label">5-year cumulative · Minimal</div>
+      <div class="metric-value">$317k</div>
+      <div class="metric-sub">CAGR 178%</div>
+    </div>
+    <div class="metric-card pink">
+      <div class="metric-label">5-year cumulative · Modest</div>
+      <div class="metric-value">$2.04M</div>
+      <div class="metric-sub">CAGR 247%</div>
+    </div>
+    <div class="metric-card green">
+      <div class="metric-label">5-year cumulative · High</div>
+      <div class="metric-value">$11.5M</div>
+      <div class="metric-sub">CAGR 335%</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+  <h2 class="section-title">Key Insights</h2>
+  <p class="section-sub">What the model reveals about the business.</p>
+
+  <div class="insight-grid">
+    <div class="insight-card">
+      <div class="insight-title">Membership is the anchor, not the ceiling</div>
+      <div class="insight-body">Membership fees represent 77% of Year 1 revenue but fall to just 15% in Year 5 (high scenario) as affiliate commerce, print on demand, the storefront, and advertising scale with traffic. The business becomes progressively less dependent on membership as it matures.</div>
+    </div>
+    <div class="insight-card">
+      <div class="insight-title">Traffic is the real multiplier</div>
+      <div class="insight-body">Six of ten revenue streams scale with site traffic, not member count. Affiliate links, print on demand, the storefront, and display advertising are all open to non-members. At 1.75M monthly sessions in Year 5, the non-member audience generates more revenue than the member base alone.</div>
+    </div>
+    <div class="insight-card">
+      <div class="insight-title">Phase 2–3 retail streams are where serious money lives</div>
+      <div class="insight-body">The curated storefront ($1.4M), affiliate commerce ($2.2M), and print on demand ($1.4M) collectively dwarf membership in the high scenario by Year 5. These streams require audience scale to unlock but compound rapidly once reached — directly analogous to The Knot's retail model.</div>
+    </div>
+    <div class="insight-card">
+      <div class="insight-title">Brand partnerships are high-margin and underestimated</div>
+      <div class="insight-body">$392k in Year 5 (high scenario) from 14 partnerships at $28k average value. Near-100% margin once audience is established. This stream grows with reputation and trust, not just traffic — making it more durable than ad-supported revenue.</div>
+    </div>
+    <div class="insight-card">
+      <div class="insight-title">The modest scenario is the honest base case</div>
+      <div class="insight-body">The modest scenario — 12,000 members and $1.21M annual revenue by Year 5 — assumes steady but unspectacular execution: good content, growing Pinterest presence, a community gaining momentum. It does not require viral moments or press coverage. It requires consistency over four years. This is the number to plan against.</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+  <h2 class="section-title">What This Requires</h2>
+
+  <div class="req-grid">
+    <div class="req-label">Capital</div>
+    <div class="req-value">Minimal. Buildable with no-code tools (Squarespace/Showit + Memberful) and AI-assisted content production. Domain secured. Phase 1 requires primarily time and creative output.</div>
+    <div class="req-label">Content</div>
+    <div class="req-value">54 editorial articles at launch across three pillars. 3–4 articles per week from July through September 2026. AI-assisted research and drafting with founder editorial judgment and voice.</div>
+    <div class="req-label">Audience</div>
+    <div class="req-value">Pinterest (primary organic channel), Facebook community group, email list with lead magnet. All buildable before site launch. Affiliate infrastructure (Amazon Associates, ShareASale) live before first article published.</div>
+    <div class="req-label">Timeline</div>
+    <div class="req-value">Phase 1: founding members and live site by Christmas 2026. Phase 2 (full retail, community): 2027. Phase 3 (local discovery, brand partnerships, UK): 2027–2028.</div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- TAB 2: REVENUE MODEL                                  -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="tab-model" class="tab-panel">
+
+  <h2 class="section-title">Year-by-Year Revenue Model</h2>
+  <p class="section-sub">Select a scenario to view the full breakdown. Blue input assumptions are documented in the accompanying spreadsheet.</p>
+
+  <div class="scenario-toggle">
+    <button class="scn-btn min" id="btn-min" onclick="showScenario('min')">Minimal</button>
+    <button class="scn-btn mod inactive" id="btn-mod" onclick="showScenario('mod')">Modest</button>
+    <button class="scn-btn hi inactive" id="btn-hi" onclick="showScenario('hi')">High Success</button>
+  </div>
+
+  <div id="model-min">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Revenue Stream</th>
+          <th>2026</th><th>2027</th><th>2028</th><th>2029</th><th>2030</th><th>5-Yr Total</th>
+        </tr>
+      </thead>
+      <tbody id="tbody-min"></tbody>
+    </table>
+    <div style="font-size:12px;color:var(--gray-mid);font-style:italic;margin-top:-20px;margin-bottom:32px;">† Available to non-members. Revenue not gated by membership count alone.</div>
+  </div>
+
+  <div id="model-mod" style="display:none">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Revenue Stream</th>
+          <th>2026</th><th>2027</th><th>2028</th><th>2029</th><th>2030</th><th>5-Yr Total</th>
+        </tr>
+      </thead>
+      <tbody id="tbody-mod"></tbody>
+    </table>
+    <div style="font-size:12px;color:var(--gray-mid);font-style:italic;margin-top:-20px;margin-bottom:32px;">† Available to non-members. Revenue not gated by membership count alone.</div>
+  </div>
+
+  <div id="model-hi" style="display:none">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Revenue Stream</th>
+          <th>2026</th><th>2027</th><th>2028</th><th>2029</th><th>2030</th><th>5-Yr Total</th>
+        </tr>
+      </thead>
+      <tbody id="tbody-hi"></tbody>
+    </table>
+    <div style="font-size:12px;color:var(--gray-mid);font-style:italic;margin-top:-20px;margin-bottom:32px;">† Available to non-members. Revenue not gated by membership count alone.</div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- TAB 3: CHARTS                                         -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="tab-charts" class="tab-panel">
+
+  <div class="chart-wrap">
+    <div class="chart-title">Total annual revenue — all three scenarios</div>
+    <div class="chart-sub">2026–2030 · Gross revenue before expenses</div>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-swatch" style="background:#993C1D"></div>Minimal</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:#72243E"></div>Modest</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:#27500A"></div>High success</div>
+    </div>
+    <div class="chart-canvas-wrap" style="height:300px">
+      <canvas id="chartTotals" role="img" aria-label="Line chart of total annual revenue 2026 to 2030 across three scenarios"></canvas>
+    </div>
+  </div>
+
+  <div class="chart-wrap">
+    <div class="chart-title">Year 5 revenue by stream — scenario comparison</div>
+    <div class="chart-sub">2030 · Stacked bar showing revenue mix in each scenario</div>
+    <div class="legend" id="stream-legend"></div>
+    <div class="chart-canvas-wrap" style="height:320px">
+      <canvas id="chartStreams" role="img" aria-label="Stacked bar chart showing year 5 revenue breakdown by stream for each scenario"></canvas>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+    <div class="chart-wrap">
+      <div class="chart-title">5-year cumulative revenue</div>
+      <div class="chart-sub">Total 2026–2030 across scenarios</div>
+      <div class="chart-canvas-wrap" style="height:240px">
+        <canvas id="chartCumulative" role="img" aria-label="Bar chart of 5-year cumulative revenue by scenario"></canvas>
+      </div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">Membership as % of total revenue</div>
+      <div class="chart-sub">How reliance on membership declines over time</div>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-swatch" style="background:#993C1D"></div>Minimal</div>
+        <div class="legend-item"><div class="legend-swatch" style="background:#72243E"></div>Modest</div>
+        <div class="legend-item"><div class="legend-swatch" style="background:#27500A"></div>High</div>
+      </div>
+      <div class="chart-canvas-wrap" style="height:200px">
+        <canvas id="chartMemPct" role="img" aria-label="Line chart showing membership as percentage of total revenue declining over 5 years"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="chart-wrap">
+    <div class="chart-title">Revenue per paying member — all scenarios</div>
+    <div class="chart-sub">Total revenue ÷ members — shows how non-member traffic and retail amplify value per member over time</div>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-swatch" style="background:#993C1D"></div>Minimal</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:#72243E"></div>Modest</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:#27500A"></div>High success</div>
+    </div>
+    <div class="chart-canvas-wrap" style="height:260px">
+      <canvas id="chartRpm" role="img" aria-label="Line chart showing revenue per member increasing over 5 years in each scenario"></canvas>
+    </div>
+  </div>
+
+</div>
+
+<footer class="doc-footer">
+  Figgy Pudding &nbsp;·&nbsp; Revenue Opportunity &nbsp;·&nbsp; April 2026 &nbsp;·&nbsp; Confidential — Not for distribution &nbsp;·&nbsp; figgy-pudding.com
+</footer>
+
+<script>
+// ── DATA ────────────────────────────────────────────────────
+const YEARS = [2026, 2027, 2028, 2029, 2030];
+
+const DATA = {
+  min: {
+    totals:  [2864, 11992, 41270, 89955, 171366],
+    members: [100, 300, 800, 1500, 2500],
+    streams: {
+      'Membership fees':            [2200, 6600, 17600, 33000, 55000],
+      'Affiliate commerce †':       [336, 1270, 5618, 14580, 30240],
+      'Shoppable wishlist †':       [38, 131, 500, 1021, 2308],
+      'Premium templates':          [35, 126, 448, 900, 1600],
+      'Print on demand †':          [194, 700, 3072, 7841, 20212],
+      'Curated storefront †':       [0, 450, 1872, 5613, 12705],
+      'Artisan marketplace †':      [0, 0, 3600, 7800, 14000],
+      'Local vendor listings †':    [0, 0, 1600, 4500, 9000],
+      'Brand partnerships':         [0, 2500, 6000, 12000, 20000],
+      'Display advertising †':      [60, 216, 960, 2700, 6300],
+    }
+  },
+  mod: {
+    totals:  [8342, 47917, 200402, 572322, 1210727],
+    members: [250, 1000, 3000, 7000, 12000],
+    streams: {
+      'Membership fees':            [5500, 22000, 66000, 154000, 264000],
+      'Affiliate commerce †':       [1605, 7949, 36288, 124740, 294840],
+      'Shoppable wishlist †':       [165, 1026, 3564, 11360, 21289],
+      'Premium templates':          [131, 720, 2400, 6930, 12960],
+      'Print on demand †':          [760, 4118, 20790, 71850, 167580],
+      'Curated storefront †':       [0, 2904, 15660, 54432, 142178],
+      'Artisan marketplace †':      [0, 0, 11200, 27900, 52800],
+      'Local vendor listings †':    [0, 0, 5700, 15750, 32200],
+      'Brand partnerships':         [0, 8000, 28000, 60000, 112000],
+      'Display advertising †':      [180, 1200, 10800, 45360, 110880],
+    }
+  },
+  hi: {
+    totals:  [21012, 183813, 877042, 2889030, 7530840],
+    members: [500, 3000, 10000, 25000, 50000],
+    streams: {
+      'Membership fees':            [11000, 66000, 220000, 550000, 1100000],
+      'Affiliate commerce †':       [6048, 45360, 224640, 816750, 2216760],
+      'Shoppable wishlist †':       [564, 5292, 24300, 75600, 195000],
+      'Premium templates':          [400, 2880, 12150, 33750, 80000],
+      'Print on demand †':          [2520, 20529, 114912, 449280, 1358280],
+      'Curated storefront †':       [0, 15552, 99840, 428400, 1360800],
+      'Artisan marketplace †':      [0, 0, 24000, 61250, 114000],
+      'Local vendor listings †':    [0, 0, 13200, 40000, 84000],
+      'Brand partnerships':         [0, 21000, 84000, 200000, 392000],
+      'Display advertising †':      [480, 7200, 60000, 234000, 630000],
+    }
+  }
+};
+
+const STREAM_COLORS = [
+  '#27500A','#3B6D11','#639922','#97C459',
+  '#72243E','#993556','#3C3489','#534AB7',
+  '#993C1D','#444441'
+];
+
+const SESSION_LABELS = {
+  min: ['2k','6k','20k','45k','88k'],
+  mod: ['5k','20k','75k','210k','420k'],
+  hi:  ['10k','60k','250k','750k','1.75M']
+};
+
+// ── FORMAT ──────────────────────────────────────────────────
+function fmtDollar(v) {
+  if (v === 0) return '—';
+  if (v >= 1000000) return '$' + (v/1000000).toFixed(2) + 'M';
+  if (v >= 1000) return '$' + Math.round(v/1000) + 'k';
+  return '$' + v.toLocaleString();
+}
+function fmtTick(v) {
+  if (v >= 1000000) return '$' + (v/1000000).toFixed(1) + 'M';
+  if (v >= 1000) return '$' + Math.round(v/1000) + 'k';
+  return '$' + v;
+}
+
+// ── BUILD TABLES ────────────────────────────────────────────
+function buildTable(scnKey) {
+  const scn = DATA[scnKey];
+  const tbody = document.getElementById('tbody-' + scnKey);
+  if (!tbody || tbody.innerHTML !== '') return;
+
+  const rows = [];
+
+  // Memo: members
+  const memRow = document.createElement('tr');
+  memRow.className = 'memo-row';
+  memRow.innerHTML = `<td>Paid members (year-end)</td>` +
+    scn.members.map(v => `<td>${v.toLocaleString()}</td>`).join('') +
+    `<td></td>`;
+  rows.push(memRow);
+
+  // Memo: sessions
+  const sessRow = document.createElement('tr');
+  sessRow.className = 'memo-row';
+  sessRow.innerHTML = `<td>Monthly sessions</td>` +
+    SESSION_LABELS[scnKey].map(v => `<td>${v}</td>`).join('') +
+    `<td></td>`;
+  rows.push(sessRow);
+
+  // Section header
+  const secRow = document.createElement('tr');
+  secRow.className = 'section-row';
+  secRow.innerHTML = `<td colspan="7">Revenue streams</td>`;
+  rows.push(secRow);
+
+  // Stream rows
+  Object.entries(scn.streams).forEach(([name, vals]) => {
+    const total = vals.reduce((a,b) => a+b, 0);
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${name}</td>` +
+      vals.map(v => `<td>${fmtDollar(v)}</td>`).join('') +
+      `<td style="font-weight:600">${fmtDollar(total)}</td>`;
+    rows.push(tr);
+  });
+
+  // Total row
+  const totalVals = YEARS.map((_,j) => Object.values(scn.streams).reduce((a,s) => a+s[j], 0));
+  const grandTotal = totalVals.reduce((a,b) => a+b, 0);
+  const totTr = document.createElement('tr');
+  totTr.className = 'total-row';
+  totTr.innerHTML = `<td>TOTAL ANNUAL REVENUE</td>` +
+    totalVals.map(v => `<td>${fmtDollar(v)}</td>`).join('') +
+    `<td>${fmtDollar(grandTotal)}</td>`;
+  rows.push(totTr);
+
+  rows.forEach(r => tbody.appendChild(r));
+}
+
+['min','mod','hi'].forEach(buildTable);
+
+// ── TAB SWITCHING ────────────────────────────────────────────
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+  if (id === 'charts' && !window.chartsBuilt) buildCharts();
+}
+
+// ── SCENARIO SWITCHING ───────────────────────────────────────
+function showScenario(scn) {
+  ['min','mod','hi'].forEach(s => {
+    document.getElementById('model-' + s).style.display = s === scn ? '' : 'none';
+    const btn = document.getElementById('btn-' + s);
+    if (s === scn) btn.classList.remove('inactive');
+    else btn.classList.add('inactive');
+  });
+}
+
+// ── CHARTS ──────────────────────────────────────────────────
+window.chartsBuilt = false;
+
+function buildCharts() {
+  window.chartsBuilt = true;
+
+  const gridColor = 'rgba(128,128,128,0.1)';
+
+  // 1. Total revenue line chart
+  new Chart(document.getElementById('chartTotals'), {
+    type: 'line',
+    data: {
+      labels: YEARS,
+      datasets: [
+        { label:'Minimal',      data: DATA.min.totals, borderColor:'#993C1D', backgroundColor:'rgba(153,60,29,0.06)', tension:0.35, borderWidth:2.5, pointRadius:5, pointBackgroundColor:'#993C1D' },
+        { label:'Modest',       data: DATA.mod.totals, borderColor:'#72243E', backgroundColor:'rgba(114,36,62,0.06)', tension:0.35, borderWidth:2.5, pointRadius:5, pointBackgroundColor:'#72243E' },
+        { label:'High success', data: DATA.hi.totals,  borderColor:'#27500A', backgroundColor:'rgba(39,80,10,0.06)',  tension:0.35, borderWidth:2.5, pointRadius:5, pointBackgroundColor:'#27500A' },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { ticks: { callback: fmtTick }, grid: { color: gridColor } },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+
+  // 2. Year 5 stacked bar by stream
+  const streamNames = Object.keys(DATA.min.streams);
+  const legend = document.getElementById('stream-legend');
+  streamNames.forEach((name, i) => {
+    const item = document.createElement('div');
+    item.className = 'legend-item';
+    item.innerHTML = `<div class="legend-swatch" style="background:${STREAM_COLORS[i]}"></div>${name.replace(' †','')}`;
+    legend.appendChild(item);
+  });
+
+  new Chart(document.getElementById('chartStreams'), {
+    type: 'bar',
+    data: {
+      labels: ['Minimal', 'Modest', 'High success'],
+      datasets: streamNames.map((name, i) => ({
+        label: name.replace(' †',''),
+        data: [DATA.min.streams[name][4], DATA.mod.streams[name][4], DATA.hi.streams[name][4]],
+        backgroundColor: STREAM_COLORS[i]
+      }))
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { stacked: true, grid: { display: false } },
+        y: { stacked: true, ticks: { callback: fmtTick }, grid: { color: gridColor } }
+      }
+    }
+  });
+
+  // 3. Cumulative bar
+  const cums = ['min','mod','hi'].map(k => DATA[k].totals.reduce((a,b)=>a+b,0));
+  new Chart(document.getElementById('chartCumulative'), {
+    type: 'bar',
+    data: {
+      labels: ['Minimal', 'Modest', 'High success'],
+      datasets: [{ label:'5-yr total', data: cums, backgroundColor: ['#993C1D','#72243E','#27500A'] }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { display: false } },
+        y: { ticks: { callback: fmtTick }, grid: { color: gridColor } }
+      }
+    }
+  });
+
+  // 4. Membership % of total
+  const memPctData = ['min','mod','hi'].map(k =>
+    YEARS.map((_,j) => {
+      const mem = DATA[k].streams['Membership fees'][j];
+      const tot = DATA[k].totals[j];
+      return tot > 0 ? Math.round((mem/tot)*100) : 0;
+    })
+  );
+  new Chart(document.getElementById('chartMemPct'), {
+    type: 'line',
+    data: {
+      labels: YEARS,
+      datasets: [
+        { label:'Minimal', data: memPctData[0], borderColor:'#993C1D', tension:0.35, borderWidth:2, pointRadius:4, pointBackgroundColor:'#993C1D' },
+        { label:'Modest',  data: memPctData[1], borderColor:'#72243E', tension:0.35, borderWidth:2, pointRadius:4, pointBackgroundColor:'#72243E' },
+        { label:'High',    data: memPctData[2], borderColor:'#27500A', tension:0.35, borderWidth:2, pointRadius:4, pointBackgroundColor:'#27500A' },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { ticks: { callback: v => v+'%' }, min: 0, max: 100, grid: { color: gridColor } },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+
+  // 5. Revenue per member
+  const rpmData = ['min','mod','hi'].map(k =>
+    YEARS.map((_,j) => {
+      const m = DATA[k].members[j];
+      return m > 0 ? Math.round(DATA[k].totals[j] / m) : 0;
+    })
+  );
+  new Chart(document.getElementById('chartRpm'), {
+    type: 'line',
+    data: {
+      labels: YEARS,
+      datasets: [
+        { label:'Minimal', data: rpmData[0], borderColor:'#993C1D', tension:0.35, borderWidth:2.5, pointRadius:5, pointBackgroundColor:'#993C1D', fill: false },
+        { label:'Modest',  data: rpmData[1], borderColor:'#72243E', tension:0.35, borderWidth:2.5, pointRadius:5, pointBackgroundColor:'#72243E', fill: false },
+        { label:'High',    data: rpmData[2], borderColor:'#27500A', tension:0.35, borderWidth:2.5, pointRadius:5, pointBackgroundColor:'#27500A', fill: false },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { ticks: { callback: v => '$'+v.toLocaleString() }, grid: { color: gridColor } },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+}
+</script>
+</body>
+</html>
