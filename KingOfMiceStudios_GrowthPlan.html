@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>King of Mice Studios — A Plan for Carolee</title>
+<link href="https://fonts.googleapis.com/css2?family=Satisfy&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Nunito:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --midnight: #0d2e3a;
+    --deep-teal: #0e4a5a;
+    --teal: #1a7a8a;
+    --teal-light: #2aaabf;
+    --teal-glow: #5dd4e8;
+    --sky: #c8eef8;
+    --sky-bright: #e8f8ff;
+    --forest: #1a4a20;
+    --forest-mid: #2d7a36;
+    --leaf: #5ab462;
+    --moon-gold: #e8c84a;
+    --moon-warm: #f5e4a0;
+    --purple: #7a4fa0;
+    --purple-soft: #c09de0;
+    --rose: #d4708a;
+    --cream: #f8fcfe;
+    --text-dark: #0d2e3a;
+    --text-mid: #1a5060;
+    --text-light: #3a8090;
+    --star: #fffde8;
+    --fairy: #e8f8ff;
+    --card-bg: #ffffff;
+    --card-border: #b8e8f4;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Lora', Georgia, serif;
+    background: linear-gradient(180deg, #d8f2fa 0%, #e8f8ff 30%, #f0faff 100%);
+    color: var(--text-dark);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ===================== STARFIELD HEADER ===================== */
+  .hero {
+    position: relative;
+    min-height: 280px;
+    background: linear-gradient(180deg,
+      #0d2e3a 0%,
+      #0e4a5a 25%,
+      #1a7a8a 55%,
+      #2aaabf 80%,
+      #5dd4e8 100%
+    );
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2.5rem 1.5rem 3rem;
+    overflow: hidden;
+  }
+
+  /* Stars */
+  .stars {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .star {
+    position: absolute;
+    background: var(--star);
+    border-radius: 50%;
+    animation: twinkle var(--duration, 3s) ease-in-out infinite var(--delay, 0s);
+  }
+
+  @keyframes twinkle {
+    0%, 100% { opacity: var(--min-op, 0.3); transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.3); }
+  }
+
+  /* Fairy lights string */
+  .fairy-lights {
+    position: absolute;
+    top: 20px;
+    left: 0;
+    right: 0;
+    height: 60px;
+    pointer-events: none;
+  }
+
+  .fairy-lights svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Moon */
+  .moon {
+    position: absolute;
+    top: 18px;
+    right: 8%;
+    width: 55px;
+    height: 55px;
+    pointer-events: none;
+  }
+
+  .moon svg { width: 100%; height: 100%; }
+
+  /* Silhouette trees */
+  .trees {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    pointer-events: none;
+  }
+
+  .trees svg { width: 100%; height: 100%; }
+
+  /* Logo */
+  .hero-logo {
+    font-family: 'Satisfy', cursive;
+    font-size: clamp(2.2rem, 7vw, 4rem);
+    color: var(--moon-warm);
+    text-shadow:
+      0 0 30px rgba(232,200,74,0.5),
+      0 0 60px rgba(77,196,216,0.3),
+      2px 2px 0 rgba(0,0,0,0.4);
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    line-height: 1.1;
+    margin-bottom: 0.3rem;
+  }
+
+  .hero-tagline {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--teal-glow);
+    letter-spacing: 0.05em;
+    position: relative;
+    z-index: 2;
+    margin-bottom: 0.2rem;
+  }
+
+  .hero-meta {
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    position: relative;
+    z-index: 2;
+    margin-top: 0.4rem;
+  }
+
+  .hero-divider {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin: 0.7rem 0;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-divider span {
+    font-size: 0.9rem;
+    color: var(--moon-gold);
+  }
+
+  .hero-divider::before,
+  .hero-divider::after {
+    content: '';
+    width: 60px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--moon-gold));
+  }
+
+  .hero-divider::after {
+    background: linear-gradient(90deg, var(--moon-gold), transparent);
+  }
+
+  /* ===================== INTRO BANNER ===================== */
+  .intro-banner {
+    background: linear-gradient(135deg, #1a7a8a 0%, #2aaabf 50%, #1a7a8a 100%);
+    padding: 1.5rem 2rem;
+    text-align: center;
+    border-top: 2px solid rgba(255,255,255,0.2);
+    border-bottom: 2px solid rgba(255,255,255,0.2);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .intro-banner::before {
+    content: '✦ ✦ ✦';
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.6rem;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 0.5rem;
+  }
+
+  .intro-banner p {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: #ffffff;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .intro-banner strong {
+    color: var(--moon-warm);
+    font-weight: 600;
+  }
+
+  /* ===================== TAB NAV ===================== */
+  .tab-nav {
+    background: #0d2e3a;
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+    border-bottom: 2px solid rgba(93,212,232,0.4);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  }
+
+  .tab-nav::-webkit-scrollbar { display: none; }
+
+  .tab-btn {
+    flex-shrink: 0;
+    padding: 0.85rem 1.3rem;
+    background: none;
+    border: none;
+    color: rgba(168,221,233,0.5);
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .tab-btn:hover {
+    color: var(--teal-glow);
+    background: rgba(77,196,216,0.05);
+  }
+
+  .tab-btn.active {
+    color: var(--moon-warm);
+    border-bottom-color: var(--moon-gold);
+    background: rgba(232,200,74,0.06);
+  }
+
+  .tab-icon {
+    font-size: 0.9rem;
+  }
+
+  /* ===================== CONTENT AREA ===================== */
+  .content-wrap {
+    background: linear-gradient(180deg, #d8f2fa 0%, #e8f8ff 30%, #f0faff 100%);
+    min-height: 60vh;
+  }
+
+  .tab-content {
+    display: none;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 4rem;
+    animation: fadeUp 0.35s ease;
+  }
+
+  .tab-content.active { display: block; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Section header */
+  .section-eyebrow {
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 0.3rem;
+  }
+
+  .section-title {
+    font-family: 'Satisfy', cursive;
+    font-size: clamp(1.6rem, 4vw, 2.3rem);
+    color: var(--deep-teal);
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+  }
+
+  .section-intro {
+    font-size: 1rem;
+    font-style: italic;
+    color: var(--text-light);
+    line-height: 1.8;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(26,122,138,0.2);
+  }
+
+  /* ===================== CARDS ===================== */
+  .card {
+    background: #ffffff;
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 1.5rem 1.75rem;
+    margin-bottom: 1.25rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 2px 16px rgba(13,46,58,0.08);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .card:hover {
+    border-color: var(--teal-light);
+    box-shadow: 0 4px 24px rgba(13,46,58,0.14);
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, var(--teal-glow), var(--teal));
+    border-radius: 4px 0 0 4px;
+  }
+
+  .card.gold { background: #fffbee; border-color: #f0dfa0; }
+  .card.gold::before { background: linear-gradient(180deg, var(--moon-warm), var(--moon-gold)); }
+  .card.purple { background: #faf5ff; border-color: #d4b8f0; }
+  .card.purple::before { background: linear-gradient(180deg, var(--purple-soft), var(--purple)); }
+  .card.forest { background: #f0fff4; border-color: #a8ddb0; }
+  .card.forest::before { background: linear-gradient(180deg, #6abf70, var(--forest-mid)); }
+  .card.rose { background: #fff5f8; border-color: #f0b8c8; }
+  .card.rose::before { background: linear-gradient(180deg, #f0a0b8, var(--rose)); }
+
+  .card-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    background: rgba(26,122,138,0.1);
+    border: 1px solid rgba(26,122,138,0.3);
+    border-radius: 20px;
+    padding: 0.2rem 0.75rem;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 0.75rem;
+  }
+
+  .card.gold .card-badge {
+    background: rgba(232,200,74,0.15);
+    border-color: rgba(200,160,30,0.3);
+    color: #8a6010;
+  }
+
+  .card.purple .card-badge {
+    background: rgba(122,79,160,0.1);
+    border-color: rgba(176,133,208,0.3);
+    color: var(--purple);
+  }
+
+  .card h3 {
+    font-family: 'Satisfy', cursive;
+    font-size: 1.35rem;
+    color: var(--deep-teal);
+    margin-bottom: 0.6rem;
+    line-height: 1.2;
+  }
+
+  .card.gold h3 { color: #7a5010; }
+  .card.purple h3 { color: var(--purple); }
+  .card.forest h3 { color: #1a5a20; }
+  .card.rose h3 { color: #a03050; }
+
+  .card p {
+    font-size: 0.98rem;
+    line-height: 1.8;
+    color: var(--text-dark);
+    margin-bottom: 0.75rem;
+  }
+
+  .card p:last-child { margin-bottom: 0; }
+
+  /* Bullet lists */
+  .bullet-list {
+    list-style: none;
+    margin: 0.6rem 0 0.75rem;
+  }
+
+  .bullet-list li {
+    padding: 0.3rem 0 0.3rem 1.6rem;
+    position: relative;
+    font-size: 0.97rem;
+    line-height: 1.65;
+    color: var(--text-dark);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 400;
+  }
+
+  .bullet-list li::before {
+    content: '✦';
+    position: absolute;
+    left: 0;
+    color: var(--teal);
+    font-size: 0.55rem;
+    top: 0.6rem;
+  }
+
+  .card.gold .bullet-list li::before { color: var(--moon-gold); }
+  .card.purple .bullet-list li::before { color: var(--purple); }
+  .card.forest .bullet-list li::before { color: var(--forest-mid); }
+  .card.rose .bullet-list li::before { color: var(--rose); }
+
+  /* Note boxes */
+  .note {
+    background: rgba(26,122,138,0.07);
+    border-left: 3px solid rgba(26,122,138,0.35);
+    border-radius: 0 6px 6px 0;
+    padding: 0.8rem 1rem;
+    margin-top: 0.85rem;
+    font-style: italic;
+    font-size: 0.92rem;
+    color: var(--text-mid);
+    line-height: 1.65;
+  }
+
+  .note.gold {
+    background: rgba(232,200,74,0.08);
+    border-left-color: rgba(200,160,30,0.4);
+    color: #6a4a08;
+  }
+
+  /* Big highlight */
+  .highlight-box {
+    background: linear-gradient(135deg, #0d2e3a 0%, #1a7a8a 100%);
+    border: 1px solid rgba(232,200,74,0.3);
+    border-radius: 12px;
+    padding: 2rem;
+    margin: 1.5rem 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .highlight-box::before {
+    content: '✦';
+    position: absolute;
+    top: 12px; right: 16px;
+    font-size: 0.7rem;
+    color: rgba(232,200,74,0.4);
+  }
+
+  .highlight-box::after {
+    content: '✦';
+    position: absolute;
+    bottom: 12px; left: 16px;
+    font-size: 0.7rem;
+    color: rgba(232,200,74,0.4);
+  }
+
+  .big-number {
+    font-family: 'Satisfy', cursive;
+    font-size: 3rem;
+    color: var(--moon-gold);
+    display: block;
+    text-shadow: 0 0 30px rgba(232,200,74,0.4);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .highlight-box p {
+    color: rgba(232,248,255,0.9);
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  /* Two col */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+
+  @media (max-width: 580px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* Comparison */
+  .comparison {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+  }
+
+  @media (max-width: 580px) { .comparison { grid-template-columns: 1fr; } }
+
+  .comparison-box {
+    border-radius: 10px;
+    padding: 1.4rem 1.5rem;
+  }
+
+  .comparison-box.same {
+    background: #f0fff4;
+    border: 1px solid #a8ddb0;
+  }
+
+  .comparison-box.changes {
+    background: #eaf8ff;
+    border: 1px solid var(--card-border);
+  }
+
+  .comparison-box h4 {
+    font-family: 'Satisfy', cursive;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid currentColor;
+  }
+
+  .comparison-box.same h4 { color: var(--forest-mid); }
+  .comparison-box.changes h4 { color: var(--teal); }
+
+  .comparison-box .bullet-list li { color: var(--text-dark); }
+  .comparison-box .bullet-list li::before { color: var(--forest-mid); }
+  .comparison-box.changes .bullet-list li::before { color: var(--teal); }
+
+  /* Summary closing */
+  .closing {
+    background: linear-gradient(135deg, #0d2e3a, #1a7a8a);
+    border: 1px solid rgba(232,200,74,0.25);
+    border-radius: 14px;
+    padding: 2.5rem 2rem;
+    text-align: center;
+    margin-top: 2rem;
+  }
+
+  .closing .closing-title {
+    font-family: 'Satisfy', cursive;
+    font-size: 1.8rem;
+    color: var(--moon-warm);
+    margin-bottom: 1rem;
+    text-shadow: 0 0 20px rgba(232,200,74,0.3);
+  }
+
+  .closing p {
+    color: rgba(220,248,255,0.9);
+    font-size: 1rem;
+    line-height: 1.8;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  .closing strong { color: var(--moon-warm); }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 2rem;
+    font-family: 'Satisfy', cursive;
+    font-size: 1rem;
+    color: var(--teal-light);
+    border-top: 1px solid rgba(26,122,138,0.2);
+  }
+
+  strong { font-weight: 600; }
+  em { font-style: italic; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <!-- Stars -->
+  <div class="stars" id="stars"></div>
+
+  <!-- Fairy lights -->
+  <div class="fairy-lights">
+    <svg viewBox="0 0 1000 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,15 Q125,35 250,15 Q375,35 500,15 Q625,35 750,15 Q875,35 1000,15" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+      <!-- bulbs -->
+      <circle cx="60" cy="22" r="4" fill="#fffde8" opacity="0.9" filter="url(#glow)"/>
+      <circle cx="130" cy="28" r="3.5" fill="#ffeaa0" opacity="0.85"/>
+      <circle cx="200" cy="22" r="4" fill="#fffde8" opacity="0.9"/>
+      <circle cx="270" cy="28" r="3.5" fill="#ffeaa0" opacity="0.8"/>
+      <circle cx="340" cy="22" r="4" fill="#fffde8" opacity="0.9"/>
+      <circle cx="410" cy="28" r="3.5" fill="#ffeaa0" opacity="0.85"/>
+      <circle cx="500" cy="22" r="4" fill="#fffde8" opacity="0.9"/>
+      <circle cx="570" cy="28" r="3.5" fill="#ffeaa0" opacity="0.8"/>
+      <circle cx="640" cy="22" r="4" fill="#fffde8" opacity="0.9"/>
+      <circle cx="710" cy="28" r="3.5" fill="#ffeaa0" opacity="0.85"/>
+      <circle cx="780" cy="22" r="4" fill="#fffde8" opacity="0.9"/>
+      <circle cx="850" cy="28" r="3.5" fill="#ffeaa0" opacity="0.8"/>
+      <circle cx="920" cy="22" r="4" fill="#fffde8" opacity="0.9"/>
+      <defs>
+        <filter id="glow"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+    </svg>
+  </div>
+
+  <!-- Moon -->
+  <div class="moon">
+    <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+      <path d="M45,30 A20,20 0 1,1 30,10 A14,14 0 0,0 45,30Z" fill="#e8c84a" opacity="0.85"/>
+    </svg>
+  </div>
+
+  <div class="hero-logo">King of Mice Studios</div>
+  <div class="hero-divider"><span>✦</span></div>
+  <div class="hero-tagline">A Growth Plan for Carolee</div>
+  <div class="hero-meta">Prepared by Courtney &nbsp;·&nbsp; April 2026</div>
+
+  <!-- Birch tree silhouettes -->
+  <div class="trees">
+    <svg viewBox="0 0 1000 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="40" y="0" width="8" height="80" fill="#0a2535" rx="2"/>
+      <rect x="90" y="10" width="6" height="70" fill="#0a2535" rx="2"/>
+      <rect x="140" y="0" width="9" height="80" fill="#0a2535" rx="2"/>
+      <rect x="200" y="5" width="7" height="75" fill="#0a2535" rx="2"/>
+      <rect x="260" y="0" width="8" height="80" fill="#0a2535" rx="2"/>
+      <rect x="330" y="8" width="6" height="72" fill="#0a2535" rx="2"/>
+      <rect x="700" y="0" width="8" height="80" fill="#0a2535" rx="2"/>
+      <rect x="760" y="5" width="6" height="75" fill="#0a2535" rx="2"/>
+      <rect x="820" y="0" width="9" height="80" fill="#0a2535" rx="2"/>
+      <rect x="880" y="8" width="7" height="72" fill="#0a2535" rx="2"/>
+      <rect x="940" y="0" width="8" height="80" fill="#0a2535" rx="2"/>
+      <!-- ground -->
+      <ellipse cx="500" cy="82" rx="520" ry="18" fill="#061018"/>
+    </svg>
+  </div>
+</div>
+
+<!-- INTRO -->
+<div class="intro-banner">
+  <p>You've spent 30 years building something rare — a loyal community of collectors who love your work and trust you completely. This plan is about making sure that work reaches more people, earns what it's worth, and takes as little extra effort from you as possible.<br><br>
+  <strong>Everything here is handled by Courtney, with the help of AI. Your job is exactly what it's always been: paint. 🎨</strong></p>
+</div>
+
+<!-- TAB NAV -->
+<nav class="tab-nav">
+  <button class="tab-btn active" onclick="showTab('traffic', this)">
+    <span class="tab-icon">🔭</span> More Eyes
+  </button>
+  <button class="tab-btn" onclick="showTab('collectors', this)">
+    <span class="tab-icon">🌙</span> New Collectors
+  </button>
+  <button class="tab-btn" onclick="showTab('revenue', this)">
+    <span class="tab-icon">✨</span> New Revenue
+  </button>
+  <button class="tab-btn" onclick="showTab('logistics', this)">
+    <span class="tab-icon">🦔</span> Work Smarter
+  </button>
+  <button class="tab-btn" onclick="showTab('pricing', this)">
+    <span class="tab-icon">🍄</span> Pricing
+  </button>
+  <button class="tab-btn" onclick="showTab('summary', this)">
+    <span class="tab-icon">🐭</span> The Plan
+  </button>
+</nav>
+
+<div class="content-wrap">
+
+<!-- TAB 1 -->
+<div class="tab-content active" id="tab-traffic">
+  <p class="section-eyebrow">Part One</p>
+  <h2 class="section-title">Getting More Eyes on Your Work</h2>
+  <p class="section-intro">Right now, most people who find you are either already following you or stumble across you by luck. This section is about changing that — systematically and passively, so your work finds the people who will love it most.</p>
+
+  <div class="card">
+    <h3>🔍 Etsy Search Optimization</h3>
+    <p>When someone searches Etsy for "whimsical dragon art print" or "hand painted wooden box," Etsy decides which listings to show based on titles, descriptions, and tags. Right now your listings may not be fully optimized for how buyers actually search.</p>
+    <p><strong>What we'll do — you won't touch a thing:</strong></p>
+    <ul class="bullet-list">
+      <li>Rewrite every listing title to lead with searchable terms buyers actually use</li>
+      <li>Rewrite descriptions to weave in words people search for naturally</li>
+      <li>Fill in all 13 tags on every listing — theme, style, occasion, aesthetic, recipient</li>
+    </ul>
+    <div class="note">
+      <strong>Example:</strong> "THE BOOKDRAGON - Print of Original Acrylic Painting by Carolee Clark" becomes "Book Dragon Art Print — Fantasy Dragon in Library — Gift for Book Lovers — Whimsical Dragon Wall Art — 11x14"
+    </div>
+  </div>
+
+  <div class="card gold">
+    <h3>📌 Pinterest</h3>
+    <p>Pinterest is essentially a visual search engine — and one of the best platforms in the world for handmade art, whimsical aesthetics, fantasy themes, and cottagecore imagery. Your work is perfectly suited for it.</p>
+    <ul class="bullet-list">
+      <li>Set up a King of Mice Studios Pinterest presence from scratch</li>
+      <li>Create themed boards — Halloween, seasonal, fantasy, animals, witchy, holiday</li>
+      <li>Pin your existing work with optimized descriptions linked to your Etsy shop</li>
+      <li>Let it run permanently in the background — every pin is a lasting advertisement</li>
+    </ul>
+    <div class="note gold">Pinterest drives passive Etsy traffic indefinitely. Set it up once, and it works while you sleep.</div>
+  </div>
+
+  <div class="card purple">
+    <h3>📸 Instagram — More Consistently</h3>
+    <p>You're already on Instagram but posting less than on Facebook. Since Meta owns both, posting to both simultaneously takes one click — no extra effort at all on your part.</p>
+    <ul class="bullet-list">
+      <li>Connect Facebook and Instagram so posts share automatically</li>
+      <li>Manage posting timing to maximize reach on both platforms</li>
+      <li>Optimize captions and hashtags for Instagram's discovery algorithm</li>
+    </ul>
+  </div>
+
+  <div class="card forest">
+    <h3>🎬 Process Videos — Reels & TikTok</h3>
+    <p>You already do occasional Reels of yourself painting — and that's the single most powerful content you can create. Videos of an artist creating something magical consistently stop people mid-scroll and attract brand new audiences.</p>
+    <ul class="bullet-list">
+      <li>Film you painting using just a phone propped up nearby — you just paint normally</li>
+      <li>Edit footage into short, beautiful time-lapses with music</li>
+      <li>Post consistently across Facebook Reels, Instagram Reels, and TikTok</li>
+      <li>Manage the TikTok account entirely — you won't need to be on it at all</li>
+    </ul>
+    <div class="note">You never need to show your face. Hands, paintbrush, the piece coming to life — that's all anyone needs to see. And it is mesmerizing to watch.</div>
+  </div>
+</div>
+
+<!-- TAB 2 -->
+<div class="tab-content" id="tab-collectors">
+  <p class="section-eyebrow">Part Two</p>
+  <h2 class="section-title">Growing Your Collector Base</h2>
+  <p class="section-intro">Your current collectors are loyal and wonderful — but they've been collecting for decades and many already have dozens of your pieces. Building the next generation of collectors is essential for long-term growth.</p>
+
+  <div class="card">
+    <h3>🌿 Reaching Younger Audiences</h3>
+    <p>There are enormous online communities that already love exactly what you make — they just don't know you exist yet:</p>
+    <ul class="bullet-list">
+      <li>Book lovers and fantasy readers — the BookTok and BookDragon communities</li>
+      <li>Pagan, witchy, and spiritual aesthetics — massive on Etsy, Instagram, and TikTok</li>
+      <li>Cottagecore and fairycore — one of the fastest growing aesthetics online right now</li>
+      <li>Halloween obsessives — a devoted, year-round community, not just seasonal</li>
+      <li>Tolkien and fantasy collectors — passionate and willing to pay for quality</li>
+      <li>Folk art and decorative painting collectors</li>
+    </ul>
+    <div class="note">Your 30 years of devoted collectors is powerful social proof to a younger buyer. It signals you're the real thing — not a trend, not someone who started six months ago.</div>
+  </div>
+
+  <div class="card gold">
+    <h3>✉️ Building an Email List</h3>
+    <p>Right now your reach depends entirely on Facebook deciding to show your posts. That's fragile — as you've experienced when Facebook limits your reach. An email list is something you own outright. No algorithm can touch it.</p>
+    <ul class="bullet-list">
+      <li>Set up a simple, free email list using a tool like Mailchimp</li>
+      <li>Invite your most devoted followers to join for exclusive "first look" access</li>
+      <li>Send a simple email each time you have new work — just the image and a link</li>
+      <li>Managed entirely by Courtney — you never have to touch it</li>
+    </ul>
+    <div class="note gold">First look access is genuinely valuable to collectors who've missed pieces before. It creates deep loyalty and costs nothing to offer.</div>
+  </div>
+</div>
+
+<!-- TAB 3 -->
+<div class="tab-content" id="tab-revenue">
+  <p class="section-eyebrow">Part Three</p>
+  <h2 class="section-title">New Revenue Streams</h2>
+  <p class="section-intro">Additional ways to earn income from work you're already creating — most requiring little to no ongoing effort once set up.</p>
+
+  <div class="card gold">
+    <div class="card-badge">⭐ Most Exciting</div>
+    <h3>🌙 Patreon — Exclusive Collector Membership</h3>
+    <p>This requires almost nothing extra from you — and could become your most reliable monthly income.</p>
+    <p>One or two pieces per month are designated as <strong>Patreon-only</strong> — never offered to the general public. Devoted collectors pay a monthly membership fee for exclusive access. They're not just supporting an artist — they're part of an inner circle with access to work nobody else can buy.</p>
+    <ul class="bullet-list">
+      <li><strong>Supporter tier ($5–10/month)</strong> — behind the scenes glimpses, works in progress, the story behind each piece</li>
+      <li><strong>Collector tier ($25–35/month)</strong> — access to Patreon-exclusive pieces, first right of purchase, occasional works-in-progress glimpses</li>
+    </ul>
+    <p>You don't create anything extra. You simply set one or two pieces aside as Patreon-only each month. That's a decision, not extra work.</p>
+    <div class="highlight-box">
+      <span class="big-number">$900+</span>
+      <p>Just 30 collector tier subscribers at $30/month — on top of everything else — for work you were going to create anyway.</p>
+    </div>
+    <div class="note gold">Courtney sets up and manages the Patreon entirely. You just paint.</div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <h3>🛍️ Print on Demand Products</h3>
+      <p>Your images can live on throw pillows, tote bags, mugs, phone cases, and puzzles through platforms like Society6.</p>
+      <ul class="bullet-list">
+        <li>Courtney uploads images once</li>
+        <li>Platform handles printing, packing, shipping</li>
+        <li>You earn a royalty on every sale</li>
+        <li>You never touch a single order</li>
+      </ul>
+      <div class="note">As close to truly passive income as it gets.</div>
+    </div>
+
+    <div class="card">
+      <h3>🖼️ Prints in Multiple Sizes</h3>
+      <p>Adding 5x7 and 8x10 options opens completely new buyers — people who love your work but need a smaller price point.</p>
+      <ul class="bullet-list">
+        <li>A 5x7 at $14–18 reaches gift buyers</li>
+        <li>Same artwork, more price points</li>
+        <li>More buyers, more sales, no extra painting</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="card purple">
+      <h3>💾 Digital Downloads</h3>
+      <p>Printable art files that buyers print themselves. Upload once, sell forever. Nearly 100% margin after Etsy's small fee.</p>
+      <ul class="bullet-list">
+        <li>Zero fulfillment cost or effort</li>
+        <li>Sells while you sleep</li>
+        <li>Courtney handles all file prep and listing creation</li>
+      </ul>
+    </div>
+
+    <div class="card purple">
+      <h3>🐾 Commissions — A Formalized Policy</h3>
+      <p>You already take commissions on your own terms — and that doesn't need to change. But there's an opportunity to make them more structured, more predictable, and more financially meaningful.</p>
+      <p>The idea: at the start of each year, announce a finite number of commission slots — for example, 10 commissions available for the year, at specific sizes and set prices. Once they're gone, they're gone until next year.</p>
+      <ul class="bullet-list">
+        <li>You know exactly how many commissions you're agreeing to — no more, no less</li>
+        <li>Buyers know the terms upfront — size, price, your creative control</li>
+        <li>Scarcity makes the slots genuinely desirable — devoted collectors will claim them quickly</li>
+        <li>You can calculate guaranteed commission income before the year even begins</li>
+      </ul>
+      <div class="note">If 10 commissions at an average of $300 each means $3,000 in guaranteed income on January 1st — that's a meaningful number. Courtney can help write and post the annual commission announcement. You just approve it.</div>
+    </div>
+  </div>
+
+  <div class="card rose">
+    <h3>🃏 Greeting Cards — Modernized</h3>
+    <p>Right now you assemble card sets by hand — printing, taping, packaging, hand-writing labels, post office trips. That's an enormous amount of physical labor. There's a much better way.</p>
+    <ul class="bullet-list">
+      <li>Print on demand services like Printful produce finished, folded greeting cards and ship directly to your customers</li>
+      <li>Customer orders on Etsy → order goes automatically to fulfillment → they handle everything → you never touch it</li>
+      <li>Slightly lower margin, but hours of exhausting physical assembly simply disappear</li>
+    </ul>
+    <div class="note">Trading a small margin for the elimination of exhausting physical labor is absolutely worth it.</div>
+  </div>
+</div>
+
+<!-- TAB 4 -->
+<div class="tab-content" id="tab-logistics">
+  <p class="section-eyebrow">Part Four</p>
+  <h2 class="section-title">Working Smarter</h2>
+  <p class="section-intro">This section has nothing to do with making more money. It's about eliminating the tedious, physically demanding tasks that eat into your time and energy every single week.</p>
+
+  <div class="card gold">
+    <div class="card-badge">⭐ High Impact</div>
+    <h3>📦 Shipping Labels — No More Hand-Writing</h3>
+    <p>Right now you hand-write every shipping label and make multiple trips to the post office every week. This is completely unnecessary.</p>
+    <p>The solution is a free tool called <strong>Pirateship:</strong></p>
+    <ul class="bullet-list">
+      <li>Type or paste the customer's address</li>
+      <li>Select the package size and weight</li>
+      <li>Print a professional shipping label instantly</li>
+      <li><strong>Schedule a free USPS pickup from your front door — no post office trips at all</strong></li>
+    </ul>
+    <p>The mail carrier comes to you. You hand over the packages. That's it.</p>
+    <div class="note gold">Pirateship also offers discounted USPS rates — better than counter rates — so you'd save money on every shipment too. Requires a basic printer (~$80–120, one-time). Courtney will set everything up so the first time you use it, it just works.</div>
+  </div>
+
+  <div class="card">
+    <h3>⚙️ Print Order Fulfillment — Automated</h3>
+    <p>Every time a print sells on Etsy, you manually type the customer's name, address, and order details into your fulfillment company's system. That's completely automatable.</p>
+    <ul class="bullet-list">
+      <li>Connect your Etsy shop to your fulfillment company using automation tools</li>
+      <li>Every order gets submitted automatically — no manual entry</li>
+      <li>You receive a confirmation. That's the entire extent of your involvement.</li>
+    </ul>
+    <div class="note">The goal is zero manual order processing on your end — ever again.</div>
+  </div>
+
+  <div class="card forest">
+    <h3>📅 The Three-Month Plan</h3>
+    <p>Your Social Security earnings limit lifts on <strong>July 30th</strong> when you turn 67. That gives us three months to quietly build and test everything — so when the earnings limit lifts, everything is already humming.</p>
+    <ul class="bullet-list">
+      <li><strong>Now → July:</strong> Etsy rewrites, Pinterest setup, process video rhythm, logistics automation, Patreon setup</li>
+      <li><strong>After July 30th:</strong> No earnings limit. Earn what your work is actually worth — without restriction.</li>
+    </ul>
+    <div class="note">Three months of building quietly, then full steam ahead. The timing couldn't be better.</div>
+  </div>
+</div>
+
+<!-- TAB 5 -->
+<div class="tab-content" id="tab-pricing">
+  <p class="section-eyebrow">Part Five</p>
+  <h2 class="section-title">The Pricing Conversation</h2>
+  <p class="section-intro">This section is here because it matters — even if it's the hardest one. No pressure. Just information worth looking at together, when you're ready.</p>
+
+  <div class="card gold">
+    <h3>🌕 What the Data Suggests</h3>
+    <p>You've been selling your work at roughly the same price range for many years. Your pieces consistently sell in under 10 minutes.</p>
+    <p>In almost any market, that's a signal that the price ceiling hasn't been found yet — that buyers would have paid more. When demand is immediate and universal, it almost always means there's room to grow.</p>
+    <div class="note gold">The one person out of thirty who says "nevermind" isn't your collector. Your collectors never say nevermind. And they'd follow you through a price increase without blinking.</div>
+  </div>
+
+  <div class="card">
+    <h3>🔎 What We'd Like to Do</h3>
+    <p>We're not suggesting a dramatic overnight change. Just:</p>
+    <ul class="bullet-list">
+      <li>Pull your Etsy sales history and analyze it — which pieces sell fastest, at what prices, in which themes</li>
+      <li>Research comparable hand painted original art on Etsy to see where the market actually sits</li>
+      <li>Build you a simple, clear picture of your own data</li>
+    </ul>
+    <p><strong>Then you decide what to do with it. No pressure. Just information.</strong></p>
+  </div>
+
+  <div class="card purple">
+    <h3>🖼️ Print Buyers vs. Original Buyers</h3>
+    <p>One concern worth addressing directly: offering more prints doesn't threaten original sales.</p>
+    <p>Print buyers and original buyers are almost never the same person. A print buyer wants to own a piece of the art. An original buyer wants to own the art <em>and</em> know nobody else has it. Offering prints actually reinforces that — it signals the original is the real prize.</p>
+    <div class="note">Disney sells millions of prints of beloved images. It doesn't stop collectors from paying thousands for original animation cels.</div>
+  </div>
+</div>
+
+<!-- TAB 6 -->
+<div class="tab-content" id="tab-summary">
+  <p class="section-eyebrow">Part Six</p>
+  <h2 class="section-title">The Plan at a Glance</h2>
+  <p class="section-intro">The honest picture of what changes for you — and what doesn't.</p>
+
+  <div class="comparison">
+    <div class="comparison-box same">
+      <h4>✓ Stays Exactly the Same</h4>
+      <ul class="bullet-list">
+        <li>You paint what you want, when you want</li>
+        <li>You post on Facebook the way you always have</li>
+        <li>You handle your own customer relationships</li>
+        <li>You decide what becomes a print</li>
+        <li>You decide which pieces are Patreon-exclusive</li>
+        <li>You set your own prices</li>
+        <li>You take commissions on your own terms</li>
+      </ul>
+    </div>
+
+    <div class="comparison-box changes">
+      <h4>✦ Handled by Courtney</h4>
+      <ul class="bullet-list">
+        <li>Etsy listings rewritten for search visibility</li>
+        <li>Pinterest built and maintained</li>
+        <li>Facebook posts auto-share to Instagram</li>
+        <li>Process videos filmed, edited, posted to TikTok & Reels</li>
+        <li>Email list set up and managed</li>
+        <li>Patreon collector membership set up and managed</li>
+        <li>Print on demand products set up on Society6</li>
+        <li>Smaller print sizes added to best-selling listings</li>
+        <li>Digital download listings created</li>
+        <li>Annual commission announcement written and posted — slots, sizes, prices, your terms</li>
+        <li>Card fulfillment modernized — no more hand assembly</li>
+        <li>Print orders automated — no more manual entry</li>
+        <li>Shipping labels automated — no more post office trips</li>
+        <li>Sales data analyzed and shared with you clearly</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="closing">
+    <div class="closing-title">You just paint. ✨</div>
+    <p>More people find you. More of your work sells passively. You spend whatever time and energy you have doing the one thing you love — and the rest takes care of itself.<br><br>
+    <strong>Built with love, for the artist who deserves to rest.</strong></p>
+  </div>
+
+  <div class="footer">King of Mice Studios &nbsp;·&nbsp; A plan made with love by Courtney &nbsp;·&nbsp; April 2026</div>
+</div>
+
+</div><!-- end content-wrap -->
+
+<script>
+  // Generate stars
+  const starsEl = document.getElementById('stars');
+  for (let i = 0; i < 80; i++) {
+    const star = document.createElement('div');
+    star.className = 'star';
+    const size = Math.random() * 2.5 + 0.5;
+    star.style.cssText = `
+      width: ${size}px;
+      height: ${size}px;
+      left: ${Math.random() * 100}%;
+      top: ${Math.random() * 70}%;
+      --duration: ${2 + Math.random() * 4}s;
+      --delay: ${Math.random() * 4}s;
+      --min-op: ${0.2 + Math.random() * 0.3};
+    `;
+    starsEl.appendChild(star);
+  }
+
+  function showTab(name, btn) {
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    btn.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>
