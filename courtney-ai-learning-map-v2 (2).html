@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Courtney's AI Learning Map</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      margin: 2em;
+      background: #f7f9fc;
+      color: #2c3e50;
+    }
+    h1 {
+      text-align: center;
+      color: #3498db;
+      margin-bottom: 0.25em;
+    }
+    .subtitle {
+      text-align: center;
+      font-size: 1.05em;
+      color: #7f8c8d;
+      margin-bottom: 1.5em;
+    }
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.25em;
+      margin-bottom: 0;
+      border-bottom: 2px solid #3498db;
+    }
+    .tab-btn {
+      padding: 0.6em 1.1em;
+      background: #ecf0f1;
+      border: 1px solid #ddd;
+      border-bottom: none;
+      cursor: pointer;
+      border-radius: 4px 4px 0 0;
+      font-weight: 600;
+      font-size: 0.88em;
+      color: #2c3e50;
+      white-space: nowrap;
+      transition: background 0.15s;
+    }
+    .tab-btn:hover {
+      background: #d6eaf8;
+    }
+    .tab-btn.active {
+      background: #3498db;
+      color: white;
+      border-color: #3498db;
+    }
+    .tab-content {
+      display: none;
+      padding: 1.75em 2em;
+      background: white;
+      border: 1px solid #ddd;
+      border-top: none;
+      border-radius: 0 0 6px 6px;
+      max-width: 920px;
+      margin: 0 auto;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    h2 {
+      color: #2980b9;
+      margin-top: 0;
+      border-bottom: 1px solid #ecf0f1;
+      padding-bottom: 0.4em;
+    }
+    h3 {
+      color: #2c3e50;
+      margin-top: 1.4em;
+      margin-bottom: 0.4em;
+    }
+    ul {
+      margin: 0.4em 0 1em 0;
+      padding-left: 1.4em;
+    }
+    li {
+      margin-bottom: 0.55em;
+      line-height: 1.55;
+    }
+    .tag {
+      display: inline-block;
+      background: #eaf4fb;
+      color: #2980b9;
+      border: 1px solid #aed6f1;
+      border-radius: 3px;
+      font-size: 0.8em;
+      padding: 0.1em 0.5em;
+      margin-right: 0.25em;
+      font-weight: 600;
+    }
+    .callout {
+      background: #fef9e7;
+      border-left: 4px solid #f1c40f;
+      padding: 0.85em 1.1em;
+      border-radius: 0 4px 4px 0;
+      margin: 1.2em 0;
+      font-size: 0.97em;
+    }
+    .callout strong {
+      display: block;
+      margin-bottom: 0.3em;
+      color: #7d6608;
+    }
+    .people-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5em;
+      margin: 0.5em 0 1em 0;
+      padding: 0;
+      list-style: none;
+    }
+    .people-list li {
+      background: #eafaf1;
+      border: 1px solid #a9dfbf;
+      border-radius: 4px;
+      padding: 0.3em 0.7em;
+      font-size: 0.9em;
+      margin: 0;
+    }
+    .example {
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 4px;
+      padding: 1em;
+      margin-bottom: 1.2em;
+      font-family: "Courier New", monospace;
+      font-size: 0.88em;
+      white-space: pre-line;
+      line-height: 1.5;
+    }
+    .example-heading {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      font-weight: 700;
+      color: #2c3e50;
+      margin: 1.2em 0 0.4em 0;
+      font-size: 0.97em;
+    }
+    .phase-block {
+      background: #f4f6f7;
+      border-left: 4px solid #3498db;
+      padding: 0.75em 1em;
+      margin-bottom: 0.75em;
+      border-radius: 0 4px 4px 0;
+    }
+    .phase-block strong {
+      color: #2471a3;
+    }
+    a {
+      color: #2980b9;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Courtney's AI Learning Map</h1>
+  <p class="subtitle">6 knowledge buckets · learning sequence · resources · LinkedIn follows · key concepts · bonus tabs</p>
+
+  <div class="tabs">
+    <button class="tab-btn active"  onclick="openTab('routine')">📅 Daily / Weekly Routine</button>
+    <button class="tab-btn" onclick="openTab('overview')">🗺 Overview & Sequence</button>
+    <button class="tab-btn" onclick="openTab('bucket1')">1 · AI & ML Foundations</button>
+    <button class="tab-btn" onclick="openTab('bucket2')">2 · Generative AI & LLMs</button>
+    <button class="tab-btn" onclick="openTab('bucket3')">3 · AI for Product & Users</button>
+    <button class="tab-btn" onclick="openTab('bucket4')">4 · Data, MLOps & Scale</button>
+    <button class="tab-btn" onclick="openTab('bucket5')">5 · AI Engineering & APIs</button>
+    <button class="tab-btn" onclick="openTab('bucket6')">6 · AI Strategy & Governance</button>
+    <button class="tab-btn" onclick="openTab('bridge')">🌉 Bridge Curriculum</button>
+    <button class="tab-btn" onclick="openTab('cheatsheet')">⚙ AI‑Engineering Thinking</button>
+    <button class="tab-btn" onclick="openTab('examples')">💻 AI‑Vibe‑Coding Examples</button>
+  </div>
+
+  <!-- OVERVIEW -->
+  <div id="overview" class="tab-content">
+    <h2>Your AI Learning Map — Overview & Sequence</h2>
+
+    <p>You're in a strong position: 16 years of Product Data Management, PIM (Salsify), Data Governance, API literacy, Boomi integration experience, and Certified Scrum Product Owner. The goal is to become an <strong>AI‑savvy Product Manager with a data‑governance edge</strong>—a combination most candidates cannot claim.</p>
+
+    <h3>The 6 Knowledge Buckets</h3>
+    <ul>
+      <li><span class="tag">1</span> <strong>Foundations of AI & ML</strong> — What AI is, how models work, where data fits in.</li>
+      <li><span class="tag">2</span> <strong>Generative AI & LLMs</strong> — How LLMs think, RAG, fine‑tuning, agents, embeddings.</li>
+      <li><span class="tag">3</span> <strong>AI for Product & Users</strong> — How PMs design AI features, metrics, guardrails, ethics.</li>
+      <li><span class="tag">4</span> <strong>Data, MLOps & Scale</strong> — Pipelines, data quality, model monitoring, LLMOps.</li>
+      <li><span class="tag">5</span> <strong>AI Engineering & APIs</strong> — REST/vector DB/webhook patterns, workflow orchestration.</li>
+      <li><span class="tag">6</span> <strong>AI Strategy & Governance</strong> — Roadmapping, risk, compliance, model governance — your secret weapon.</li>
+    </ul>
+
+    <h3>Recommended Learning Sequence (5 Phases)</h3>
+
+    <div class="phase-block">
+      <strong>Phase 1 — Weeks 1–4: AI Literacy + Product Mindset</strong><br>
+      Learn what AI/ML is, what LLMs are, and how PMs think about AI. Simultaneously refresh core PM fundamentals (strategy, discovery, metrics). <em>Buckets 1, 2, 3.</em>
+    </div>
+
+    <div class="phase-block">
+      <strong>Phase 2 — Weeks 5–8: Generative AI & LLMs in Practice</strong><br>
+      Deep‑dive into LLMs, RAG, embeddings, and how to turn them into user‑facing features. Start using AI tools (playgrounds, no‑code builders) on real product‑ish problems. <em>Bucket 2 deeper + Bucket 3.</em>
+    </div>
+
+    <div class="phase-block">
+      <strong>Phase 3 — Weeks 9–12: Data, MLOps & Engineering Literacy</strong><br>
+      Learn how models get trained, monitored, and redeployed; how data quality and pipelines feed AI. Recycle your API/Boomi mental model into modern AI‑system patterns. <em>Buckets 4 & 5.</em>
+    </div>
+
+    <div class="phase-block">
+      <strong>Phase 4 — Months 4–6: AI‑Product Practice</strong><br>
+      Design 2–3 AI features for a hypothetical product or portfolio (AI‑powered PIM assistant, auto‑tagging, content‑generation workflows). Practice writing PRDs, OKRs, and risk/ethics sections for AI features.
+    </div>
+
+    <div class="phase-block">
+      <strong>Phase 5 — Months 7–12: Strategy, Governance & Expert Positioning</strong><br>
+      Study how companies build AI roadmaps, select bets, and govern data and models. Position yourself as a "data‑governance meets AI‑product" specialist. <em>Bucket 6.</em>
+    </div>
+
+    <div class="callout">
+      <strong>Your unique positioning story:</strong>
+      "She speaks product‑data, PIM, and data‑governance. She understands APIs, integration, and workflow patterns. She is now fluent in AI‑product thinking, RAG, and LLM‑enabled workflows. She can lead AI‑governance for models and data, not just features." — That's a PIM + AI‑product + data‑governance specialist, which is exactly what many SaaS and e‑commerce companies want.
+    </div>
+  </div>
+
+  <!-- BUCKET 1 -->
+  <div id="bucket1" class="tab-content">
+    <h2>Bucket 1 — Foundations of AI & ML</h2>
+    <p><em>Why this matters for you:</em> You'll talk fluently with data scientists and engineers, and you'll know what "model risk," "overfitting," and "bias" really mean.</p>
+
+    <h3>Subtopics to learn</h3>
+    <ul>
+      <li>What is AI vs ML vs DL vs NLP vs CV — and how each fits into enterprise products.</li>
+      <li>Supervised vs unsupervised vs reinforcement learning.</li>
+      <li>Basic statistics for ML: distributions, correlation vs causation, bias, variance, confidence.</li>
+      <li>How training data drives model behavior.</li>
+      <li>Model evaluation basics: precision, recall, accuracy, F‑score, A/B tests.</li>
+      <li>The AI workflow stack: data ingestion → model training → deployment → monitoring → feedback loop.</li>
+    </ul>
+
+    <h3>Key concepts you must own</h3>
+    <ul>
+      <li>A model is only as good as its data <em>and</em> its definition of "good" (your metrics).</li>
+      <li>"More data" is not always better — bad or biased data is worse than a simple rule.</li>
+      <li>You can't expect 100% accuracy; you must design UX and fallbacks around that uncertainty.</li>
+      <li>AI is a <strong>pipeline</strong> (data → model → deploy → monitor → feedback), not a one‑shot magic box.</li>
+      <li>Drift (data drift, concept drift) is a real, measurable risk — you design alerts, fallbacks, and refresh cycles around it.</li>
+    </ul>
+
+    <h3>Resources to prioritize</h3>
+    <ul>
+      <li><a href="https://www.coursera.org/learn/ai-for-everyone" target="_blank">Coursera — "AI For Everyone" (Andrew Ng)</a> — non‑technical intro, perfectly suited for a PM.</li>
+      <li><a href="https://www.icagile.com/resources/ai-for-product-managers-5-foundational-concepts-and-10-tool-options" target="_blank">ICAgile — "AI for Product Managers: 5 Foundational Concepts & 10 Tool Options"</a> — short, PM‑focused.</li>
+      <li>Any beginner "ML for Business" or "ML for Non‑Engineers" course on Coursera/edX.</li>
+    </ul>
+
+    <h3>People to follow on LinkedIn</h3>
+    <ul class="people-list">
+      <li>Andrew Ng — AI scholar, DeepLearning.AI founder, prolific educator</li>
+      <li>Fei‑Fei Li — AI researcher and thought leader</li>
+      <li>Search "AI for Product Managers" or "AI PM" to surface more product‑facing educators</li>
+    </ul>
+  </div>
+
+  <!-- BUCKET 2 -->
+  <div id="bucket2" class="tab-content">
+    <h2>Bucket 2 — Generative AI & LLMs</h2>
+    <p><em>This is where you'll shine as a future AI‑PM.</em> Understanding how LLMs are wired into real workflows — not just chatbots — is the core differentiator.</p>
+
+    <h3>Subtopics to learn</h3>
+    <ul>
+      <li>What an LLM is: tokenization, embeddings, attention, context windows — at a conceptual level.</li>
+      <li>How prompts, system messages, and few‑shot prompts shape LLM behavior.</li>
+      <li>Retrieval‑Augmented Generation (RAG): how you ground LLMs in your own data.</li>
+      <li>Fine‑tuning vs prompt‑engineering vs custom models — when to use each.</li>
+      <li>Multimodal models (vision + text, etc.).</li>
+      <li>Agent‑like systems: task loops, memory, and tool use.</li>
+    </ul>
+
+    <h3>Key concepts you must own</h3>
+    <ul>
+      <li>LLMs are <strong>"stochastic completion engines," not databases</strong> — they hallucinate, and you design around that.</li>
+      <li>You design an <em>experience</em> around an LLM, not just a chatbox.</li>
+      <li>RAG lets you attach your product data (e.g., PIM content) to the LLM so answers are grounded in your source of truth — not generic web knowledge.</li>
+      <li>Agent systems are <strong>"goal‑oriented workflows"</strong>, not one‑shot prompts — they can call tools, read logs, and iterate.</li>
+      <li>Everything about LLMs is probabilistic: design UX, fallbacks, and human‑in‑the‑loop paths around uncertainty, not deterministic correctness.</li>
+    </ul>
+
+    <h3>Resources to prioritize</h3>
+    <ul>
+      <li>"AI for Product Managers" or "AI Product Manager"‑style courses (many PM schools now offer these).</li>
+      <li><a href="https://platform.openai.com/docs" target="_blank">OpenAI</a> / <a href="https://docs.anthropic.com" target="_blank">Anthropic</a> / Google Cloud documentation — read their "How‑to‑Use" guides for embeddings, RAG, and function‑calling.</li>
+      <li>OpenAI Playground or Hugging Face Transformers — hands‑on sandboxes to experiment with prompts.</li>
+      <li>No‑code tools like Bubble + OpenAI, or Zapier + GPT, to prototype AI‑powered workflows.</li>
+      <li>"How to Build AI Products" (widely recommended book/long‑form for PMs).</li>
+    </ul>
+
+    <h3>People to follow on LinkedIn</h3>
+    <ul class="people-list">
+      <li>Lenny Rachitsky — PM‑focused, writes heavily about AI‑product experiments</li>
+      <li>Aakash Gupta — PM‑to‑founder, writes about AI‑product strategy</li>
+      <li>Paweł Huryn — AI‑product leader, tactical AI‑PM thinking</li>
+      <li>Rishabh Nandwana — curates AI‑product leaders; follow him to find more names</li>
+    </ul>
+  </div>
+
+  <!-- BUCKET 3 -->
+  <div id="bucket3" class="tab-content">
+    <h2>Bucket 3 — AI for Product & Users</h2>
+    <p><em>This is where your PM experience becomes your superpower.</em> Knowing how to define, design, and govern AI features — not just build them — is the PM's core value.</p>
+
+    <h3>Subtopics to learn</h3>
+    <ul>
+      <li>How to define an AI use case: start from user problem, not "let's add AI."</li>
+      <li>Designing AI‑assisted UX — how to make it trustworthy, not terrifying or confusing.</li>
+      <li>Metrics for AI features: accuracy, latency, trust, adoption, error‑handling rates.</li>
+      <li>Guardrails and safety: toxicity, bias, hallucinations, PII exposure, regulatory risks.</li>
+      <li>A/B testing and iterating AI features safely.</li>
+      <li>Privacy, consent, and explainability — especially for customer‑facing AI.</li>
+    </ul>
+
+    <h3>Key concepts you must own</h3>
+    <ul>
+      <li>Every AI feature should solve a <strong>specific, measurable user problem</strong> — not be a "cool demo."</li>
+      <li>AI features need <strong>clear fallbacks</strong>: human‑review paths, "I don't know" UX, graceful degradation.</li>
+      <li>You must define <strong>success metrics AND warning metrics</strong> for your models (e.g., drop in accuracy, spike in complaints).</li>
+      <li>AI is a <strong>continuous experiment</strong>, not a "set‑and‑forget" feature — plan for iteration from day one.</li>
+    </ul>
+
+    <h3>Resources to prioritize</h3>
+    <ul>
+      <li>Product School / Mind the Product / ICAgile "AI for Product Managers" guides.</li>
+      <li>Company AI‑product case studies (Spotify, HubSpot, Grammarly) — read how they framed the problem, metrics, and guardrails.</li>
+      <li><a href="https://voltagecontrol.com/articles/ai-product-management-roadmap-frameworks-step-by-step-guide/" target="_blank">Voltage Control — "AI Product Management Roadmap & Frameworks"</a> — practical step‑by‑step for real‑world AI features.</li>
+    </ul>
+
+    <h3>People to follow on LinkedIn</h3>
+    <ul class="people-list">
+      <li>Noam Lovinsky (Grammarly CPO) — AI‑powered communication, PM‑plus‑AI thinking</li>
+      <li>Karen Ng (HubSpot VP Product) — AI‑driven CRM and marketing‑focused AI product</li>
+      <li>Any "AI Product Manager" or "Head of AI Products" at SaaS / e‑commerce / PIM‑adjacent companies</li>
+    </ul>
+  </div>
+
+  <!-- BUCKET 4 -->
+  <div id="bucket4" class="tab-content">
+    <h2>Bucket 4 — Data, MLOps & Scale</h2>
+    <p><em>This is where your data‑governance and product‑data background will make you stand out.</em> You already think about data quality, lineage, and pipelines — now apply that instinct to AI systems.</p>
+
+    <h3>Subtopics to learn</h3>
+    <ul>
+      <li>Data pipelines for AI: ingestion, cleaning, labeling, versioning.</li>
+      <li>Feature engineering and embeddings — what they are (not how to code them).</li>
+      <li>Training vs validation vs test splits.</li>
+      <li>Model monitoring: drift, staleness, performance degradation.</li>
+      <li>A/B testing with models.</li>
+      <li>LLMOps / MLOps: model registries, deployment rollouts, canary launches.</li>
+      <li>Cost and latency considerations: tokens, compute, API pricing.</li>
+    </ul>
+
+    <h3>Key concepts you must own</h3>
+    <ul>
+      <li><strong>Bad data → bad model → bad UX</strong>; data quality is a product‑level concern, not a "data team problem."</li>
+      <li>Models <strong>decay over time</strong> as real‑world data shifts — you need monitoring and refresh plans built in from launch.</li>
+      <li>You must trade off <strong>quality, latency, and cost</strong>; your KPIs should reflect that tension explicitly.</li>
+      <li>You must design <strong>logging and traceability</strong> so you can debug AI failures — your data‑governance instinct will love this.</li>
+      <li>MLOps = repeatability and reliability for models, just like DevOps is for code.</li>
+    </ul>
+
+    <h3>Resources to prioritize</h3>
+    <ul>
+      <li>"MLOps for Business" or "MLOps for Product Managers" type courses (Coursera, Datacamp).</li>
+      <li>MLOps / LLMOps blogs from AWS, GCP, Azure, Neptune.ai, and Weights & Biases.</li>
+      <li>"AI‑driven PIM" or "PXM" content from Salsify, inRiver, etc. — where AI is used for enrichment, classification, and personalization in a domain you know cold.</li>
+    </ul>
+
+    <h3>People to follow on LinkedIn</h3>
+    <ul class="people-list">
+      <li>Chip Huyen — MLOps and LLM deployment expert, very practical writing</li>
+      <li>Shreya Shankar — ML engineering and data quality research</li>
+      <li>Search "LLMOps" or "MLOps product" for practitioners posting hands‑on content</li>
+    </ul>
+  </div>
+
+  <!-- BUCKET 5 -->
+  <div id="bucket5" class="tab-content">
+    <h2>Bucket 5 — AI Engineering & APIs (for non‑engineers)</h2>
+    <p><em>You already know APIs and Boomi‑style data transformation — this is just the AI‑native extension of that mental model.</em></p>
+
+    <h3>Subtopics to learn</h3>
+    <ul>
+      <li>REST/GraphQL APIs for AI models (OpenAI, Anthropic, Cohere, etc.).</li>
+      <li>Event‑driven and webhook patterns for AI workflows.</li>
+      <li>Vector DBs (Pinecone, Weaviate, Chroma) and how they power RAG.</li>
+      <li>Workflow orchestration: LangChain‑style frameworks, Airflow / Prefect / Dagster, or low‑code tools (Zapier, n8n, Make).</li>
+    </ul>
+
+    <h3>Key concepts you must own</h3>
+    <ul>
+      <li><strong>Input → transform → model → output → action</strong> is the core pattern for every AI workflow — you've seen this with Boomi, now apply it to LLMs.</li>
+      <li>You can <strong>decouple your product UI from the AI backend</strong> using APIs and webhooks — the AI is just another service.</li>
+      <li>Vector DBs let you make your product data (PIM, catalog, specs) <strong>"searchable" by an LLM</strong>, not just by a SQL query.</li>
+      <li>Everything can be a reusable step in a workflow: normalize, classify, summarize, send — just like a Boomi transformation map.</li>
+    </ul>
+
+    <h3>Resources to prioritize</h3>
+    <ul>
+      <li>"AI Engineer for Product Managers"‑style content — read to understand the layers of AI engineering, not to code them.</li>
+      <li><a href="https://python.langchain.com/docs/get_started/introduction" target="_blank">LangChain</a> / LlamaIndex documentation — skim at a high level for the mental model, not to write code.</li>
+      <li>No‑code AI builders (Zapier, n8n, Make) — <strong>build a small workflow</strong> that calls an LLM, then saves results to a DB or PIM‑like structure. This is gold for interviews.</li>
+    </ul>
+
+    <h3>People to follow on LinkedIn</h3>
+    <ul class="people-list">
+      <li>Simon Willison — AI engineering and LLM tooling practitioner</li>
+      <li>Andrej Karpathy — foundational AI/LLM explainer content (very accessible)</li>
+      <li>Search "AI workflow" or "LLM APIs" for hands‑on builders posting tutorials</li>
+    </ul>
+  </div>
+
+  <!-- BUCKET 6 -->
+  <div id="bucket6" class="tab-content">
+    <h2>Bucket 6 — AI Strategy & Governance</h2>
+    <p><em>This is your secret weapon.</em> Your data‑governance background makes this the bucket where you can speak more credibly and specifically than most PM candidates.</p>
+
+    <h3>Subtopics to learn</h3>
+    <ul>
+      <li>How AI strategy fits into broader product and business strategy.</li>
+      <li>AI risk categories: bias, safety, privacy, compliance (GDPR, sector‑specific rules).</li>
+      <li>Model governance: versioning, approval workflows, human‑in‑the‑loop, audit logs.</li>
+      <li>Data governance for AI: lineage, consent, PII handling, labeling standards.</li>
+      <li>AI ethics frameworks and "AI risk boards."</li>
+      <li>Measuring AI ROI and avoiding "AI‑boomerang" projects (big investment, no business impact).</li>
+    </ul>
+
+    <h3>Key concepts you must own</h3>
+    <ul>
+      <li>AI is <strong>not "just a tech project"</strong>; it's a governed business capability — treat it like one.</li>
+      <li>You must define <strong>who owns each risk</strong> (data, model, UX, legal) and how it's monitored and escalated.</li>
+      <li><strong>Data lineage and model lineage</strong> are as important as code versioning — this is your PIM/governance instinct in action.</li>
+      <li>You can lead <strong>"AI‑by‑design" reviews</strong> where you ask: "What if it breaks? What if it's wrong? What if it's biased?" — and have answers ready.</li>
+      <li>The data flywheel is your strategic moat: better product data → better AI → better products → more trust → more data investment → repeat.</li>
+    </ul>
+
+    <h3>Resources to prioritize</h3>
+    <ul>
+      <li>"Exceptional AI Product Manager" / "AI‑driven product strategy" guides focused on governance and business alignment.</li>
+      <li>Enterprise AI governance whitepapers from major cloud vendors (AWS, GCP, Azure) and consulting firms (McKinsey, BCG).</li>
+      <li>Content on "AI agents" and "context engineering" — how to design long‑term AI behavior, not just one‑shot prompts.</li>
+      <li><a href="https://www.usaii.org/ai-insights/the-exceptional-artificial-intelligence-product-managers-foundational-elements" target="_blank">USAII — "The Exceptional AI Product Manager"</a></li>
+    </ul>
+
+    <h3>People to follow on LinkedIn</h3>
+    <ul class="people-list">
+      <li>Cathy O'Neil — AI bias and algorithmic accountability</li>
+      <li>Timnit Gebru — AI ethics and governance research</li>
+      <li>Search "AI governance product manager" for practitioners bridging compliance and product</li>
+    </ul>
+
+    <div class="callout">
+      <strong>Your interview positioning:</strong>
+      "I see AI as a strategic capability, not a feature to ship and forget. My data‑governance background means I bring lineage, ownership, audit, and control thinking to every AI initiative from day one — and I understand how to build the data flywheel that makes AI actually compound in value over time."
+    </div>
+  </div>
+
+  <!-- ROUTINE -->
+  <div id="routine" class="tab-content active">
+    <h2>Daily & Weekly Study Routine</h2>
+    <p>A practical structure to keep learning from becoming abstract or overwhelming.</p>
+
+    <h3>Daily rhythm (2–3 hours total)</h3>
+    <ul>
+      <li><strong>Morning (60–90 min):</strong> Study one subtopic from a course or article — e.g., "RAG basics," "MLOps monitoring," "how vector DBs work."</li>
+      <li><strong>Afternoon (60–90 min):</strong> Hands‑on play — build a tiny prototype, e.g., "AI‑powered PIM assistant in a no‑code tool" or "LLM + Airtable + webhooks."</li>
+    </ul>
+
+    <h3>Weekly "mini‑project" — ship one artifact per week</h3>
+    <ul>
+      <li>A <strong>spec doc</strong> for an AI feature for a hypothetical PIM / e‑commerce product.</li>
+      <li>A <strong>1‑page "AI risk + governance" plan</strong> for that feature.</li>
+      <li>A <strong>LinkedIn post or Medium‑style article</strong> explaining one concept you learned — great for job‑search visibility and building in public.</li>
+    </ul>
+
+    <h3>The "map back" habit</h3>
+    <p>As you learn each new concept, constantly ask: <em>"How does this map to my background?"</em></p>
+    <ul>
+      <li>RAG → PIM as source of truth for LLM context.</li>
+      <li>Model drift monitoring → data‑quality SLAs you already know how to write.</li>
+      <li>Workflow orchestration → Boomi transformation maps, just AI‑native.</li>
+      <li>Model governance → data governance policies, applied to models instead of attributes.</li>
+    </ul>
+
+    <h3>Portfolio project ideas (for Phase 4)</h3>
+    <ul>
+      <li><strong>AI‑powered PIM assistant:</strong> A no‑code prototype that lets you ask questions about product data and get grounded, RAG‑backed answers.</li>
+      <li><strong>Auto‑tagging workflow:</strong> A small pipeline that classifies product descriptions into taxonomy categories using an LLM.</li>
+      <li><strong>AI governance spec:</strong> A written "AI‑by‑design" review document for one of the above prototypes — showing you can define risk, lineage, fallbacks, and audit.</li>
+    </ul>
+
+    <div class="callout">
+      <strong>Visibility tip:</strong>
+      Post one thing per week on LinkedIn about what you're learning. Frame it as "I'm building an AI learning map tailored to product data and PIM — here's what I learned about RAG this week." It signals the exact combination of skills you're building.
+    </div>
+  </div>
+
+  <!-- BRIDGE CURRICULUM -->
+  <div id="bridge" class="tab-content">
+    <h2>🌉 Bridge Curriculum — Closing the Gap with Engineers</h2>
+
+    <p>This curriculum is not about becoming an engineer. It's about accumulating enough <strong>building scar tissue</strong> that you can work confidently inside the same tools engineers use, speak their language fluently, and build real things with AI — not just describe them. Think of it as learning to drive, not learning to build a car.</p>
+
+    <div class="callout">
+      <strong>The core principle:</strong>
+      Engineers have an advantage in <em>how</em> to build. You have an advantage in <em>what</em> to build and <em>why</em>. This curriculum closes the "how" gap just enough that you become dangerous — and that combination is rarer and more valuable than either skill alone.
+    </div>
+
+    <h3>Stage 1 — Learn to Read the Engineer's World (Weeks 1–2)</h3>
+    <p>Before you build anything, you need to get comfortable in the environments engineers live in. The goal here is <em>comfort and orientation</em>, not mastery.</p>
+
+    <h4>GitHub — demystified</h4>
+    <p>GitHub is just a version-controlled cloud folder where code lives, with a social layer on top. That's it. Here's what you actually need to understand:</p>
+    <ul>
+      <li><strong>Repository (repo):</strong> A project folder. Everything for one project lives here — code, docs, history.</li>
+      <li><strong>Commit:</strong> A saved snapshot of changes. Like "Track Changes" in Word, but for everything, forever.</li>
+      <li><strong>Branch:</strong> A parallel copy of the project where you experiment without breaking the main version.</li>
+      <li><strong>Pull Request (PR):</strong> A proposal to merge your changes into the main branch. Engineers review and approve these.</li>
+      <li><strong>Fork:</strong> Your own personal copy of someone else's repo. This is how you take an open-source project and make it yours.</li>
+      <li><strong>README:</strong> The front door of any repo — always read this first. It tells you what the project does and how to use it.</li>
+      <li><strong>Star / Watch:</strong> GitHub's equivalent of following or bookmarking a project.</li>
+    </ul>
+    <p><strong>What to do this week:</strong> Create a free GitHub account. Find 3 repos related to AI tools you've read about (search "LangChain", "n8n", or "open-source PIM"). Read their READMEs. You're not touching code — just learning to navigate the environment like a local.</p>
+
+    <h4>The Terminal — one small crack in the door</h4>
+    <ul>
+      <li>The terminal (also called command line, shell, or CLI) is just a text-based way to talk to your computer. Engineers use it because it's faster and more powerful than clicking around.</li>
+      <li>You don't need to master it. You need to be able to open it, run a command someone gives you, and read the output without panicking.</li>
+      <li><strong>What to do:</strong> Open Terminal (Mac) or Command Prompt / PowerShell (Windows). Type <code>pwd</code> (Mac) or <code>cd</code> (Windows) and press Enter. It shows you where you are on your computer. That's your first command. You just used the terminal.</li>
+    </ul>
+
+    <h4>VS Code — the engineer's notebook</h4>
+    <ul>
+      <li>VS Code is a free text editor that engineers use to write and run code. It's also where a lot of AI-assisted building happens now (GitHub Copilot, Claude for VS Code, etc.).</li>
+      <li><strong>What to do:</strong> Download and install <a href="https://code.visualstudio.com/" target="_blank">VS Code</a> for free. Open a folder on your computer. Create a new file called <code>notes.md</code> and type some text. You've just used the same tool most engineers work in every day.</li>
+    </ul>
+
+    <hr style="margin: 1.5em 0; border: none; border-top: 1px solid #ecf0f1;">
+
+    <h3>Stage 2 — Build Your First Real Thing (Weeks 3–4)</h3>
+    <p>This is where the scar tissue starts. You're going to build something broken, fix it, and learn more in two weeks than you would in two months of courses.</p>
+
+    <h4>Project: An AI-powered product description generator</h4>
+    <p>Build a workflow that takes a product name + a few attributes, sends them to an LLM, and returns a polished product description. This maps directly to your PIM background.</p>
+
+    <ul>
+      <li><strong>Tool to use:</strong> <a href="https://n8n.io" target="_blank">n8n</a> (free, self-hostable) or <a href="https://zapier.com" target="_blank">Zapier</a> — no code required, but they expose you to the same logic engineers use: triggers, actions, inputs, outputs, conditionals.</li>
+      <li><strong>What you'll learn by doing this:</strong> How to call an API (the OpenAI API), how to pass data between steps, what happens when something returns an error, and how to read API documentation.</li>
+      <li><strong>The moment it breaks</strong> (it will): Don't fix it immediately. First, read the error message carefully. Google the exact error text. This is the most important engineering habit you can build — engineers aren't smarter, they're just more comfortable sitting with a broken thing and debugging systematically.</li>
+    </ul>
+
+    <h4>Understanding APIs hands-on — not just conceptually</h4>
+    <ul>
+      <li>Download <a href="https://www.postman.com/" target="_blank">Postman</a> (free). This is a tool for making API calls without writing any code — engineers use it constantly to test APIs.</li>
+      <li>Make your first real API call: use the OpenAI API directly in Postman. Send a prompt, get a response. You've just done exactly what every AI application does under the hood — you're just seeing the raw version of it.</li>
+      <li>This will immediately demystify what "calling an API" means. It's just: send a structured request to a URL, get a structured response back. That's it.</li>
+    </ul>
+
+    <hr style="margin: 1.5em 0; border: none; border-top: 1px solid #ecf0f1;">
+
+    <h3>Stage 3 — Learn to Read Code (Not Write It) (Weeks 5–6)</h3>
+    <p>This is the single highest-leverage skill for a non-engineer working in AI. You don't need to write code from scratch — AI can do that. But if you can <em>read</em> code, you can direct AI to write better code, debug what went wrong, and hold engineers accountable to what was agreed.</p>
+
+    <h4>Python basics — just enough</h4>
+    <ul>
+      <li>Python is the dominant language in AI. You need to be able to look at a Python script and understand what it's doing at a high level — not write it yourself.</li>
+      <li><strong>What to study:</strong> <a href="https://www.learnpython.org/" target="_blank">learnpython.org</a> — do the first 5 lessons only: Hello World, Variables, Lists, Basic Operators, String Formatting. Stop there. That's enough to read most AI scripts at a structural level.</li>
+      <li><strong>The practice habit:</strong> Once a week, take a short Python script (find one on GitHub or ask Claude to write one), paste it here, and ask "explain what each section of this code does in plain English." Do this until reading code stops feeling like reading a foreign language.</li>
+    </ul>
+
+    <h4>JSON — the language AI systems use to talk to each other</h4>
+    <ul>
+      <li>Most AI APIs send and receive data in JSON format. If you've worked with PIM or ERP data exports, you've probably seen it.</li>
+      <li>JSON is just structured data with labels. Example: <code>{"product_name": "Ergonomic Chair", "color": "Black", "in_stock": true}</code> — that's it. Key-value pairs, nested where needed.</li>
+      <li><strong>What to do:</strong> Go to <a href="https://jsonlint.com/" target="_blank">jsonlint.com</a>. Paste some JSON. Read it. Edit it. Break it and fix it. Being fluent in reading JSON is a genuine superpower when working with AI systems.</li>
+    </ul>
+
+    <hr style="margin: 1.5em 0; border: none; border-top: 1px solid #ecf0f1;">
+
+    <h3>Stage 4 — Build with AI as Your Coding Partner (Weeks 7–8)</h3>
+    <p>This is where it all comes together. You're going to build something real using AI to write the code — and your job is to direct, review, debug, and ship it.</p>
+
+    <h4>Install Claude Code or GitHub Copilot</h4>
+    <ul>
+      <li><a href="https://claude.ai/code" target="_blank">Claude Code</a> and <a href="https://github.com/features/copilot" target="_blank">GitHub Copilot</a> are AI coding assistants that live inside VS Code. They write code based on your plain-English instructions.</li>
+      <li>Your job is not to write the code. Your job is to: describe what you want, review what it produces, test it, describe what's wrong, and iterate. This is a skill — and it's one engineers are still learning too.</li>
+      <li><strong>Key mindset shift:</strong> You are the <em>product manager of the AI that is writing your code</em>. You write the spec (in plain English), the AI writes the implementation, you QA it. This is a skill you already have — you're just applying it to a new domain.</li>
+    </ul>
+
+    <h4>Project: A RAG-powered PIM Q&amp;A tool</h4>
+    <p>This is your capstone for this stage. Build a small tool that lets you ask questions about a product catalog and get answers grounded in real data — not hallucinated ones.</p>
+    <ul>
+      <li>Create a simple CSV or spreadsheet with 20–30 fake product records (use your PIM knowledge to make it realistic — SKUs, titles, categories, attributes, compliance flags).</li>
+      <li>Use Claude Code or Copilot to write a Python script that loads that data, creates embeddings, stores them in a simple vector store, and lets you query it with natural language.</li>
+      <li>You will not understand every line of code. That's fine. Focus on: does it work? Does it return accurate answers? What breaks it?</li>
+      <li>Document what you built in a README on GitHub. This is now a portfolio artifact.</li>
+    </ul>
+
+    <hr style="margin: 1.5em 0; border: none; border-top: 1px solid #ecf0f1;">
+
+    <h3>Stage 5 — Engineer's Mindset Habits (Ongoing)</h3>
+    <p>These aren't things you learn once — they're habits that, once built, permanently close the gap between you and engineers.</p>
+
+    <ul>
+      <li><strong>Read error messages slowly.</strong> Engineers aren't special — they've just read thousands of error messages and learned that the answer is usually in the message itself. Train yourself to read the full error before Googling.</li>
+      <li><strong>Ask "what state is this in?"</strong> At every step of a workflow or system, ask: what data exists at this point? What shape is it in? What could have gone wrong to get here? This is systems thinking, and it's a learnable habit.</li>
+      <li><strong>Use GitHub as your portfolio.</strong> Every project you build — even the ugly ones — goes on GitHub with a README. This is how engineers show their work. You should do the same. Future employers can see it.</li>
+      <li><strong>Follow engineers on GitHub, not just LinkedIn.</strong> Find engineers working on AI + PIM or AI + product data. Watch what repos they star, what they build, what tools they use. This is real-time signal about where the field is going.</li>
+      <li><strong>Break things on purpose.</strong> Take a working script and delete one line. See what breaks. Change a variable name. Pass the wrong data type. This "destructive testing" builds intuition faster than any tutorial.</li>
+      <li><strong>Write a "what I built and what broke" log.</strong> One paragraph per week. What you tried to build, what actually happened, what you learned. This is your engineering journal and it compounds enormously over time.</li>
+    </ul>
+
+    <hr style="margin: 1.5em 0; border: none; border-top: 1px solid #ecf0f1;">
+
+    <h3>Tools Cheatsheet — The Engineer's Toolkit, Translated</h3>
+    <ul>
+      <li><strong>GitHub</strong> — version-controlled home for code and projects. Your portfolio lives here. <a href="https://github.com" target="_blank">github.com</a></li>
+      <li><strong>VS Code</strong> — the editor where you write, read, and run code. Free. <a href="https://code.visualstudio.com" target="_blank">code.visualstudio.com</a></li>
+      <li><strong>Postman</strong> — test any API without writing code. Demystifies how AI models are actually called. <a href="https://postman.com" target="_blank">postman.com</a></li>
+      <li><strong>n8n / Zapier / Make</strong> — no-code/low-code workflow builders. The fastest path to building real AI pipelines. <a href="https://n8n.io" target="_blank">n8n.io</a></li>
+      <li><strong>Claude Code / GitHub Copilot</strong> — AI coding assistants inside VS Code. You direct, they write. <a href="https://claude.ai/code" target="_blank">claude.ai/code</a></li>
+      <li><strong>Replit</strong> — run code in a browser with no setup. Perfect for experimenting without installing anything. <a href="https://replit.com" target="_blank">replit.com</a></li>
+      <li><strong>Hugging Face</strong> — open-source AI model hub. Think of it as the GitHub of AI models. <a href="https://huggingface.co" target="_blank">huggingface.co</a></li>
+      <li><strong>JSONLint</strong> — paste and validate JSON. Builds fluency in the data format AI systems use. <a href="https://jsonlint.com" target="_blank">jsonlint.com</a></li>
+      <li><strong>LearnPython.org</strong> — free, browser-based Python basics. Do the first 5 lessons. Stop there (for now). <a href="https://learnpython.org" target="_blank">learnpython.org</a></li>
+      <li><strong>Terminal / Command Line</strong> — already on your computer. Open it. Don't fear it. It's just text.</li>
+    </ul>
+
+    <div class="callout">
+      <strong>The honest timeline:</strong>
+      8 weeks of doing this — actually building, breaking, and fixing things — will put you ahead of the majority of "AI PMs" who have only taken courses and read articles. Scar tissue beats certificates. Ship ugly things. Document them. Iterate.
+    </div>
+  </div>
+
+  <!-- CHEATSHEET -->
+  <div id="cheatsheet" class="tab-content">
+    <h2>AI‑Engineering Thinking (for non‑engineers)</h2>
+    <p><strong>Goal:</strong> Think like an engineer who uses AI — without writing code.</p>
+
+    <h3>1. Think in systems, not tools</h3>
+    <ul>
+      <li>AI is a <strong>service/module</strong> in a larger system: it has inputs, outputs, latency, cost, and failure modes.</li>
+      <li>Always ask: <em>Where does AI sit in the data‑flow?</em> (PIM → AI → UI / ERP / Workflow Engine).</li>
+    </ul>
+
+    <h3>2. Decompose workflows into AI‑friendly steps</h3>
+    <ul>
+      <li>Data inputs (PIM, ERP, tickets, dashboards).</li>
+      <li>Decision points (classify, rank, summarize, QA).</li>
+      <li>Action points (update PIM, send email, route to human).</li>
+      <li>Map AI only to <strong>routine, data‑heavy steps</strong>; keep <strong>high‑risk decisions</strong> human‑driven.</li>
+    </ul>
+
+    <h3>3. Treat AI like an "API" with contracts</h3>
+    <ul>
+      <li>For every AI module, define:
+        <ul>
+          <li>Inputs (what data, where it lives).</li>
+          <li>Outputs (format, structure, confidence).</li>
+          <li>Constraints (latency, PII rules, accuracy thresholds, fallbacks).</li>
+        </ul>
+      </li>
+    </ul>
+
+    <h3>4. Design for failure</h3>
+    <ul>
+      <li>AI will be wrong sometimes. Define: what happens when confidence is low? Route to human? Use cached result? Return default?</li>
+      <li>Every AI step needs a fallback path.</li>
+    </ul>
+
+    <h3>5. Monitor like an engineer</h3>
+    <ul>
+      <li>Track: accuracy over time, latency, hallucination rate, user correction rate, data drift.</li>
+      <li>Set SLAs for each AI module just like you'd set SLAs for an API.</li>
+    </ul>
+
+    <h3>6. Governance is a feature, not a tax</h3>
+    <ul>
+      <li>Who owns the data quality feeding this model?</li>
+      <li>Who approves model updates?</li>
+      <li>Who is notified when accuracy drops?</li>
+      <li>Is there an audit log?</li>
+    </ul>
+
+    <p><strong>Summary mental model:</strong> <em>Input contract → AI module → Output contract → Fallback → Monitor → Govern.</em></p>
+  </div>
+
+  <!-- EXAMPLES -->
+  <div id="examples" class="tab-content">
+    <h2>AI‑Vibe‑Coding PIM Examples</h2>
+    <p><strong>Goal:</strong> See what "AI‑vibe‑coding" looks like when applied to PIM workflows — plain‑language prompts that produce real, structured outputs.</p>
+
+    <p class="example-heading">Example 1 – Auto‑classify a product into a taxonomy</p>
+    <div class="example">Prompt: "Given this product title and description, classify it into the correct category from our taxonomy. Return category path, confidence score, and reason."
+
+Input: { title: "Wireless Noise‑Cancelling Headphones", description: "Over‑ear, Bluetooth 5.2, 30hr battery..." }
+Taxonomy: Electronics > Audio > Headphones > Over‑Ear
+
+Output: { category: "Electronics > Audio > Headphones > Over‑Ear", confidence: 0.97, reason: "Over‑ear, wireless, audio device matches taxonomy node." }</div>
+
+    <p class="example-heading">Example 2 – Generate missing product attributes</p>
+    <div class="example">Prompt: "Given this product data, identify missing required attributes and suggest values based on the product type and description."
+
+Input: { title: "Ergonomic Office Chair", description: "Adjustable lumbar support, mesh back, 5‑star base..." }
+Required attributes: color, weight_capacity_lbs, material, adjustable_height
+
+Output: { color: "Black (inferred from image alt‑text)", weight_capacity_lbs: "250 (industry standard for this category)", material: "Mesh + Nylon", adjustable_height: "Yes (mentioned in description)" }</div>
+
+    <p class="example-heading">Example 3 – QA flag for compliance‑critical attributes</p>
+    <div class="example">Prompt: "Review this product record for compliance gaps. Flag any missing or suspicious values for regulated attributes."
+
+Input: { product_id: "SKU‑4821", category: "Children's Toys", age_rating: null, material: "Unknown", safety_cert: null }
+
+Output: { flags: [
+  { attribute: "age_rating",  issue: "Missing – required for children's toys" },
+  { attribute: "material",    issue: "Unknown – required for CPSC compliance" },
+  { attribute: "safety_cert", issue: "Missing – ASTM F963 cert required" }
+], risk_level: "HIGH" }</div>
+
+    <p class="example-heading">Example 4 – Summarize a product for a channel</p>
+    <div class="example">Prompt: "Rewrite this product description for a mobile‑first e‑commerce channel. Max 80 words, lead with the top benefit, end with a CTA."
+
+Input: Long technical spec description (300 words)...
+
+Output: "Crystal‑clear sound meets all‑day comfort. These over‑ear headphones deliver 30 hours of noise‑cancelling audio on one charge — perfect for work, travel, or anything in between. Bluetooth 5.2 keeps you connected instantly. Shop now and hear the difference."</div>
+
+    <p class="example-heading">Example 5 – RAG‑grounded product Q&A</p>
+    <div class="example">Setup: PIM data for 500 SKUs loaded into a vector DB (e.g., Pinecone).
+
+Prompt: "Is the Model X standing desk compatible with dual‑monitor arms from third‑party vendors?"
+
+Without RAG output: "Most standing desks support dual‑monitor arms..." [generic, potentially wrong]
+
+With RAG output: "According to the Model X spec sheet (SKU‑1042), the desk has a grommet hole diameter of 50mm and a max monitor arm load of 20kg per side. It is compatible with any VESA‑standard arm meeting those specs." [grounded in your actual PIM data]</div>
+  </div>
+
+  <script>
+    function openTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      event.currentTarget.classList.add('active');
+    }
+  </script>
+</body>
+</html>
