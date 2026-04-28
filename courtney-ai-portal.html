@@ -1,0 +1,1653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Courtney's AI Learning Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:        #e8f5f5;
+      --sidebar:   #1a4a52;
+      --card:      #ffffff;
+      --border:    #b0d8dc;
+      --accent:    #1a7a8a;
+      --accent2:   #2aaa88;
+      --accent3:   #e07a40;
+      --accent4:   #c45a78;
+      --text:      #1c3a40;
+      --muted:     #5a8a92;
+      --heading:   #0e2830;
+      --tag-bg:    #c8eaee;
+      --tag-text:  #1a6a7a;
+      --code-bg:   #0d2a30;
+      --sidebar-w: 270px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      min-height: 100vh;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    /* ── SIDEBAR ── */
+    #sidebar {
+      width: var(--sidebar-w);
+      min-height: 100vh;
+      background: linear-gradient(175deg, #0e3a44 0%, #1a5a6a 45%, #1e6a5a 100%);
+      border-right: 1px solid rgba(0,0,0,0.15);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0; left: 0;
+      overflow-y: auto;
+      z-index: 100;
+    }
+
+    .sidebar-header {
+      padding: 1.75rem 1.5rem 1.25rem;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .sidebar-logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.15rem;
+      color: #e8f8fa;
+      line-height: 1.3;
+      margin-bottom: 0.35rem;
+    }
+
+    .sidebar-tagline {
+      font-size: 0.75rem;
+      color: #7ab8c0;
+      font-weight: 300;
+      letter-spacing: 0.02em;
+    }
+
+    .progress-bar-wrap {
+      padding: 1rem 1.5rem 0.75rem;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .progress-label {
+      font-size: 0.72rem;
+      color: #7ab8c0;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .progress-track {
+      height: 4px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 2px;
+      transition: width 0.4s ease;
+    }
+
+    .nav-section {
+      padding: 1rem 0 0.5rem;
+    }
+
+    .nav-section-label {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #5a9aa4;
+      padding: 0 1.5rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      padding: 0.55rem 1.5rem;
+      cursor: pointer;
+      border-left: 3px solid transparent;
+      transition: all 0.15s ease;
+      color: #9accd4;
+      font-size: 0.875rem;
+      font-weight: 400;
+      text-decoration: none;
+      user-select: none;
+    }
+
+    .nav-item:hover {
+      background: rgba(255,255,255,0.07);
+      color: #e8f8fa;
+    }
+
+    .nav-item.active {
+      background: rgba(255,255,255,0.12);
+      border-left-color: #7adce8;
+      color: #e8f8fa;
+      font-weight: 500;
+    }
+
+    .nav-item .nav-icon {
+      font-size: 1em;
+      flex-shrink: 0;
+      width: 1.2em;
+      text-align: center;
+    }
+
+    .nav-item .nav-check {
+      margin-left: auto;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(255,255,255,0.2);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.6rem;
+      transition: all 0.2s;
+    }
+
+    .nav-item.done .nav-check {
+      background: var(--accent2);
+      border-color: var(--accent2);
+      color: #fff;
+    }
+
+    /* ── MAIN CONTENT ── */
+    #main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      height: 56px;
+      background: var(--sidebar);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 2.5rem;
+      gap: 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .topbar-breadcrumb {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .topbar-breadcrumb span {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .topbar-actions {
+      margin-left: auto;
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .btn-mark {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      padding: 0.4rem 1rem;
+      border-radius: 6px;
+      border: 1.5px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-mark:hover {
+      border-color: var(--accent2);
+      color: var(--accent2);
+    }
+
+    .btn-mark.marked {
+      background: rgba(56, 201, 142, 0.12);
+      border-color: var(--accent2);
+      color: var(--accent2);
+    }
+
+    .content-wrap {
+      padding: 2.5rem 3rem 4rem;
+      max-width: 820px;
+    }
+
+    /* ── TYPOGRAPHY ── */
+    .page { display: none; }
+    .page.active { display: block; }
+
+    .page-eyebrow {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .page-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2rem;
+      color: var(--heading);
+      line-height: 1.2;
+      margin-bottom: 0.75rem;
+    }
+
+    .page-intro {
+      font-size: 0.975rem;
+      color: var(--muted);
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin-bottom: 2rem;
+      font-style: italic;
+    }
+
+    h3 {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      font-weight: 600;
+      margin: 2rem 0 0.75rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    h4 {
+      font-size: 1rem;
+      color: var(--heading);
+      font-weight: 600;
+      margin: 1.25rem 0 0.5rem;
+    }
+
+    p { margin-bottom: 0.85rem; color: var(--text); }
+
+    ul {
+      padding-left: 0;
+      list-style: none;
+      margin-bottom: 1rem;
+    }
+
+    ul li {
+      position: relative;
+      padding: 0.3rem 0 0.3rem 1.35rem;
+      color: var(--text);
+      font-size: 0.925rem;
+    }
+
+    ul li::before {
+      content: '›';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    ul li strong { color: var(--heading); }
+    ul li em { color: var(--muted); font-style: italic; }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    code {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.85em;
+      background: #c8eaee;
+      border: 1px solid #a0ccd4;
+      padding: 0.1em 0.4em;
+      border-radius: 3px;
+      color: #0e4a56;
+    }
+
+    /* ── CARDS ── */
+    .callout {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent3);
+      border-radius: 0 8px 8px 0;
+      padding: 1rem 1.25rem;
+      margin: 1.25rem 0;
+      font-size: 0.9rem;
+    }
+
+    .callout .callout-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent3);
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
+
+    .callout p { color: var(--muted); margin: 0; }
+    .callout p strong { color: var(--text); }
+
+    .phase-block {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .phase-block .phase-num {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent2);
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .phase-block strong { color: var(--heading); }
+    .phase-block p { color: var(--muted); font-size: 0.9rem; margin: 0.3rem 0 0; }
+
+    .pill-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      padding: 0;
+      margin: 0.5rem 0 1rem;
+      list-style: none;
+    }
+
+    .pill-list li {
+      background: var(--tag-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 0.3rem 0.85rem;
+      font-size: 0.82rem;
+      color: var(--text);
+      font-weight: 400;
+    }
+
+    .pill-list li::before { display: none; }
+
+    .tag {
+      display: inline-block;
+      background: var(--tag-bg);
+      color: var(--accent);
+      border: 1px solid rgba(122,106,158,0.35);
+      border-radius: 4px;
+      font-size: 0.75rem;
+      padding: 0.1em 0.5em;
+      font-weight: 600;
+      margin-right: 0.3em;
+      font-family: 'DM Mono', monospace;
+    }
+
+    .code-block {
+      background: var(--code-bg);
+      border: 1px solid #4a3e38;
+      border-radius: 8px;
+      padding: 1.1rem 1.25rem;
+      margin: 0.75rem 0 1.25rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.82rem;
+      color: #d4b896;
+      white-space: pre-wrap;
+      line-height: 1.6;
+      overflow-x: auto;
+    }
+
+    .code-block .code-label {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #9a8070;
+      margin-bottom: 0.6rem;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+    }
+
+    .tool-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 0.75rem;
+      margin: 0.75rem 0 1.5rem;
+    }
+
+    .tool-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.85rem 1rem;
+      transition: border-color 0.2s;
+    }
+
+    .tool-card:hover { border-color: var(--accent); }
+
+    .tool-card .tool-name {
+      font-weight: 600;
+      color: var(--heading);
+      font-size: 0.9rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .tool-card .tool-desc {
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .tool-card a {
+      font-size: 0.75rem;
+      display: inline-block;
+      margin-top: 0.4rem;
+    }
+
+    hr.divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 2rem 0;
+    }
+
+    /* checklist items */
+    .checklist { list-style: none; padding: 0; }
+    .checklist li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.4rem 0;
+      font-size: 0.925rem;
+    }
+    .checklist li::before { display: none; }
+    .checklist input[type="checkbox"] {
+      margin-top: 0.25rem;
+      accent-color: var(--accent2);
+      width: 15px;
+      height: 15px;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+    .checklist label { cursor: pointer; color: var(--text); }
+    .checklist input:checked + label {
+      color: var(--muted);
+      text-decoration: line-through;
+    }
+
+    /* bucket overview cards */
+    .bucket-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1rem;
+      margin: 1rem 0 1.5rem;
+    }
+
+    .bucket-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.1rem 1.2rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .bucket-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .bucket-card .bc-num {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 0.4rem;
+    }
+
+    .bucket-card .bc-title {
+      font-weight: 600;
+      color: var(--heading);
+      font-size: 0.925rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .bucket-card .bc-desc {
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════ SIDEBAR ══════════ -->
+<nav id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo">Courtney's AI<br>Learning Portal</div>
+    <div class="sidebar-tagline">PIM · Data Governance · AI‑PM</div>
+  </div>
+
+  <div class="progress-bar-wrap">
+    <div class="progress-label">
+      <span>Overall Progress</span>
+      <span id="prog-pct">0%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="prog-fill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-label">Start Here</div>
+    <div class="nav-item active" onclick="showPage('routine', this)" data-id="routine">
+      <span class="nav-icon">📅</span> Daily &amp; Weekly Routine
+      <span class="nav-check">✓</span>
+    </div>
+    <div class="nav-item" onclick="showPage('overview', this)" data-id="overview">
+      <span class="nav-icon">🗺</span> Overview &amp; Sequence
+      <span class="nav-check">✓</span>
+    </div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-label">6 Knowledge Buckets</div>
+    <div class="nav-item" onclick="showPage('bucket1', this)" data-id="bucket1">
+      <span class="nav-icon">①</span> AI &amp; ML Foundations
+      <span class="nav-check">✓</span>
+    </div>
+    <div class="nav-item" onclick="showPage('bucket2', this)" data-id="bucket2">
+      <span class="nav-icon">②</span> Generative AI &amp; LLMs
+      <span class="nav-check">✓</span>
+    </div>
+    <div class="nav-item" onclick="showPage('bucket3', this)" data-id="bucket3">
+      <span class="nav-icon">③</span> AI for Product &amp; Users
+      <span class="nav-check">✓</span>
+    </div>
+    <div class="nav-item" onclick="showPage('bucket4', this)" data-id="bucket4">
+      <span class="nav-icon">④</span> Data, MLOps &amp; Scale
+      <span class="nav-check">✓</span>
+    </div>
+    <div class="nav-item" onclick="showPage('bucket5', this)" data-id="bucket5">
+      <span class="nav-icon">⑤</span> AI Engineering &amp; APIs
+      <span class="nav-check">✓</span>
+    </div>
+    <div class="nav-item" onclick="showPage('bucket6', this)" data-id="bucket6">
+      <span class="nav-icon">⑥</span> AI Strategy &amp; Governance
+      <span class="nav-check">✓</span>
+    </div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-label">Emerging · 2026</div>
+    <div class="nav-item" onclick="showPage('mcp', this)" data-id="mcp">
+      <span class="nav-icon">🔌</span> MCP &amp; AI Integrations
+      <span class="nav-check">✓</span>
+    </div>
+    <div class="nav-item" onclick="showPage('agents', this)" data-id="agents">
+      <span class="nav-icon">🤖</span> AI Agents &amp; Multi‑Agent
+      <span class="nav-check">✓</span>
+    </div>
+    <div class="nav-item" onclick="showPage('evals', this)" data-id="evals">
+      <span class="nav-icon">🧪</span> AI Evals
+      <span class="nav-check">✓</span>
+    </div>
+    <div class="nav-item" onclick="showPage('context', this)" data-id="context">
+      <span class="nav-icon">🧠</span> Context Engineering
+      <span class="nav-check">✓</span>
+    </div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-label">Bridge &amp; Tools</div>
+    <div class="nav-item" onclick="showPage('bridge', this)" data-id="bridge">
+      <span class="nav-icon">🌉</span> Bridge Curriculum
+      <span class="nav-check">✓</span>
+    </div>
+    <div class="nav-item" onclick="showPage('cheatsheet', this)" data-id="cheatsheet">
+      <span class="nav-icon">⚙</span> Engineering Thinking
+      <span class="nav-check">✓</span>
+    </div>
+    <div class="nav-item" onclick="showPage('examples', this)" data-id="examples">
+      <span class="nav-icon">💻</span> Vibe‑Coding Examples
+      <span class="nav-check">✓</span>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════ MAIN ══════════ -->
+<div id="main">
+  <div class="topbar">
+    <div class="topbar-breadcrumb">AI Learning Portal &rsaquo; <span id="topbar-title">Daily &amp; Weekly Routine</span></div>
+    <div class="topbar-actions">
+      <button class="btn-mark" id="mark-btn" onclick="toggleDone()">Mark as Done</button>
+    </div>
+  </div>
+
+  <div class="content-wrap">
+
+    <!-- ══ ROUTINE ══ -->
+    <div class="page active" id="page-routine" data-title="Daily &amp; Weekly Routine">
+      <div class="page-eyebrow">Start Here</div>
+      <h2 class="page-title">Daily &amp; Weekly Routine</h2>
+      <p class="page-intro">A practical structure to keep learning from becoming abstract or overwhelming. Two to three focused hours a day compounds fast.</p>
+
+      <h3>Daily Rhythm</h3>
+      <ul>
+        <li><strong>Morning (60–90 min):</strong> Study one subtopic from a course or article — e.g., "RAG basics," "MLOps monitoring," "how vector DBs work."</li>
+        <li><strong>Afternoon (60–90 min):</strong> Hands‑on play — build a tiny prototype, e.g., "AI‑powered PIM assistant in a no‑code tool" or "LLM + Airtable + webhooks."</li>
+      </ul>
+
+      <h3>Weekly Mini‑Project — Ship One Artifact Per Week</h3>
+      <ul class="checklist">
+        <li><input type="checkbox" id="c1"><label for="c1">A <strong>spec doc</strong> for an AI feature for a hypothetical PIM / e‑commerce product.</label></li>
+        <li><input type="checkbox" id="c2"><label for="c2">A <strong>1‑page "AI risk + governance" plan</strong> for that feature.</label></li>
+        <li><input type="checkbox" id="c3"><label for="c3">A <strong>LinkedIn post or Medium‑style article</strong> explaining one concept you learned.</label></li>
+      </ul>
+
+      <h3>The "Map Back" Habit</h3>
+      <p>As you learn each new concept, ask: <em>"How does this map to my background?"</em></p>
+      <ul>
+        <li>RAG → PIM as source of truth for LLM context.</li>
+        <li>Model drift monitoring → data‑quality SLAs you already know how to write.</li>
+        <li>Workflow orchestration → Boomi transformation maps, just AI‑native.</li>
+        <li>Model governance → data governance policies, applied to models instead of attributes.</li>
+      </ul>
+
+      <h3>Portfolio Project Ideas (Phase 4)</h3>
+      <ul>
+        <li><strong>AI‑powered PIM assistant:</strong> A no‑code prototype that lets you ask questions about product data and get RAG‑backed answers.</li>
+        <li><strong>Auto‑tagging workflow:</strong> A small pipeline that classifies product descriptions into taxonomy categories using an LLM.</li>
+        <li><strong>AI governance spec:</strong> A written "AI‑by‑design" review document — showing you can define risk, lineage, fallbacks, and audit.</li>
+      </ul>
+
+      <div class="callout">
+        <div class="callout-label">Visibility Tip</div>
+        <p>Post one thing per week on LinkedIn about what you're learning. Frame it as "I'm building an AI learning map tailored to product data and PIM — here's what I learned about RAG this week." It signals the exact combination of skills you're building.</p>
+      </div>
+    </div>
+
+    <!-- ══ OVERVIEW ══ -->
+    <div class="page" id="page-overview" data-title="Overview &amp; Sequence">
+      <div class="page-eyebrow">Start Here</div>
+      <h2 class="page-title">Overview &amp; Learning Sequence</h2>
+      <p class="page-intro">You're in a strong position: 16 years of PIM, Data Governance, API literacy, Boomi integration experience, and Certified Scrum PO. The goal is to become an <strong>AI‑savvy PM with a data‑governance edge</strong> — a combination most candidates can't claim.</p>
+
+      <h3>The 6 Knowledge Buckets</h3>
+      <div class="bucket-grid">
+        <div class="bucket-card" onclick="showPageById('bucket1')">
+          <div class="bc-num">BUCKET 01</div>
+          <div class="bc-title">AI &amp; ML Foundations</div>
+          <div class="bc-desc">What AI is, how models work, where data fits in.</div>
+        </div>
+        <div class="bucket-card" onclick="showPageById('bucket2')">
+          <div class="bc-num">BUCKET 02</div>
+          <div class="bc-title">Generative AI &amp; LLMs</div>
+          <div class="bc-desc">How LLMs think, RAG, fine‑tuning, agents, embeddings.</div>
+        </div>
+        <div class="bucket-card" onclick="showPageById('bucket3')">
+          <div class="bc-num">BUCKET 03</div>
+          <div class="bc-title">AI for Product &amp; Users</div>
+          <div class="bc-desc">How PMs design AI features, metrics, guardrails, ethics.</div>
+        </div>
+        <div class="bucket-card" onclick="showPageById('bucket4')">
+          <div class="bc-num">BUCKET 04</div>
+          <div class="bc-title">Data, MLOps &amp; Scale</div>
+          <div class="bc-desc">Pipelines, data quality, model monitoring, LLMOps.</div>
+        </div>
+        <div class="bucket-card" onclick="showPageById('bucket5')">
+          <div class="bc-num">BUCKET 05</div>
+          <div class="bc-title">AI Engineering &amp; APIs</div>
+          <div class="bc-desc">REST/vector DB/webhook patterns, workflow orchestration.</div>
+        </div>
+        <div class="bucket-card" onclick="showPageById('bucket6')">
+          <div class="bc-num">BUCKET 06</div>
+          <div class="bc-title">AI Strategy &amp; Governance</div>
+          <div class="bc-desc">Roadmapping, risk, compliance, model governance — your secret weapon.</div>
+        </div>
+      </div>
+
+      <h3>Recommended 5‑Phase Learning Sequence</h3>
+      <div class="phase-block">
+        <div class="phase-num">Phase 1 — Weeks 1–4</div>
+        <strong>AI Literacy + Product Mindset</strong>
+        <p>Learn what AI/ML is, what LLMs are, and how PMs think about AI. Simultaneously refresh core PM fundamentals. <em>Buckets 1, 2, 3.</em></p>
+      </div>
+      <div class="phase-block">
+        <div class="phase-num">Phase 2 — Weeks 5–8</div>
+        <strong>Generative AI &amp; LLMs in Practice</strong>
+        <p>Deep‑dive into LLMs, RAG, embeddings, and how to turn them into user‑facing features. Use AI tools on real product‑ish problems. <em>Bucket 2 deeper + Bucket 3.</em></p>
+      </div>
+      <div class="phase-block">
+        <div class="phase-num">Phase 3 — Weeks 9–12</div>
+        <strong>Data, MLOps &amp; Engineering Literacy</strong>
+        <p>Learn how models get trained, monitored, and redeployed. Recycle your Boomi mental model into modern AI‑system patterns. <em>Buckets 4 &amp; 5.</em></p>
+      </div>
+      <div class="phase-block">
+        <div class="phase-num">Phase 4 — Months 4–6</div>
+        <strong>AI‑Product Practice</strong>
+        <p>Design 2–3 AI features for a hypothetical product or portfolio. Practice writing PRDs, OKRs, and risk/ethics sections for AI features.</p>
+      </div>
+      <div class="phase-block">
+        <div class="phase-num">Phase 5 — Months 7–12</div>
+        <strong>Strategy, Governance &amp; Expert Positioning</strong>
+        <p>Study how companies build AI roadmaps, select bets, and govern data and models. Position yourself as a "data‑governance meets AI‑product" specialist. <em>Bucket 6.</em></p>
+      </div>
+
+      <div class="callout">
+        <div class="callout-label">Your Unique Positioning</div>
+        <p>"She speaks product‑data, PIM, and data‑governance. She understands APIs, integration, and workflow patterns. She is now fluent in AI‑product thinking, RAG, and LLM‑enabled workflows. She can lead AI‑governance for models and data, not just features." — That's a PIM + AI‑product + data‑governance specialist, which is exactly what many SaaS and e‑commerce companies want.</p>
+      </div>
+    </div>
+
+    <!-- ══ BUCKET 1 ══ -->
+    <div class="page" id="page-bucket1" data-title="Bucket 1 · AI &amp; ML Foundations">
+      <div class="page-eyebrow">Bucket 01</div>
+      <h2 class="page-title">AI &amp; ML Foundations</h2>
+      <p class="page-intro">You'll be able to talk fluently with data scientists and engineers, and know what "model risk," "overfitting," and "bias" really mean in practice.</p>
+
+      <h3>Subtopics to Learn</h3>
+      <ul class="checklist">
+        <li><input type="checkbox" id="b1c1"><label for="b1c1">What is AI vs ML vs DL vs NLP vs CV — and how each fits into enterprise products.</label></li>
+        <li><input type="checkbox" id="b1c2"><label for="b1c2">Supervised vs unsupervised vs reinforcement learning.</label></li>
+        <li><input type="checkbox" id="b1c3"><label for="b1c3">Basic statistics for ML: distributions, correlation vs causation, bias, variance, confidence.</label></li>
+        <li><input type="checkbox" id="b1c4"><label for="b1c4">How training data drives model behavior.</label></li>
+        <li><input type="checkbox" id="b1c5"><label for="b1c5">Model evaluation basics: precision, recall, accuracy, F‑score, A/B tests.</label></li>
+        <li><input type="checkbox" id="b1c6"><label for="b1c6">The AI workflow stack: data ingestion → model training → deployment → monitoring → feedback loop.</label></li>
+      </ul>
+
+      <h3>Key Concepts You Must Own</h3>
+      <ul>
+        <li>A model is only as good as its data <em>and</em> its definition of "good" (your metrics).</li>
+        <li>"More data" is not always better — bad or biased data is worse than a simple rule.</li>
+        <li>You can't expect 100% accuracy; you must design UX and fallbacks around that uncertainty.</li>
+        <li>AI is a <strong>pipeline</strong> (data → model → deploy → monitor → feedback), not a one‑shot magic box.</li>
+        <li><strong>Drift</strong> (data drift, concept drift) is a real, measurable risk — you design alerts, fallbacks, and refresh cycles around it.</li>
+      </ul>
+
+      <h3>Resources to Prioritize</h3>
+      <ul>
+        <li><a href="https://www.coursera.org/learn/ai-for-everyone" target="_blank">Coursera — "AI For Everyone" (Andrew Ng)</a> — non‑technical intro, perfectly suited for a PM.</li>
+        <li><a href="https://www.icagile.com/resources/ai-for-product-managers-5-foundational-concepts-and-10-tool-options" target="_blank">ICAgile — "AI for Product Managers: 5 Foundational Concepts"</a> — short, PM‑focused.</li>
+        <li>Any beginner "ML for Business" or "ML for Non‑Engineers" course on Coursera/edX.</li>
+      </ul>
+
+      <h3>People to Follow on LinkedIn</h3>
+      <ul class="pill-list">
+        <li>Andrew Ng — DeepLearning.AI founder</li>
+        <li>Fei‑Fei Li — AI researcher &amp; thought leader</li>
+        <li>Search "AI for Product Managers" or "AI PM"</li>
+      </ul>
+    </div>
+
+    <!-- ══ BUCKET 2 ══ -->
+    <div class="page" id="page-bucket2" data-title="Bucket 2 · Generative AI &amp; LLMs">
+      <div class="page-eyebrow">Bucket 02</div>
+      <h2 class="page-title">Generative AI &amp; LLMs</h2>
+      <p class="page-intro">This is where you'll shine as a future AI‑PM. Understanding how LLMs are wired into real workflows — not just chatbots — is the core differentiator.</p>
+
+      <h3>Subtopics to Learn</h3>
+      <ul class="checklist">
+        <li><input type="checkbox" id="b2c1"><label for="b2c1">What an LLM is: tokenization, embeddings, attention, context windows — at a conceptual level.</label></li>
+        <li><input type="checkbox" id="b2c2"><label for="b2c2">How prompts, system messages, and few‑shot prompts shape LLM behavior.</label></li>
+        <li><input type="checkbox" id="b2c3"><label for="b2c3">Retrieval‑Augmented Generation (RAG): how you ground LLMs in your own data.</label></li>
+        <li><input type="checkbox" id="b2c4"><label for="b2c4">Fine‑tuning vs prompt‑engineering vs custom models — when to use each.</label></li>
+        <li><input type="checkbox" id="b2c5"><label for="b2c5">Multimodal models (vision + text, etc.).</label></li>
+        <li><input type="checkbox" id="b2c6"><label for="b2c6">Agent‑like systems: task loops, memory, and tool use.</label></li>
+      </ul>
+
+      <h3>Key Concepts You Must Own</h3>
+      <ul>
+        <li>LLMs are <strong>"stochastic completion engines," not databases</strong> — they hallucinate, and you design around that.</li>
+        <li>You design an <em>experience</em> around an LLM, not just a chatbox.</li>
+        <li>RAG lets you attach your PIM content to the LLM so answers are grounded in your source of truth — not generic web knowledge.</li>
+        <li>Agent systems are <strong>"goal‑oriented workflows"</strong> — they can call tools, read logs, and iterate.</li>
+        <li>Everything about LLMs is probabilistic: design UX, fallbacks, and human‑in‑the‑loop paths around uncertainty.</li>
+      </ul>
+
+      <h3>Resources to Prioritize</h3>
+      <ul>
+        <li>"AI for Product Managers" or "AI Product Manager"‑style courses — many PM schools now offer these.</li>
+        <li><a href="https://platform.openai.com/docs" target="_blank">OpenAI</a> / <a href="https://docs.anthropic.com" target="_blank">Anthropic</a> / Google Cloud docs — read their guides for embeddings, RAG, and function‑calling.</li>
+        <li>OpenAI Playground or Hugging Face Transformers — hands‑on sandboxes to experiment with prompts.</li>
+        <li>No‑code tools like Bubble + OpenAI, or Zapier + GPT, to prototype AI‑powered workflows.</li>
+      </ul>
+
+      <h3>People to Follow on LinkedIn</h3>
+      <ul class="pill-list">
+        <li>Lenny Rachitsky — PM‑focused, AI product experiments</li>
+        <li>Aakash Gupta — AI‑product strategy</li>
+        <li>Paweł Huryn — tactical AI‑PM thinking</li>
+        <li>Rishabh Nandwana — curates AI‑product leaders</li>
+      </ul>
+    </div>
+
+    <!-- ══ BUCKET 3 ══ -->
+    <div class="page" id="page-bucket3" data-title="Bucket 3 · AI for Product &amp; Users">
+      <div class="page-eyebrow">Bucket 03</div>
+      <h2 class="page-title">AI for Product &amp; Users</h2>
+      <p class="page-intro">This is where your PM experience becomes your superpower. Knowing how to define, design, and govern AI features — not just build them — is the PM's core value.</p>
+
+      <h3>Subtopics to Learn</h3>
+      <ul class="checklist">
+        <li><input type="checkbox" id="b3c1"><label for="b3c1">How to define an AI use case: start from user problem, not "let's add AI."</label></li>
+        <li><input type="checkbox" id="b3c2"><label for="b3c2">Designing AI‑assisted UX — how to make it trustworthy, not terrifying or confusing.</label></li>
+        <li><input type="checkbox" id="b3c3"><label for="b3c3">Metrics for AI features: accuracy, latency, trust, adoption, error‑handling rates.</label></li>
+        <li><input type="checkbox" id="b3c4"><label for="b3c4">Guardrails and safety: toxicity, bias, hallucinations, PII exposure, regulatory risks.</label></li>
+        <li><input type="checkbox" id="b3c5"><label for="b3c5">A/B testing and iterating AI features safely.</label></li>
+        <li><input type="checkbox" id="b3c6"><label for="b3c6">Privacy, consent, and explainability — especially for customer‑facing AI.</label></li>
+      </ul>
+
+      <h3>Key Concepts You Must Own</h3>
+      <ul>
+        <li>Every AI feature should solve a <strong>specific, measurable user problem</strong> — not be a "cool demo."</li>
+        <li>AI features need <strong>clear fallbacks</strong>: human‑review paths, "I don't know" UX, graceful degradation.</li>
+        <li>You must define <strong>success metrics AND warning metrics</strong> for your models.</li>
+        <li>AI is a <strong>continuous experiment</strong>, not a "set‑and‑forget" feature — plan for iteration from day one.</li>
+      </ul>
+
+      <h3>Resources to Prioritize</h3>
+      <ul>
+        <li>Product School / Mind the Product / ICAgile "AI for Product Managers" guides.</li>
+        <li>Company AI‑product case studies (Spotify, HubSpot, Grammarly) — read how they framed the problem, metrics, and guardrails.</li>
+        <li><a href="https://voltagecontrol.com/articles/ai-product-management-roadmap-frameworks-step-by-step-guide/" target="_blank">Voltage Control — "AI Product Management Roadmap &amp; Frameworks"</a></li>
+      </ul>
+
+      <h3>People to Follow on LinkedIn</h3>
+      <ul class="pill-list">
+        <li>Noam Lovinsky (Grammarly CPO)</li>
+        <li>Karen Ng (HubSpot VP Product)</li>
+        <li>"AI Product Manager" at SaaS / e‑commerce / PIM‑adjacent companies</li>
+      </ul>
+    </div>
+
+    <!-- ══ BUCKET 4 ══ -->
+    <div class="page" id="page-bucket4" data-title="Bucket 4 · Data, MLOps &amp; Scale">
+      <div class="page-eyebrow">Bucket 04</div>
+      <h2 class="page-title">Data, MLOps &amp; Scale</h2>
+      <p class="page-intro">This is where your data‑governance and product‑data background will make you stand out. You already think about data quality, lineage, and pipelines — now apply that instinct to AI systems.</p>
+
+      <h3>Subtopics to Learn</h3>
+      <ul class="checklist">
+        <li><input type="checkbox" id="b4c1"><label for="b4c1">Data pipelines for AI: ingestion, cleaning, labeling, versioning.</label></li>
+        <li><input type="checkbox" id="b4c2"><label for="b4c2">Feature engineering and embeddings — what they are (not how to code them).</label></li>
+        <li><input type="checkbox" id="b4c3"><label for="b4c3">Training vs validation vs test splits.</label></li>
+        <li><input type="checkbox" id="b4c4"><label for="b4c4">Model monitoring: drift, staleness, performance degradation.</label></li>
+        <li><input type="checkbox" id="b4c5"><label for="b4c5">LLMOps / MLOps: model registries, deployment rollouts, canary launches.</label></li>
+        <li><input type="checkbox" id="b4c6"><label for="b4c6">Cost and latency considerations: tokens, compute, API pricing.</label></li>
+      </ul>
+
+      <h3>Key Concepts You Must Own</h3>
+      <ul>
+        <li><strong>Bad data → bad model → bad UX</strong>; data quality is a product‑level concern, not a "data team problem."</li>
+        <li>Models <strong>decay over time</strong> as real‑world data shifts — you need monitoring and refresh plans built in from launch.</li>
+        <li>You must trade off <strong>quality, latency, and cost</strong>; your KPIs should reflect that tension explicitly.</li>
+        <li>You must design <strong>logging and traceability</strong> so you can debug AI failures — your data‑governance instinct will love this.</li>
+      </ul>
+
+      <h3>Resources to Prioritize</h3>
+      <ul>
+        <li>"MLOps for Business" or "MLOps for Product Managers" courses (Coursera, Datacamp).</li>
+        <li>MLOps / LLMOps blogs from AWS, GCP, Azure, Neptune.ai, and Weights &amp; Biases.</li>
+        <li>"AI‑driven PIM" or "PXM" content from Salsify, inRiver — AI for enrichment, classification, personalization in your domain.</li>
+      </ul>
+
+      <h3>People to Follow on LinkedIn</h3>
+      <ul class="pill-list">
+        <li>Chip Huyen — MLOps &amp; LLM deployment</li>
+        <li>Shreya Shankar — ML engineering &amp; data quality</li>
+        <li>Search "LLMOps" or "MLOps product"</li>
+      </ul>
+    </div>
+
+    <!-- ══ BUCKET 5 ══ -->
+    <div class="page" id="page-bucket5" data-title="Bucket 5 · AI Engineering &amp; APIs">
+      <div class="page-eyebrow">Bucket 05</div>
+      <h2 class="page-title">AI Engineering &amp; APIs</h2>
+      <p class="page-intro">You already know APIs and Boomi‑style data transformation — this is just the AI‑native extension of that mental model.</p>
+
+      <h3>Subtopics to Learn</h3>
+      <ul class="checklist">
+        <li><input type="checkbox" id="b5c1"><label for="b5c1">REST/GraphQL APIs for AI models (OpenAI, Anthropic, Cohere, etc.).</label></li>
+        <li><input type="checkbox" id="b5c2"><label for="b5c2">Event‑driven and webhook patterns for AI workflows.</label></li>
+        <li><input type="checkbox" id="b5c3"><label for="b5c3">Vector DBs (Pinecone, Weaviate, Chroma) and how they power RAG.</label></li>
+        <li><input type="checkbox" id="b5c4"><label for="b5c4">Workflow orchestration: LangChain‑style frameworks, Airflow / Prefect, or low‑code tools (Zapier, n8n, Make).</label></li>
+      </ul>
+
+      <h3>Key Concepts You Must Own</h3>
+      <ul>
+        <li><strong>Input → transform → model → output → action</strong> is the core pattern for every AI workflow — you've seen this with Boomi.</li>
+        <li>You can <strong>decouple your product UI from the AI backend</strong> using APIs and webhooks — the AI is just another service.</li>
+        <li>Vector DBs let you make your PIM/catalog data <strong>"searchable" by an LLM</strong>, not just by a SQL query.</li>
+        <li>Everything can be a reusable step in a workflow: normalize, classify, summarize, send.</li>
+      </ul>
+
+      <h3>Resources to Prioritize</h3>
+      <ul>
+        <li><a href="https://python.langchain.com/docs/get_started/introduction" target="_blank">LangChain</a> / LlamaIndex documentation — skim for the mental model, not to write code.</li>
+        <li>No‑code AI builders (Zapier, n8n, Make) — build a small workflow that calls an LLM, then saves results to a DB or PIM‑like structure.</li>
+      </ul>
+
+      <h3>People to Follow on LinkedIn</h3>
+      <ul class="pill-list">
+        <li>Simon Willison — AI engineering &amp; LLM tooling</li>
+        <li>Andrej Karpathy — foundational AI/LLM explainers</li>
+        <li>Search "AI workflow" or "LLM APIs"</li>
+      </ul>
+    </div>
+
+    <!-- ══ BUCKET 6 ══ -->
+    <div class="page" id="page-bucket6" data-title="Bucket 6 · AI Strategy &amp; Governance">
+      <div class="page-eyebrow">Bucket 06 — Your Secret Weapon</div>
+      <h2 class="page-title">AI Strategy &amp; Governance</h2>
+      <p class="page-intro">Your data‑governance background makes this the bucket where you can speak more credibly and specifically than most PM candidates — own it.</p>
+
+      <h3>Subtopics to Learn</h3>
+      <ul class="checklist">
+        <li><input type="checkbox" id="b6c1"><label for="b6c1">How AI strategy fits into broader product and business strategy.</label></li>
+        <li><input type="checkbox" id="b6c2"><label for="b6c2">AI risk categories: bias, safety, privacy, compliance (GDPR, sector‑specific rules).</label></li>
+        <li><input type="checkbox" id="b6c3"><label for="b6c3">Model governance: versioning, approval workflows, human‑in‑the‑loop, audit logs.</label></li>
+        <li><input type="checkbox" id="b6c4"><label for="b6c4">Data governance for AI: lineage, consent, PII handling, labeling standards.</label></li>
+        <li><input type="checkbox" id="b6c5"><label for="b6c5">AI ethics frameworks and "AI risk boards."</label></li>
+        <li><input type="checkbox" id="b6c6"><label for="b6c6">Measuring AI ROI and avoiding "AI‑boomerang" projects.</label></li>
+      </ul>
+
+      <h3>Key Concepts You Must Own</h3>
+      <ul>
+        <li>AI is <strong>not "just a tech project"</strong>; it's a governed business capability — treat it like one.</li>
+        <li>You must define <strong>who owns each risk</strong> (data, model, UX, legal) and how it's monitored and escalated.</li>
+        <li><strong>Data lineage and model lineage</strong> are as important as code versioning — this is your PIM/governance instinct in action.</li>
+        <li>You can lead <strong>"AI‑by‑design" reviews</strong>: "What if it breaks? What if it's wrong? What if it's biased?"</li>
+        <li>The <strong>data flywheel</strong> is your strategic moat: better product data → better AI → better products → more trust → more data investment → repeat.</li>
+      </ul>
+
+      <h3>Resources to Prioritize</h3>
+      <ul>
+        <li>Enterprise AI governance whitepapers from AWS, GCP, Azure, McKinsey, BCG.</li>
+        <li>Content on "AI agents" and "context engineering" — designing long‑term AI behavior.</li>
+        <li><a href="https://www.usaii.org/ai-insights/the-exceptional-artificial-intelligence-product-managers-foundational-elements" target="_blank">USAII — "The Exceptional AI Product Manager"</a></li>
+      </ul>
+
+      <h3>People to Follow on LinkedIn</h3>
+      <ul class="pill-list">
+        <li>Cathy O'Neil — AI bias &amp; algorithmic accountability</li>
+        <li>Timnit Gebru — AI ethics &amp; governance research</li>
+        <li>Search "AI governance product manager"</li>
+      </ul>
+
+      <div class="callout">
+        <div class="callout-label">Interview Positioning</div>
+        <p>"I see AI as a strategic capability, not a feature to ship and forget. My data‑governance background means I bring lineage, ownership, audit, and control thinking to every AI initiative from day one — and I understand how to build the data flywheel that makes AI actually compound in value over time."</p>
+      </div>
+    </div>
+
+    <!-- ══ BRIDGE ══ -->
+    <div class="page" id="page-bridge" data-title="Bridge Curriculum">
+      <div class="page-eyebrow">Bridge &amp; Tools</div>
+      <h2 class="page-title">Bridge Curriculum</h2>
+      <p class="page-intro">This is not about becoming an engineer. It's about accumulating enough <strong>building scar tissue</strong> that you can work confidently inside the same tools engineers use. Think of it as learning to drive, not learning to build a car.</p>
+
+      <div class="callout">
+        <div class="callout-label">Core Principle</div>
+        <p>Engineers have an advantage in <em>how</em> to build. You have an advantage in <em>what</em> to build and <em>why</em>. This curriculum closes the "how" gap just enough that you become dangerous — and that combination is rarer and more valuable than either skill alone.</p>
+      </div>
+
+      <h3>Stage 1 — Learn to Read the Engineer's World (Weeks 1–2)</h3>
+
+      <h4>GitHub — Demystified</h4>
+      <p>GitHub is just a version-controlled cloud folder where code lives, with a social layer on top. That's it.</p>
+      <ul class="checklist">
+        <li><input type="checkbox" id="g1"><label for="g1"><strong>Repository (repo):</strong> A project folder. Everything for one project lives here — code, docs, history.</label></li>
+        <li><input type="checkbox" id="g2"><label for="g2"><strong>Commit:</strong> A saved snapshot of changes. Like "Track Changes" in Word, but for everything, forever.</label></li>
+        <li><input type="checkbox" id="g3"><label for="g3"><strong>Branch:</strong> A parallel copy of the project where you experiment without breaking the main version.</label></li>
+        <li><input type="checkbox" id="g4"><label for="g4"><strong>Pull Request (PR):</strong> A proposal to merge your changes into the main branch.</label></li>
+        <li><input type="checkbox" id="g5"><label for="g5"><strong>Fork:</strong> Your own personal copy of someone else's repo.</label></li>
+        <li><input type="checkbox" id="g6"><label for="g6"><strong>README:</strong> The front door of any repo — always read this first.</label></li>
+      </ul>
+      <p><strong>Week 1 action:</strong> Create a free GitHub account. Find 3 repos related to AI tools you've read about (search "LangChain", "n8n", or "open-source PIM"). Read their READMEs. You're not touching code — just navigating the environment.</p>
+
+      <h4>The Terminal — One Small Crack in the Door</h4>
+      <p>The terminal is just a text-based way to talk to your computer. You need to be able to open it, run a command someone gives you, and read the output without panicking.</p>
+      <div class="code-block"><div class="code-label">Your First Terminal Command</div>pwd          ← Mac: shows where you are on your computer
+cd           ← Windows: same thing
+ls           ← Mac: lists files in current folder
+dir          ← Windows: same thing</div>
+
+      <h4>VS Code — The Engineer's Notebook</h4>
+      <p>VS Code is a free text editor where engineers write and run code. It's also where AI‑assisted building happens (GitHub Copilot, Claude Code). <strong>Action:</strong> <a href="https://code.visualstudio.com/" target="_blank">Download VS Code</a>, open a folder, create a file called <code>notes.md</code>, type some text. You've just used the same tool most engineers work in every day.</p>
+
+      <hr class="divider">
+
+      <h3>Stage 2 — Build Your First Real Thing (Weeks 3–4)</h3>
+
+      <h4>Project: AI‑Powered Product Description Generator</h4>
+      <p>Build a workflow that takes a product name + a few attributes, sends them to an LLM, and returns a polished product description. This maps directly to your PIM background.</p>
+      <ul>
+        <li><strong>Tool to use:</strong> <a href="https://n8n.io" target="_blank">n8n</a> or <a href="https://zapier.com" target="_blank">Zapier</a> — no code required, but they expose you to the same logic engineers use: triggers, actions, inputs, outputs, conditionals.</li>
+        <li><strong>When it breaks</strong> (it will): Read the error message slowly before Googling. This is the most important engineering habit you can build.</li>
+      </ul>
+
+      <h4>Hands‑On with APIs via Postman</h4>
+      <p><a href="https://www.postman.com/" target="_blank">Download Postman</a> (free). Make a real API call to the OpenAI API. Send a prompt, get a response. You've just done exactly what every AI application does under the hood — you're seeing the raw version of it. This demystifies "calling an API" permanently.</p>
+
+      <hr class="divider">
+
+      <h3>Stage 3 — Learn to Read Code, Not Write It (Weeks 5–6)</h3>
+
+      <h4>Python Basics — Just Enough</h4>
+      <p>Python is the dominant language in AI. You need to <em>read</em> a Python script and understand what it's doing at a high level — not write it yourself.</p>
+      <ul>
+        <li><strong>What to study:</strong> <a href="https://www.learnpython.org/" target="_blank">learnpython.org</a> — do the first 5 lessons only: Hello World, Variables, Lists, Basic Operators, String Formatting. <strong>Stop there.</strong></li>
+        <li><strong>The practice habit:</strong> Once a week, paste a short Python script into Claude and ask "explain what each section of this code does in plain English." Do this until code stops feeling like a foreign language.</li>
+      </ul>
+
+      <h4>JSON — The Language AI Systems Use to Talk to Each Other</h4>
+      <p>Most AI APIs send and receive data in JSON. If you've worked with PIM data exports, you've seen it.</p>
+      <div class="code-block"><div class="code-label">JSON is just labeled data — that's it</div>{
+  "product_name": "Ergonomic Chair",
+  "color": "Black",
+  "in_stock": true,
+  "attributes": {
+    "weight_capacity_lbs": 250,
+    "material": "Mesh + Nylon"
+  }
+}</div>
+      <p><strong>Action:</strong> Go to <a href="https://jsonlint.com/" target="_blank">jsonlint.com</a>. Paste some JSON. Edit it. Break it and fix it. JSON fluency is a genuine superpower when working with AI systems.</p>
+
+      <hr class="divider">
+
+      <h3>Stage 4 — Build with AI as Your Coding Partner (Weeks 7–8)</h3>
+
+      <h4>Install Claude Code or GitHub Copilot</h4>
+      <p><a href="https://claude.ai/code" target="_blank">Claude Code</a> and <a href="https://github.com/features/copilot" target="_blank">GitHub Copilot</a> are AI coding assistants inside VS Code. They write code based on your plain‑English instructions.</p>
+      <div class="callout">
+        <div class="callout-label">Key Mindset Shift</div>
+        <p>You are the <strong>product manager of the AI that is writing your code</strong>. You write the spec in plain English, the AI writes the implementation, you QA it. This is a skill you already have — you're just applying it to a new domain.</p>
+      </div>
+
+      <h4>Capstone Project: RAG‑Powered PIM Q&amp;A Tool</h4>
+      <ul>
+        <li>Create a CSV with 20–30 fake product records (use your PIM knowledge — SKUs, titles, categories, attributes, compliance flags).</li>
+        <li>Use Claude Code or Copilot to write a Python script that loads that data, creates embeddings, stores them in a simple vector store, and lets you query it with natural language.</li>
+        <li>You will not understand every line of code. That's fine. Focus on: does it work? Does it return accurate answers? What breaks it?</li>
+        <li><strong>Document what you built in a README on GitHub.</strong> This is now a portfolio artifact.</li>
+      </ul>
+
+      <hr class="divider">
+
+      <h3>Stage 5 — Engineer's Mindset Habits (Ongoing)</h3>
+      <ul class="checklist">
+        <li><input type="checkbox" id="m1"><label for="m1"><strong>Read error messages slowly.</strong> Engineers aren't special — they've just read thousands of error messages. The answer is usually in the message itself.</label></li>
+        <li><input type="checkbox" id="m2"><label for="m2"><strong>Ask "what state is this in?"</strong> At every step of a workflow, ask: what data exists here? What shape is it in? What could have gone wrong?</label></li>
+        <li><input type="checkbox" id="m3"><label for="m3"><strong>Use GitHub as your portfolio.</strong> Every project — even ugly ones — goes on GitHub with a README. This is how engineers show their work.</label></li>
+        <li><input type="checkbox" id="m4"><label for="m4"><strong>Follow engineers on GitHub, not just LinkedIn.</strong> Watch what repos they star, what they build, what tools they use.</label></li>
+        <li><input type="checkbox" id="m5"><label for="m5"><strong>Break things on purpose.</strong> Take a working script and delete one line. Change a variable. Pass the wrong data type. Destructive testing builds intuition fast.</label></li>
+        <li><input type="checkbox" id="m6"><label for="m6"><strong>Write a "what I built and what broke" log.</strong> One paragraph per week. What you tried, what happened, what you learned. This compounds enormously over time.</label></li>
+      </ul>
+
+      <h3>Tools Cheatsheet — The Engineer's Toolkit, Translated</h3>
+      <div class="tool-grid">
+        <div class="tool-card">
+          <div class="tool-name">GitHub</div>
+          <div class="tool-desc">Version-controlled home for code. Your portfolio lives here.</div>
+          <a href="https://github.com" target="_blank">github.com</a>
+        </div>
+        <div class="tool-card">
+          <div class="tool-name">VS Code</div>
+          <div class="tool-desc">The editor where engineers write, read, and run code. Free.</div>
+          <a href="https://code.visualstudio.com" target="_blank">code.visualstudio.com</a>
+        </div>
+        <div class="tool-card">
+          <div class="tool-name">Postman</div>
+          <div class="tool-desc">Test any API without writing code. Demystifies how AI models are actually called.</div>
+          <a href="https://postman.com" target="_blank">postman.com</a>
+        </div>
+        <div class="tool-card">
+          <div class="tool-name">n8n / Zapier / Make</div>
+          <div class="tool-desc">No‑code/low‑code workflow builders. Fastest path to real AI pipelines.</div>
+          <a href="https://n8n.io" target="_blank">n8n.io</a>
+        </div>
+        <div class="tool-card">
+          <div class="tool-name">Claude Code</div>
+          <div class="tool-desc">AI coding assistant inside VS Code. You direct, it writes.</div>
+          <a href="https://claude.ai/code" target="_blank">claude.ai/code</a>
+        </div>
+        <div class="tool-card">
+          <div class="tool-name">Replit</div>
+          <div class="tool-desc">Run code in a browser with zero setup. Perfect for experimenting.</div>
+          <a href="https://replit.com" target="_blank">replit.com</a>
+        </div>
+        <div class="tool-card">
+          <div class="tool-name">Hugging Face</div>
+          <div class="tool-desc">Open‑source AI model hub. The GitHub of AI models.</div>
+          <a href="https://huggingface.co" target="_blank">huggingface.co</a>
+        </div>
+        <div class="tool-card">
+          <div class="tool-name">JSONLint</div>
+          <div class="tool-desc">Paste and validate JSON. Builds fluency in the data format AI systems use.</div>
+          <a href="https://jsonlint.com" target="_blank">jsonlint.com</a>
+        </div>
+        <div class="tool-card">
+          <div class="tool-name">LearnPython.org</div>
+          <div class="tool-desc">Free, browser‑based Python basics. Do the first 5 lessons. Stop there.</div>
+          <a href="https://learnpython.org" target="_blank">learnpython.org</a>
+        </div>
+        <div class="tool-card">
+          <div class="tool-name">Terminal / CLI</div>
+          <div class="tool-desc">Already on your computer. Open it. Don't fear it. It's just text.</div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <div class="callout-label">The Honest Timeline</div>
+        <p>8 weeks of actually building, breaking, and fixing things will put you ahead of the majority of "AI PMs" who have only taken courses and read articles. <strong>Scar tissue beats certificates.</strong> Ship ugly things. Document them. Iterate.</p>
+      </div>
+    </div>
+
+    <!-- ══ CHEATSHEET ══ -->
+    <div class="page" id="page-cheatsheet" data-title="AI‑Engineering Thinking">
+      <div class="page-eyebrow">Bridge &amp; Tools</div>
+      <h2 class="page-title">AI‑Engineering Thinking</h2>
+      <p class="page-intro">How to think like an engineer who uses AI — without writing code. These mental models are more valuable than syntax.</p>
+
+      <h3>1 — Think in Systems, Not Tools</h3>
+      <ul>
+        <li>AI is a <strong>service/module</strong> in a larger system: it has inputs, outputs, latency, cost, and failure modes.</li>
+        <li>Always ask: <em>Where does AI sit in the data‑flow?</em> (PIM → AI → UI / ERP / Workflow Engine).</li>
+      </ul>
+
+      <h3>2 — Decompose Workflows into AI‑Friendly Steps</h3>
+      <ul>
+        <li>Data inputs (PIM, ERP, tickets, dashboards).</li>
+        <li>Decision points (classify, rank, summarize, QA).</li>
+        <li>Action points (update PIM, send email, route to human).</li>
+        <li>Map AI only to <strong>routine, data‑heavy steps</strong>; keep <strong>high‑risk decisions</strong> human‑driven.</li>
+      </ul>
+
+      <h3>3 — Treat AI Like an "API" with Contracts</h3>
+      <p>For every AI module, define:</p>
+      <ul>
+        <li><strong>Inputs</strong> — what data, where it lives.</li>
+        <li><strong>Outputs</strong> — format, structure, confidence score.</li>
+        <li><strong>Constraints</strong> — latency, PII rules, accuracy thresholds, fallbacks.</li>
+      </ul>
+
+      <h3>4 — Design for Failure</h3>
+      <ul>
+        <li>AI will be wrong sometimes. Define: what happens when confidence is low? Route to human? Use cached result? Return default?</li>
+        <li>Every AI step needs a fallback path — no exceptions.</li>
+      </ul>
+
+      <h3>5 — Monitor Like an Engineer</h3>
+      <ul>
+        <li>Track: accuracy over time, latency, hallucination rate, user correction rate, data drift.</li>
+        <li>Set SLAs for each AI module just like you'd set SLAs for an API.</li>
+      </ul>
+
+      <h3>6 — Governance Is a Feature, Not a Tax</h3>
+      <ul>
+        <li>Who owns the data quality feeding this model?</li>
+        <li>Who approves model updates?</li>
+        <li>Who is notified when accuracy drops?</li>
+        <li>Is there an audit log?</li>
+      </ul>
+
+      <div class="callout">
+        <div class="callout-label">Summary Mental Model</div>
+        <p><strong>Input contract → AI module → Output contract → Fallback → Monitor → Govern.</strong></p>
+      </div>
+    </div>
+
+    <!-- ══ EXAMPLES ══ -->
+    <div class="page" id="page-examples" data-title="AI‑Vibe‑Coding Examples">
+      <div class="page-eyebrow">Bridge &amp; Tools</div>
+      <h2 class="page-title">AI‑Vibe‑Coding PIM Examples</h2>
+      <p class="page-intro">What "AI‑vibe‑coding" looks like when applied to PIM workflows — plain‑language prompts that produce real, structured outputs.</p>
+
+      <h3>Example 1 — Auto‑Classify a Product into a Taxonomy</h3>
+      <div class="code-block">PROMPT:
+"Given this product title and description, classify it into the correct
+category from our taxonomy. Return category path, confidence score, and reason."
+
+INPUT:
+{ title: "Wireless Noise‑Cancelling Headphones",
+  description: "Over‑ear, Bluetooth 5.2, 30hr battery..." }
+Taxonomy: Electronics > Audio > Headphones > Over‑Ear
+
+OUTPUT:
+{ category: "Electronics > Audio > Headphones > Over‑Ear",
+  confidence: 0.97,
+  reason: "Over‑ear, wireless, audio device matches taxonomy node." }</div>
+
+      <h3>Example 2 — Generate Missing Product Attributes</h3>
+      <div class="code-block">PROMPT:
+"Given this product data, identify missing required attributes and suggest
+values based on the product type and description."
+
+INPUT:
+{ title: "Ergonomic Office Chair",
+  description: "Adjustable lumbar support, mesh back, 5‑star base..." }
+Required attributes: color, weight_capacity_lbs, material, adjustable_height
+
+OUTPUT:
+{ color: "Black (inferred from image alt‑text)",
+  weight_capacity_lbs: "250 (industry standard for this category)",
+  material: "Mesh + Nylon",
+  adjustable_height: "Yes (mentioned in description)" }</div>
+
+      <h3>Example 3 — QA Flag for Compliance‑Critical Attributes</h3>
+      <div class="code-block">PROMPT:
+"Review this product record for compliance gaps. Flag any missing or
+suspicious values for regulated attributes."
+
+INPUT:
+{ product_id: "SKU‑4821", category: "Children's Toys",
+  age_rating: null, material: "Unknown", safety_cert: null }
+
+OUTPUT:
+{ flags: [
+    { attribute: "age_rating",  issue: "Missing – required for children's toys" },
+    { attribute: "material",    issue: "Unknown – required for CPSC compliance" },
+    { attribute: "safety_cert", issue: "Missing – ASTM F963 cert required" }
+  ],
+  risk_level: "HIGH" }</div>
+
+      <h3>Example 4 — Summarize a Product for a Channel</h3>
+      <div class="code-block">PROMPT:
+"Rewrite this product description for a mobile‑first e‑commerce channel.
+Max 80 words, lead with the top benefit, end with a CTA."
+
+INPUT: Long technical spec description (300 words)...
+
+OUTPUT:
+"Crystal‑clear sound meets all‑day comfort. These over‑ear headphones deliver
+30 hours of noise‑cancelling audio on one charge — perfect for work, travel,
+or anything in between. Bluetooth 5.2 keeps you connected instantly.
+Shop now and hear the difference."</div>
+
+      <h3>Example 5 — RAG‑Grounded Product Q&amp;A</h3>
+      <div class="code-block">SETUP: PIM data for 500 SKUs loaded into a vector DB (e.g., Pinecone).
+
+PROMPT:
+"Is the Model X standing desk compatible with dual‑monitor arms from
+third‑party vendors?"
+
+WITHOUT RAG:
+"Most standing desks support dual‑monitor arms..." [generic, potentially wrong]
+
+WITH RAG:
+"According to the Model X spec sheet (SKU‑1042), the desk has a grommet hole
+diameter of 50mm and a max monitor arm load of 20kg per side. It is compatible
+with any VESA‑standard arm meeting those specs."
+[grounded in your actual PIM data]</div>
+    </div>
+
+
+    <!-- ══ MCP ══ -->
+    <div class="page" id="page-mcp" data-title="MCP &amp; AI Integrations">
+      <div class="page-eyebrow">Emerging · 2026</div>
+      <h2 class="page-title">MCP &amp; AI Integrations</h2>
+      <p class="page-intro">Model Context Protocol is the most important new infrastructure topic in AI right now — and your Boomi/integration background makes you uniquely positioned to understand and talk about it. This is not optional knowledge in 2026.</p>
+
+      <div class="callout">
+        <div class="callout-label">Why This Matters Right Now</div>
+        <p>MCP launched in November 2024 and has already become the universal standard for connecting AI agents to enterprise tools — with 97M+ monthly SDK downloads and adoption by OpenAI, Google, Microsoft, and AWS. Forrester predicts 30% of enterprise SaaS vendors will launch their own MCP servers in 2026. If your product doesn't have one, it's invisible to AI agents.</p>
+      </div>
+
+      <h3>What MCP Actually Is</h3>
+      <p>Before MCP, every AI agent that needed to access external data — a PIM system, a CRM, a database, a ticketing tool — required a completely custom integration. Each vendor built their own approach. The result was the same fragmentation problem that REST APIs solved a generation earlier: a many-to-many integration mess with no shared standard.</p>
+      <p><strong>MCP fixes this.</strong> It's an open standard — often described as "USB-C for AI" — that defines how any AI model connects to any external tool or data source using a single, standardized interface. An AI can connect to your file system, your PIM, your ERP, GitHub, Slack — and actually <em>act</em> on them, not just talk about them.</p>
+      <ul>
+        <li><strong>MCP Host:</strong> The AI application (e.g., Claude, ChatGPT, your product) that wants to use tools.</li>
+        <li><strong>MCP Client:</strong> The component inside the host that speaks the MCP protocol.</li>
+        <li><strong>MCP Server:</strong> A lightweight service that exposes a tool, data source, or system (e.g., "Salsify PIM server," "Jira server," "your database server") in a standardized way the AI can discover and use.</li>
+      </ul>
+
+      <h3>The Boomi Connection — Why This Is Your Mental Model</h3>
+      <p>You've worked with Boomi to transform and map data from point A to point B using standardized connectors. MCP is that same idea, except <strong>the AI model itself becomes an actor in the integration</strong> — it doesn't just pass data through, it can read, write, query, and trigger actions across systems based on a goal you've given it. Think of MCP servers as Boomi connectors, but for AI agents.</p>
+
+      <h3>Subtopics to Learn</h3>
+      <ul class="checklist">
+        <li><input type="checkbox" id="mcp1"><label for="mcp1">The MCP architecture: hosts, clients, and servers — what each does.</label></li>
+        <li><input type="checkbox" id="mcp2"><label for="mcp2">What MCP servers expose: tools (actions), resources (data), and prompts (templates).</label></li>
+        <li><input type="checkbox" id="mcp3"><label for="mcp3">How MCP solves the M×N integration problem — from thousands of custom connectors to one standard.</label></li>
+        <li><input type="checkbox" id="mcp4"><label for="mcp4">MCP security model: scoped permissions, read-only modes, auth strategies.</label></li>
+        <li><input type="checkbox" id="mcp5"><label for="mcp5">The A2A (Agent-to-Agent) protocol — the next layer where MCP servers themselves become agents that negotiate with each other.</label></li>
+        <li><input type="checkbox" id="mcp6"><label for="mcp6">What it means for your product strategy: if your SaaS has no MCP server, AI agents can't use it.</label></li>
+      </ul>
+
+      <h3>Key Concepts You Must Own</h3>
+      <ul>
+        <li>MCP is now <strong>governance-neutral infrastructure</strong> — donated to the Linux Foundation's Agentic AI Foundation (AAIF) in Dec 2025, co-governed by Anthropic, OpenAI, Google, Microsoft, and AWS. It's not going away.</li>
+        <li>For a PM, MCP changes <strong>your product's surface area</strong> — your product now needs an MCP strategy just like it needs an API strategy. "Is our product MCP-ready?" is a real product roadmap question.</li>
+        <li>MCP servers expose three things to AI agents: <strong>Tools</strong> (things the AI can do), <strong>Resources</strong> (data the AI can read), and <strong>Prompts</strong> (templates for common tasks). As a PM you define all three.</li>
+        <li>Security and permissions are a product design problem, not just an engineering one — you define what an AI agent is and isn't allowed to do in your system.</li>
+      </ul>
+
+      <h3>Hands-On Actions</h3>
+      <ul>
+        <li>Browse <a href="https://github.com/modelcontextprotocol/servers" target="_blank">the official MCP servers repo on GitHub</a> — look at what's already been built (Slack, GitHub, databases, file systems). Read the READMEs.</li>
+        <li>Try Claude Desktop with an MCP server connected (the filesystem server is the easiest starting point) — this lets you see an AI actually reading and acting on your local files via MCP.</li>
+        <li>Write a 1-page "MCP strategy memo" for a hypothetical PIM product: what tools, resources, and prompts would you expose? What permissions would you lock down? This is a portfolio artifact.</li>
+      </ul>
+
+      <h3>Resources</h3>
+      <ul>
+        <li><a href="https://modelcontextprotocol.io" target="_blank">modelcontextprotocol.io</a> — the official spec and documentation. Skim the overview; you don't need to read the full spec.</li>
+        <li><a href="https://truto.one/blog/what-is-mcp-model-context-protocol-the-2026-guide-for-saas-pms" target="_blank">Truto — "What is MCP: The 2026 Guide for SaaS PMs"</a> — written specifically for product managers.</li>
+        <li><a href="https://imagine-works.com/insights/model-context-protocol-for-enterprise-leaders" target="_blank">Imagine Works — "MCP: A Guide for Enterprise Leaders"</a> — covers the procurement and governance angle.</li>
+      </ul>
+
+      <h3>People to Follow</h3>
+      <ul class="pill-list">
+        <li>David Soria Parra — Anthropic, co-creator of MCP</li>
+        <li>Search "MCP product manager" or "Model Context Protocol" on LinkedIn for practitioners</li>
+        <li>Follow the AAIF (Agentic AI Foundation) for standards updates</li>
+      </ul>
+    </div>
+
+    <!-- ══ AGENTS ══ -->
+    <div class="page" id="page-agents" data-title="AI Agents &amp; Multi‑Agent Systems">
+      <div class="page-eyebrow">Emerging · 2026</div>
+      <h2 class="page-title">AI Agents &amp; Multi‑Agent Systems</h2>
+      <p class="page-intro">Agents stopped being toys in late 2025. By early 2026 they're reliable in scoped enterprise workflows. Understanding how to design for, govern, and evaluate agentic systems is rapidly becoming a core PM skill.</p>
+
+      <div class="callout">
+        <div class="callout-label">The Shift That Happened</div>
+        <p>For most of 2024, AI agents were impressive demos that broke in production. By late 2025, hallucinations dropped, planning improved, tool use matured, and agents became genuinely reliable in scoped workflows. The question has shifted from "do agents work?" to "how do we design workflows for them responsibly?"</p>
+      </div>
+
+      <h3>What Is an AI Agent, Really?</h3>
+      <p>An agent is an AI system that can take a goal, break it into steps, use tools to accomplish those steps, observe the results, and iterate — without a human approving each action. The key properties that make something truly agentic:</p>
+      <ul>
+        <li><strong>Autonomy:</strong> Acts independently without continuous human oversight.</li>
+        <li><strong>Tool use:</strong> Can call APIs, read files, write to databases, send messages.</li>
+        <li><strong>Memory:</strong> Can remember context across steps, sessions, or time.</li>
+        <li><strong>Reactivity:</strong> Adapts its plan when it gets unexpected results.</li>
+        <li><strong>Proactivity:</strong> Initiates actions to achieve a goal, not just responds.</li>
+      </ul>
+
+      <h3>Multi-Agent Systems</h3>
+      <p>A multi-agent system is when multiple AI agents collaborate — each specializing in a domain, handing off work, and checking each other's output. Think: an "orchestrator" agent that plans and delegates, a "researcher" agent that gathers information, a "writer" agent that drafts content, and a "reviewer" agent that checks quality. MCP is the plumbing that lets these agents talk to each other and to external tools.</p>
+
+      <h3>Subtopics to Learn</h3>
+      <ul class="checklist">
+        <li><input type="checkbox" id="ag1"><label for="ag1">Agentic loop basics: plan → act → observe → iterate.</label></li>
+        <li><input type="checkbox" id="ag2"><label for="ag2">Agent memory types: in-context, external (vector DB), episodic (session history).</label></li>
+        <li><input type="checkbox" id="ag3"><label for="ag3">Orchestrator vs. worker agent patterns.</label></li>
+        <li><input type="checkbox" id="ag4"><label for="ag4">Human-in-the-loop checkpoints: when to pause and require approval.</label></li>
+        <li><input type="checkbox" id="ag5"><label for="ag5">Failure modes: infinite loops, tool misuse, cascading errors in multi-agent chains.</label></li>
+        <li><input type="checkbox" id="ag6"><label for="ag6">Agent governance: audit logs, permission scoping, rollback mechanisms.</label></li>
+      </ul>
+
+      <h3>Key Concepts You Must Own</h3>
+      <ul>
+        <li>Most agent failures are <strong>intent failures, not model failures</strong> — the agent didn't understand the goal well enough. Your job as PM is to define intent precisely.</li>
+        <li><strong>Design human-in-the-loop checkpoints deliberately</strong> — not as a fallback, but as a first-class product feature. Define which decisions an agent can make autonomously and which require human approval.</li>
+        <li>In enterprise settings, agents need the same governance treatment as any other system: <strong>audit logs, permission boundaries, rollback plans, and escalation paths.</strong></li>
+        <li>The value of multi-agent systems is <strong>parallel specialization</strong> — different agents handle different expertise domains simultaneously, then synthesize. This is where PIM + AI gets very interesting (enrichment agent, QA agent, compliance agent all working on the same product record).</li>
+      </ul>
+
+      <h3>PIM-Specific Agent Design Idea</h3>
+      <div class="code-block"><div class="code-label">Example: Multi-Agent PIM Enrichment Pipeline</div>Orchestrator Agent: "Enrich this batch of 500 new SKUs"
+  → Research Agent: scrapes manufacturer specs, pulls category standards
+  → Enrichment Agent: fills missing attributes, suggests values with confidence scores
+  → Compliance Agent: checks regulated attributes (age ratings, safety certs, materials)
+  → QA Agent: flags low-confidence fills and compliance gaps for human review
+  → Human checkpoint: reviewer approves or corrects flagged items
+  → Write Agent: commits approved enrichments back to PIM</div>
+
+      <h3>Resources</h3>
+      <ul>
+        <li>LangGraph documentation — visual multi-agent workflow design (read for the concepts, not the code).</li>
+        <li>Anthropic's "Building effective agents" guide — the clearest conceptual overview of agentic patterns.</li>
+        <li>Search "agentic AI product management 2026" for current practitioner writing.</li>
+      </ul>
+    </div>
+
+    <!-- ══ EVALS ══ -->
+    <div class="page" id="page-evals" data-title="AI Evals">
+      <div class="page-eyebrow">Emerging · 2026</div>
+      <h2 class="page-title">AI Evals (Evaluations)</h2>
+      <p class="page-intro">Called the single most important new skill for AI product managers in 2026. AI features don't fail because of the model — they fail because nobody defined what "good" meant and tested for it systematically.</p>
+
+      <div class="callout">
+        <div class="callout-label">The Core Problem Evals Solve</div>
+        <p>When you ship a traditional feature, you can write deterministic tests: "if input X, expect output Y." AI features don't work that way — outputs are probabilistic. Evals are the framework for systematically measuring whether your AI feature is working well enough, consistently enough, across enough cases, to be in production.</p>
+      </div>
+
+      <h3>What Are Evals?</h3>
+      <p>An "eval" is an evaluation — a test suite designed specifically for AI outputs. Instead of checking if code returns the right value, you're checking if an LLM returns a <em>good enough</em> answer across a representative set of real-world inputs. Evals answer questions like:</p>
+      <ul>
+        <li>Does our product description generator produce accurate, on-brand output for 95%+ of inputs?</li>
+        <li>Does our PIM classification agent get the taxonomy right for the edge cases, not just the easy ones?</li>
+        <li>Did our new prompt version perform better or worse than the old one — and can we prove it?</li>
+        <li>Are there categories of input where the model consistently fails?</li>
+      </ul>
+
+      <h3>Subtopics to Learn</h3>
+      <ul class="checklist">
+        <li><input type="checkbox" id="ev1"><label for="ev1">What an eval dataset is: representative inputs + expected outputs (or evaluation criteria).</label></li>
+        <li><input type="checkbox" id="ev2"><label for="ev2">Types of evals: human eval, automated eval, LLM-as-judge (using an AI to evaluate another AI's output).</label></li>
+        <li><input type="checkbox" id="ev3"><label for="ev3">Eval metrics: accuracy, precision/recall, semantic similarity, hallucination rate, task completion rate.</label></li>
+        <li><input type="checkbox" id="ev4"><label for="ev4">How to build an eval dataset from real user data (support tickets, past queries, edge cases).</label></li>
+        <li><input type="checkbox" id="ev5"><label for="ev5">Regression evals: running evals automatically when you change a prompt, model, or RAG setup to catch regressions before they reach users.</label></li>
+        <li><input type="checkbox" id="ev6"><label for="ev6">The PM's role: defining success criteria and owning the eval dataset, not writing the eval code.</label></li>
+      </ul>
+
+      <h3>Key Concepts You Must Own</h3>
+      <ul>
+        <li><strong>Start with evals, not instructions.</strong> Before you write a prompt, define what "good output" looks like and how you'll measure it. This reverses how most teams work — and it's the right order.</li>
+        <li><strong>LLM-as-judge</strong> is a practical pattern: use a second, more capable LLM to evaluate the outputs of your production LLM at scale. You define the rubric; the judge applies it to thousands of outputs automatically.</li>
+        <li>An eval dataset is a <strong>living product artifact</strong> — it should grow every time a new failure mode is discovered in production. You own this, not engineering.</li>
+        <li>Evals plug directly into your <strong>data governance instincts</strong>: who defines the rubric? Who maintains the dataset? Who reviews when scores drop? These are governance questions you already know how to answer.</li>
+      </ul>
+
+      <h3>A PIM Eval Example</h3>
+      <div class="code-block"><div class="code-label">Simple eval rubric for a product description generator</div>For each generated description, score 1–5 on:
+  · Accuracy:    Does it match the source spec data? No hallucinated attributes?
+  · Completeness: Does it include all required attributes for this category?
+  · Tone:        Does it match brand voice guidelines?
+  · Length:      Is it within the target word count for this channel?
+  · CTA:         Does it end with an appropriate call to action?
+
+Passing threshold: average score ≥ 4.0, no Accuracy score below 3.
+Run automatically on a 50-sample dataset every time the prompt changes.</div>
+
+      <h3>Resources</h3>
+      <ul>
+        <li><a href="https://maven.com/parlance-labs/evals" target="_blank">Maven — "AI Evals for Engineers &amp; PMs" (Hamel Husain &amp; Shreya Shankar)</a> — the most-recommended practical evals course right now.</li>
+        <li>Anthropic's evals documentation — how Claude's own evaluations are structured (great mental model).</li>
+        <li>Search "LLM evals product manager" for practitioner case studies.</li>
+      </ul>
+
+      <h3>People to Follow</h3>
+      <ul class="pill-list">
+        <li>Hamel Husain — ML engineer, evals practitioner, teaches the Maven course</li>
+        <li>Shreya Shankar — ML engineering &amp; data quality research, co-teaches evals</li>
+        <li>Ankit Chukla — teaches evals specifically for PMs</li>
+      </ul>
+    </div>
+
+    <!-- ══ CONTEXT ENGINEERING ══ -->
+    <div class="page" id="page-context" data-title="Context Engineering">
+      <div class="page-eyebrow">Emerging · 2026</div>
+      <h2 class="page-title">Context Engineering</h2>
+      <p class="page-intro">As models get better and cheaper, the competitive edge shifts away from which model you use — and toward how well you architect the context around it. Context engineering is the new prompt engineering, and it's a PM-level skill.</p>
+
+      <div class="callout">
+        <div class="callout-label">The Key Insight from AI Engineer Europe 2026</div>
+        <p>"Models are good enough. What is lagging is everything around them: evaluation frameworks, context engineering, governance, domain expertise, and organisational design. The teams who build that infrastructure now will compound the advantage over the next 2–3 years."</p>
+      </div>
+
+      <h3>What Is Context Engineering?</h3>
+      <p>Prompt engineering was about crafting the right words in a single prompt. Context engineering is the broader discipline of <strong>designing everything that goes into an AI model's context window</strong> — not just the prompt, but the system instructions, retrieved documents (RAG), conversation history, tool outputs, user state, and memory — to reliably produce the behavior you want across the full range of real-world inputs.</p>
+      <p>It's the difference between "write a good prompt" and "design an AI system that consistently behaves well."</p>
+
+      <h3>The Components of Context</h3>
+      <ul>
+        <li><strong>System prompt / instructions:</strong> The persistent instructions that shape the model's behavior, persona, and constraints across all interactions.</li>
+        <li><strong>Retrieved context (RAG):</strong> The documents, records, or data pulled from your knowledge base and injected into the context based on the user's query.</li>
+        <li><strong>Conversation history:</strong> Prior turns in the conversation — how much to include, how to summarize long histories.</li>
+        <li><strong>Tool outputs:</strong> Results from tools the model has already called (e.g., a database query result, an API response).</li>
+        <li><strong>User state &amp; metadata:</strong> Who is the user? What permissions do they have? What product are they viewing?</li>
+        <li><strong>Examples (few-shot):</strong> Carefully chosen input/output examples that demonstrate the behavior you want.</li>
+      </ul>
+
+      <h3>Subtopics to Learn</h3>
+      <ul class="checklist">
+        <li><input type="checkbox" id="ce1"><label for="ce1">Context window limits and why they matter: what happens when you run out of space.</label></li>
+        <li><input type="checkbox" id="ce2"><label for="ce2">Context compression and summarization: how to preserve meaning when history gets long.</label></li>
+        <li><input type="checkbox" id="ce3"><label for="ce3">Strategic RAG design: not just "retrieve relevant chunks" but designing what gets retrieved, when, and how it's formatted.</label></li>
+        <li><input type="checkbox" id="ce4"><label for="ce4">System prompt design: writing instructions that are robust across edge cases, not just the happy path.</label></li>
+        <li><input type="checkbox" id="ce5"><label for="ce5">Context poisoning risks: malicious or low-quality content in retrieved context that corrupts model behavior.</label></li>
+        <li><input type="checkbox" id="ce6"><label for="ce6">"Start with why": giving agents strategic context (objectives, constraints, success criteria) rather than just instructions.</label></li>
+      </ul>
+
+      <h3>Key Concepts You Must Own</h3>
+      <ul>
+        <li><strong>Context quality is a data quality problem</strong> — and you already know how to think about data quality. Bad context in → bad model behavior out, regardless of how good the model is.</li>
+        <li>The most common agent failures are <strong>intent failures</strong>: the agent had the right tools but the wrong understanding of the goal. Fix this with better strategic context, not more instructions.</li>
+        <li><strong>Context is a product design decision</strong>, not just an engineering one. What information does this AI need at this moment to behave the way our users need it to? That's a PM question.</li>
+        <li>For PIM specifically: the context you inject (product category standards, brand voice guidelines, compliance rules, channel requirements) is what transforms a generic LLM into a domain-expert PIM assistant.</li>
+      </ul>
+
+      <h3>PIM Context Engineering Example</h3>
+      <div class="code-block"><div class="code-label">What goes into context for a PIM description generator</div>SYSTEM PROMPT:
+  You are a product content specialist for [Brand]. You write accurate,
+  compelling product descriptions that follow brand voice guidelines.
+  Never invent specifications not present in the source data.
+  Always flag low-confidence fills with [REVIEW NEEDED].
+
+RETRIEVED CONTEXT (RAG):
+  · Category standards for "Over-Ear Headphones" (pulled from PIM taxonomy)
+  · Brand voice guide excerpt relevant to audio products
+  · 3 example descriptions for similar approved products (few-shot)
+
+USER INPUT:
+  · Raw product spec data for SKU-1042
+  · Target channel: mobile e-commerce
+  · Required attributes for this category
+
+RESULT:
+  A grounded, on-brand description — not a hallucinated one.</div>
+
+      <h3>Resources</h3>
+      <ul>
+        <li><a href="https://www.productcompass.pm/p/ai-2026-designing-ai-systems" target="_blank">Product Compass — "2026: Stop Watching AI Models, Start Designing AI Systems"</a> — excellent PM-focused context engineering primer.</li>
+        <li>Anthropic's "prompt engineering" documentation — covers system prompts, few-shot design, and context structuring in depth.</li>
+        <li>Search "context engineering LLM" for the growing body of practitioner writing on this topic.</li>
+      </ul>
+
+      <h3>People to Follow</h3>
+      <ul class="pill-list">
+        <li>Paweł Huryn (Product Compass) — writes specifically about context engineering for PMs</li>
+        <li>Simon Willison — practical context and prompt design thinking</li>
+        <li>Search "context engineering" on LinkedIn &amp; Substack for emerging voices</li>
+      </ul>
+    </div>
+
+  </div><!-- /content-wrap -->
+</div><!-- /main -->
+
+<script>
+  const titles = {
+    routine: 'Daily &amp; Weekly Routine',
+    overview: 'Overview &amp; Sequence',
+    bucket1: 'Bucket 1 · AI &amp; ML Foundations',
+    bucket2: 'Bucket 2 · Generative AI &amp; LLMs',
+    bucket3: 'Bucket 3 · AI for Product &amp; Users',
+    bucket4: 'Bucket 4 · Data, MLOps &amp; Scale',
+    bucket5: 'Bucket 5 · AI Engineering &amp; APIs',
+    bucket6: 'Bucket 6 · AI Strategy &amp; Governance',
+    mcp:     'MCP &amp; AI Integrations',
+    agents:  'AI Agents &amp; Multi‑Agent Systems',
+    evals:   'AI Evals',
+    context: 'Context Engineering',
+    bridge:  'Bridge Curriculum',
+    cheatsheet: 'AI‑Engineering Thinking',
+    examples: 'AI‑Vibe‑Coding Examples'
+  };
+
+  let currentPage = 'routine';
+
+  function showPage(id, navEl) {
+    // hide all pages
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+    document.getElementById('page-' + id).classList.add('active');
+    if (navEl) navEl.classList.add('active');
+
+    currentPage = id;
+    document.getElementById('topbar-title').innerHTML = titles[id] || id;
+
+    const btn = document.getElementById('mark-btn');
+    const done = localStorage.getItem('done-' + id) === '1';
+    btn.classList.toggle('marked', done);
+    btn.textContent = done ? '✓ Completed' : 'Mark as Done';
+
+    window.scrollTo(0, 0);
+  }
+
+  function showPageById(id) {
+    const navEl = document.querySelector('.nav-item[data-id="' + id + '"]');
+    showPage(id, navEl);
+  }
+
+  function toggleDone() {
+    const key = 'done-' + currentPage;
+    const isDone = localStorage.getItem(key) === '1';
+    localStorage.setItem(key, isDone ? '0' : '1');
+
+    const navEl = document.querySelector('.nav-item[data-id="' + currentPage + '"]');
+    if (navEl) navEl.classList.toggle('done', !isDone);
+
+    const btn = document.getElementById('mark-btn');
+    btn.classList.toggle('marked', !isDone);
+    btn.textContent = !isDone ? '✓ Completed' : 'Mark as Done';
+
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const allIds = Object.keys(titles);
+    const doneCount = allIds.filter(id => localStorage.getItem('done-' + id) === '1').length;
+    const pct = Math.round((doneCount / allIds.length) * 100);
+    document.getElementById('prog-fill').style.width = pct + '%';
+    document.getElementById('prog-pct').textContent = pct + '%';
+  }
+
+  // On load: restore done states and progress
+  window.addEventListener('load', () => {
+    Object.keys(titles).forEach(id => {
+      if (localStorage.getItem('done-' + id) === '1') {
+        const navEl = document.querySelector('.nav-item[data-id="' + id + '"]');
+        if (navEl) navEl.classList.add('done');
+      }
+    });
+    updateProgress();
+
+    // restore current mark button state
+    const done = localStorage.getItem('done-routine') === '1';
+    const btn = document.getElementById('mark-btn');
+    btn.classList.toggle('marked', done);
+    btn.textContent = done ? '✓ Completed' : 'Mark as Done';
+  });
+</script>
+</body>
+</html>
