@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Focus Board</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito Sans', sans-serif;
+    background: #1a1035;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2.5rem 2rem 4rem;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 15% 20%, rgba(255,100,180,0.18) 0%, transparent 50%),
+      radial-gradient(ellipse at 85% 10%, rgba(100,180,255,0.18) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 90%, rgba(120,80,255,0.22) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  body > * { position: relative; z-index: 1; }
+
+  /* ── SETUP SCREEN ── */
+  #setup-screen {
+    width: 100%;
+    max-width: 700px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  #setup-screen header { text-align: center; }
+
+  #setup-screen h1 {
+    font-family: 'Nunito', sans-serif;
+    font-size: 3rem;
+    font-weight: 900;
+    color: #fff;
+    letter-spacing: -1px;
+  }
+
+  #setup-screen h1 span {
+    background: linear-gradient(90deg, #ff6eb4, #ffb347, #7ee8fa, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  #setup-screen p {
+    font-size: 17px;
+    color: rgba(255,255,255,0.5);
+    margin-top: 6px;
+    font-weight: 600;
+  }
+
+  .setup-card {
+    width: 100%;
+    background: rgba(255,255,255,0.07);
+    border: 1.5px solid rgba(255,255,255,0.15);
+    border-radius: 20px;
+    padding: 1.75rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .setup-card label {
+    font-family: 'Nunito', sans-serif;
+    font-size: 15px;
+    font-weight: 800;
+    color: rgba(255,255,255,0.7);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .setup-card input[type="text"] {
+    background: rgba(255,255,255,0.1);
+    border: 1.5px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: 17px;
+    font-family: 'Nunito Sans', sans-serif;
+    color: #fff;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+
+  .setup-card input[type="text"]::placeholder { color: rgba(255,255,255,0.3); }
+  .setup-card input[type="text"]:focus { border-color: rgba(167,139,250,0.7); }
+
+  .setup-card textarea {
+    background: rgba(255,255,255,0.1);
+    border: 1.5px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-size: 15px;
+    font-family: 'Nunito Sans', sans-serif;
+    color: #fff;
+    outline: none;
+    resize: vertical;
+    min-height: 220px;
+    line-height: 1.7;
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+
+  .setup-card textarea::placeholder { color: rgba(255,255,255,0.3); }
+  .setup-card textarea:focus { border-color: rgba(167,139,250,0.7); }
+
+  .setup-hint {
+    font-size: 13px;
+    color: rgba(255,255,255,0.35);
+    line-height: 1.5;
+  }
+
+  .task-counter {
+    font-size: 13px;
+    color: rgba(255,255,255,0.45);
+    font-weight: 600;
+    text-align: right;
+    margin-top: -6px;
+  }
+
+  .task-counter span { color: #ffdb70; }
+
+  .build-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #ff6eb4 0%, #a86ef0 50%, #4a9ff5 100%);
+    border: none;
+    border-radius: 16px;
+    padding: 18px 36px;
+    font-size: 20px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 6px 24px rgba(168,110,240,0.5);
+    letter-spacing: -0.2px;
+  }
+
+  .build-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(168,110,240,0.6); }
+  .build-btn:active { transform: scale(0.98); }
+  .build-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+  .build-btn i { font-size: 22px; }
+
+  .error-msg {
+    display: none;
+    background: rgba(255,80,80,0.15);
+    border: 1.5px solid rgba(255,100,100,0.35);
+    border-radius: 10px;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #ff9a9a;
+    text-align: center;
+  }
+
+  .error-msg.show { display: block; }
+
+  /* ── BOARD SCREEN ── */
+  #board-screen { display: none; width: 100%; flex-direction: column; align-items: center; }
+  #board-screen.show { display: flex; }
+
+  header.board-header { text-align: center; margin-bottom: 1.5rem; }
+
+  header.board-header h1 {
+    font-family: 'Nunito', sans-serif;
+    font-size: 3.2rem;
+    font-weight: 900;
+    color: #fff;
+    letter-spacing: -1px;
+  }
+
+  header.board-header h1 span {
+    background: linear-gradient(90deg, #ff6eb4, #ffb347, #7ee8fa, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  header.board-header p {
+    font-size: 18px;
+    color: rgba(255,255,255,0.5);
+    margin-top: 6px;
+    font-weight: 600;
+  }
+
+  .stats-row {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .stat-pill {
+    background: rgba(255,255,255,0.1);
+    border: 1.5px solid rgba(255,255,255,0.2);
+    border-radius: 100px;
+    padding: 8px 22px;
+    font-size: 17px;
+    font-weight: 700;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .stat-pill i { font-size: 18px; color: rgba(255,255,255,0.55); }
+  .stat-pill strong { color: #ffdb70; }
+
+  .bingo-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 14px;
+    width: 100%;
+    max-width: 1100px;
+  }
+
+  .cell {
+    aspect-ratio: 1;
+    border-radius: 22px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 10px;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.2s;
+    text-align: center;
+    position: relative;
+    user-select: none;
+    border: 2.5px solid transparent;
+  }
+
+  .cell:hover { transform: translateY(-4px) scale(1.03); box-shadow: 0 12px 32px rgba(0,0,0,0.3); }
+  .cell:active { transform: scale(0.97); }
+
+  .cell[data-color="0"] { background: #fff0f8; border-color: #f9aadd; }
+  .cell[data-color="0"] .cell-icon { color: #d4449a; }
+  .cell[data-color="0"] .cell-label { color: #7a1256; }
+
+  .cell[data-color="1"] { background: #eef4ff; border-color: #aac3fc; }
+  .cell[data-color="1"] .cell-icon { color: #3a6ef5; }
+  .cell[data-color="1"] .cell-label { color: #1a3580; }
+
+  .cell[data-color="2"] { background: #fff9ee; border-color: #ffd280; }
+  .cell[data-color="2"] .cell-icon { color: #d48a00; }
+  .cell[data-color="2"] .cell-label { color: #7a4a00; }
+
+  .cell[data-color="3"] { background: #efffef; border-color: #80e8a8; }
+  .cell[data-color="3"] .cell-icon { color: #18a058; }
+  .cell[data-color="3"] .cell-label { color: #0a5030; }
+
+  .cell[data-color="4"] { background: #f8f0ff; border-color: #c89aff; }
+  .cell[data-color="4"] .cell-icon { color: #8030e8; }
+  .cell[data-color="4"] .cell-label { color: #420a8a; }
+
+  /* Empty cell — clickable to add a task */
+  .cell.empty {
+    background: rgba(255,255,255,0.05) !important;
+    border: 2.5px dashed rgba(255,255,255,0.2) !important;
+    cursor: pointer;
+  }
+  .cell.empty:hover {
+    background: rgba(255,255,255,0.1) !important;
+    border-color: rgba(255,255,255,0.4) !important;
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  }
+  .cell.empty .empty-plus {
+    font-size: 32px;
+    color: rgba(255,255,255,0.25);
+    transition: color 0.15s;
+    line-height: 1;
+  }
+  .cell.empty:hover .empty-plus { color: rgba(255,255,255,0.55); }
+  .cell.empty .empty-hint {
+    font-size: 11px;
+    color: rgba(255,255,255,0.2);
+    margin-top: 5px;
+    font-weight: 600;
+  }
+  .cell.empty:hover .empty-hint { color: rgba(255,255,255,0.45); }
+
+  /* Inline task input inside a cell */
+  .cell.editing {
+    background: rgba(255,255,255,0.12) !important;
+    border: 2.5px solid rgba(167,139,250,0.8) !important;
+    box-shadow: 0 0 0 3px rgba(167,139,250,0.25) !important;
+    cursor: default;
+    transform: scale(1.04);
+    padding: 8px;
+  }
+  .cell.editing:hover { transform: scale(1.04); }
+
+  .cell-inline-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: 'Nunito', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    text-align: center;
+    line-height: 1.4;
+    resize: none;
+    overflow: hidden;
+  }
+  .cell-inline-input::placeholder { color: rgba(255,255,255,0.3); }
+
+  .cell.done {
+    opacity: 0.6;
+    background: #e2fce8 !important;
+    border-color: #4cc870 !important;
+  }
+
+  .cell.done .cell-icon { color: #1e8040 !important; }
+  .cell.done .cell-label { color: #0f4a25 !important; }
+
+  .cell.free {
+    background: rgba(255,255,255,0.07) !important;
+    border: 2.5px dashed rgba(255,255,255,0.28) !important;
+    cursor: default;
+  }
+
+  .cell.free:hover { transform: none; box-shadow: none; }
+
+  .check-badge {
+    display: none;
+    position: absolute;
+    top: 10px; right: 10px;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: #4cc870;
+    align-items: center; justify-content: center;
+    box-shadow: 0 2px 8px rgba(76,200,112,0.5);
+  }
+
+  .check-badge i { font-size: 15px; color: #fff; }
+  .cell.done .check-badge { display: flex; }
+
+  .cell-icon { font-size: 40px; margin-bottom: 10px; transition: color 0.2s; }
+  .cell-label { font-size: 13.5px; line-height: 1.35; font-weight: 700; }
+
+  .free-icon { font-size: 44px; color: rgba(255,255,255,0.45); margin-bottom: 8px; }
+  .free-label { font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 900; font-style: italic; color: rgba(255,255,255,0.45); }
+
+  .cell.spinning {
+    transform: scale(1.08);
+    box-shadow: 0 0 0 3px #fff, 0 0 25px 8px rgba(255,220,80,0.65);
+    z-index: 10;
+  }
+
+  .cell.picked {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 4px #fff, 0 0 50px 12px rgba(255,200,50,0.75);
+    animation: pop 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) forwards;
+    z-index: 10;
+  }
+
+  @keyframes pop {
+    0%   { transform: scale(1.0) rotate(0deg); }
+    35%  { transform: scale(1.18) rotate(-3deg); }
+    65%  { transform: scale(1.06) rotate(2deg); }
+    100% { transform: scale(1.1) rotate(0deg); }
+  }
+
+  .bingo-banner {
+    display: none;
+    max-width: 1100px;
+    width: 100%;
+    margin-top: 1.25rem;
+    padding: 16px 28px;
+    background: linear-gradient(90deg, #ff6eb4, #ffb347);
+    border-radius: 16px;
+    color: #fff;
+    font-family: 'Nunito', sans-serif;
+    font-size: 22px;
+    font-weight: 900;
+    text-align: center;
+    box-shadow: 0 6px 32px rgba(255,110,180,0.45);
+  }
+
+  .bingo-banner.show { display: block; animation: banner-in 0.4s ease; }
+
+  @keyframes banner-in {
+    0% { transform: scale(0.9); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  .progress-section {
+    max-width: 1100px;
+    width: 100%;
+    margin-top: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .progress-bar-bg {
+    flex: 1; height: 12px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 6px; overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #a78bfa, #60d4f5, #7cef9c);
+    border-radius: 6px;
+    transition: width 0.45s ease;
+    width: 0%;
+  }
+
+  .progress-text { font-size: 17px; font-weight: 700; color: rgba(255,255,255,0.55); white-space: nowrap; }
+
+  .footer {
+    max-width: 1100px;
+    width: 100%;
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .pick-btn {
+    background: linear-gradient(135deg, #ff6eb4 0%, #a86ef0 50%, #4a9ff5 100%);
+    border: none;
+    border-radius: 16px;
+    padding: 16px 36px;
+    font-size: 20px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 6px 24px rgba(168,110,240,0.5);
+  }
+
+  .pick-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(168,110,240,0.6); }
+  .pick-btn:active { transform: scale(0.97); }
+  .pick-btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+  .pick-btn i { font-size: 22px; }
+
+  .btn-group { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+
+  .secondary-btn {
+    background: rgba(255,255,255,0.1);
+    border: 1.5px solid rgba(255,255,255,0.22);
+    border-radius: 12px;
+    padding: 12px 20px;
+    font-size: 15px;
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 600;
+    color: rgba(255,255,255,0.65);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    transition: background 0.15s, color 0.15s;
+  }
+
+  .secondary-btn:hover { background: rgba(255,255,255,0.18); color: #fff; }
+  .secondary-btn i { font-size: 16px; }
+
+  /* ── ENCOURAGEMENT TOAST (after spin lands) ── */
+  .encourage-toast {
+    display: none;
+    position: fixed;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: linear-gradient(135deg, #a86ef0, #4a9ff5);
+    color: #fff;
+    font-family: 'Nunito', sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    padding: 14px 28px;
+    border-radius: 100px;
+    box-shadow: 0 8px 30px rgba(100,80,220,0.45);
+    white-space: nowrap;
+    z-index: 100;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+  }
+  .encourage-toast.show {
+    display: block;
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* ── COMPLETION CELEBRATION OVERLAY ── */
+  .celebration-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+  }
+  .celebration-overlay.show { display: flex; }
+
+  .celebration-card {
+    background: linear-gradient(135deg, #1a1035ee, #2d1060ee);
+    border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 28px;
+    padding: 2.5rem 3rem;
+    text-align: center;
+    pointer-events: all;
+    animation: celebrate-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    max-width: 420px;
+    width: 90%;
+  }
+
+  @keyframes celebrate-in {
+    0%   { transform: scale(0.7); opacity: 0; }
+    100% { transform: scale(1);   opacity: 1; }
+  }
+
+  .celebration-emoji { font-size: 3.5rem; margin-bottom: 0.5rem; }
+
+  .celebration-headline {
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: #fff;
+    margin-bottom: 0.4rem;
+    background: linear-gradient(90deg, #ff6eb4, #ffb347, #7ee8fa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .celebration-task {
+    font-size: 15px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 1.5rem;
+    font-style: italic;
+  }
+
+  .celebration-close {
+    background: linear-gradient(135deg, #ff6eb4, #a86ef0);
+    border: none;
+    border-radius: 100px;
+    padding: 12px 32px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 16px;
+    font-weight: 900;
+    color: #fff;
+    cursor: pointer;
+    transition: transform 0.1s;
+  }
+  .celebration-close:hover { transform: scale(1.05); }
+  .celebration-close:active { transform: scale(0.97); }
+
+  /* Confetti pieces */
+  .confetti-piece {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    pointer-events: none;
+    z-index: 199;
+    animation: confetti-fall linear forwards;
+  }
+  @keyframes confetti-fall {
+    0%   { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── ENCOURAGEMENT TOAST ── -->
+<div class="encourage-toast" id="encourage-toast"></div>
+
+<!-- ── COMPLETION CELEBRATION ── -->
+<div class="celebration-overlay" id="celebration-overlay">
+  <div class="celebration-card">
+    <div class="celebration-emoji" id="celebration-emoji">🎉</div>
+    <div class="celebration-headline" id="celebration-headline">You did it!</div>
+    <div class="celebration-task" id="celebration-task"></div>
+    <button class="celebration-close" onclick="closeCelebration()">Keep going! ✨</button>
+  </div>
+</div>
+
+<!-- ── SETUP SCREEN ── -->
+<div id="setup-screen">
+  <header>
+    <h1>My <span>Focus Board</span></h1>
+    <p>Paste your task list and build your board.</p>
+  </header>
+
+  <div class="setup-card">
+    <label for="board-title">Board title (optional)</label>
+    <input type="text" id="board-title" placeholder="e.g. Q3 Goals, Weekly Wins, Study Plan…" maxlength="60">
+
+    <label for="task-input">Your tasks — one per line</label>
+    <textarea id="task-input" placeholder="Finish SQL class&#10;Learn Git / GitHub&#10;Watch saved AI video&#10;Practice ETL&#10;…paste as many tasks as you like"></textarea>
+
+    <div class="task-counter" id="task-counter"><span>0</span> tasks → <span id="grid-preview">–</span></div>
+    <div class="setup-hint">Paste a numbered list, bullet list, or plain lines — the board cleans it up automatically. Minimum 8 tasks, maximum 24. The grid size adjusts to fit. The center square is always a free space.</div>
+
+    <div class="error-msg" id="error-msg"></div>
+
+    <button class="build-btn" id="build-btn" onclick="buildBoard()">
+      <i class="ti ti-layout-grid"></i> Build my board!
+    </button>
+  </div>
+</div>
+
+<!-- ── BOARD SCREEN ── -->
+<div id="board-screen">
+  <header class="board-header">
+    <h1 id="board-title-display">My <span>Focus Board</span></h1>
+    <p>Pick one square. Just one. That's enough.</p>
+  </header>
+
+  <div class="stats-row">
+    <div class="stat-pill"><i class="ti ti-check"></i> <strong id="done-num">0</strong> completed</div>
+    <div class="stat-pill"><i class="ti ti-target"></i> <strong id="left-num">0</strong> remaining</div>
+  </div>
+
+  <div class="bingo-grid" id="grid"></div>
+
+  <div class="bingo-banner" id="banner">🎉 BINGO! You completed a full row, column, or diagonal!</div>
+
+  <div class="progress-section">
+    <div class="progress-bar-bg"><div class="progress-bar-fill" id="prog-fill"></div></div>
+    <span class="progress-text" id="prog-text">0 / 0</span>
+  </div>
+
+  <div class="footer">
+    <button class="pick-btn" id="pick-btn" onclick="spinPick()">
+      <i class="ti ti-dice-3"></i> Pick one for me!
+    </button>
+    <div class="btn-group">
+      <button class="secondary-btn" onclick="reshuffleBoard()">
+        <i class="ti ti-refresh"></i> Reshuffle
+      </button>
+      <button class="secondary-btn" onclick="editList()">
+        <i class="ti ti-edit"></i> Edit list
+      </button>
+      <button class="secondary-btn" onclick="startOver()">
+        <i class="ti ti-plus"></i> New list
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+// If this file has never been opened before, wipe any stale state from a previous user.
+// Once someone builds a board, 'custom_initialized' is set and progress persists.
+if (!localStorage.getItem('custom_initialized')) {
+  ['custom_board','custom_done','custom_colors','custom_title','custom_task_count','custom_grid_size'].forEach(k => localStorage.removeItem(k));
+}
+
+const ENCOURAGE_MESSAGES = [
+  "You've got this! 💪",
+  "Start here — one step at a time!",
+  "This one's yours today. Go!",
+  "You can do this. I believe in you! ⭐",
+  "Small steps add up. Let's go!",
+  "Just this one thing. That's all. 🙌",
+  "Pick this up and put it down done.",
+  "You're more capable than you think! ✨",
+  "One task. That's the whole plan. 🎯",
+  "You've handled harder things. Go for it!",
+  "Today's win is right here. 🌟",
+  "Start anywhere. Start here!",
+];
+
+const CELEBRATE_MESSAGES = [
+  { headline: "Yes!! Look at you go!", emoji: "🎉" },
+  { headline: "That's a win!", emoji: "⭐" },
+  { headline: "You crushed it!", emoji: "🙌" },
+  { headline: "One down, more to come!", emoji: "🚀" },
+  { headline: "Nailed it!", emoji: "💥" },
+  { headline: "That's what I'm talking about!", emoji: "🔥" },
+  { headline: "You showed up today!", emoji: "✨" },
+  { headline: "Look at you making moves!", emoji: "💪" },
+  { headline: "Done and done!", emoji: "🏆" },
+  { headline: "You are on a roll!", emoji: "🌟" },
+];
+
+let toastTimer = null;
+
+function showEncouragement(taskLabel) {
+  const msg = ENCOURAGE_MESSAGES[Math.floor(Math.random() * ENCOURAGE_MESSAGES.length)];
+  const toast = document.getElementById('encourage-toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 3500);
+}
+
+function showCelebration(taskLabel) {
+  const msg = CELEBRATE_MESSAGES[Math.floor(Math.random() * CELEBRATE_MESSAGES.length)];
+  document.getElementById('celebration-emoji').textContent = msg.emoji;
+  document.getElementById('celebration-headline').textContent = msg.headline;
+  document.getElementById('celebration-task').textContent = `"${taskLabel}" — complete!`;
+  document.getElementById('celebration-overlay').classList.add('show');
+  launchConfetti();
+}
+
+function closeCelebration() {
+  document.getElementById('celebration-overlay').classList.remove('show');
+}
+
+function launchConfetti() {
+  const colors = ['#ff6eb4','#ffb347','#7ee8fa','#a78bfa','#7cef9c','#ffd700','#ff8c69'];
+  for (let i = 0; i < 60; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.left = Math.random() * 100 + 'vw';
+    piece.style.top = '-10px';
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+    piece.style.width  = (6 + Math.random() * 8) + 'px';
+    piece.style.height = (6 + Math.random() * 8) + 'px';
+    piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    piece.style.animationDuration = (1.5 + Math.random() * 2) + 's';
+    piece.style.animationDelay = (Math.random() * 0.5) + 's';
+    document.body.appendChild(piece);
+    setTimeout(() => piece.remove(), 3500);
+  }
+}
+const ICONS = [
+  'ti-star','ti-heart','ti-bolt','ti-rocket','ti-flame',
+  'ti-trophy','ti-target','ti-bulb','ti-brush','ti-code',
+  'ti-book','ti-camera','ti-music','ti-plant','ti-puzzle',
+  'ti-crown','ti-diamond','ti-flag','ti-gift','ti-leaf',
+  'ti-moon','ti-sun','ti-cloud','ti-compass','ti-anchor',
+  'ti-fish','ti-bird','ti-cat','ti-dog','ti-horse',
+  'ti-car','ti-plane','ti-ship','ti-train','ti-bike'
+];
+
+const MIN_TASKS = 8;
+const MAX_TASKS = 24;
+
+function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
+
+function getGridSize(taskCount) {
+  const total = taskCount + 1;
+  for (let n = 2; n <= 10; n++) {
+    if (n * n >= total) return n;
+  }
+  return 10;
+}
+
+function getBingoLines(n) {
+  const lines = [];
+  for (let r = 0; r < n; r++) {
+    const row = [];
+    for (let c = 0; c < n; c++) row.push(r * n + c);
+    lines.push(row);
+  }
+  for (let c = 0; c < n; c++) {
+    const col = [];
+    for (let r = 0; r < n; r++) col.push(r * n + c);
+    lines.push(col);
+  }
+  const d1 = [], d2 = [];
+  for (let i = 0; i < n; i++) { d1.push(i * n + i); d2.push(i * n + (n - 1 - i)); }
+  lines.push(d1); lines.push(d2);
+  return lines;
+}
+
+function cleanTasks(raw) {
+  return raw.split('\n')
+    .map(l => l
+      .replace(/^[\s]*\d+[\.\):][\s]*/, '')   // strip "1. " / "15) " / "2: " list prefixes only
+      .replace(/^[\s]*[-\*\•][\s]+/, '')        // strip bullet prefixes: "- " / "* " / "• "
+      .trim()
+    )
+    .filter(l => l.length > 0);
+}
+
+// Live counter + validation feedback
+document.getElementById('task-input').addEventListener('input', function() {
+  const tasks = cleanTasks(this.value);
+  const count = tasks.length;
+  const n = getGridSize(Math.min(count, MAX_TASKS));
+  const counterEl = document.getElementById('task-counter');
+  const previewEl = document.getElementById('grid-preview');
+  const errorEl   = document.getElementById('error-msg');
+
+  counterEl.querySelector('span').textContent = count;
+
+  if (count === 0) {
+    previewEl.textContent = '–';
+    errorEl.classList.remove('show');
+  } else if (count < MIN_TASKS) {
+    previewEl.textContent = `need ${MIN_TASKS - count} more`;
+    errorEl.textContent = `Add at least ${MIN_TASKS - count} more task${MIN_TASKS - count > 1 ? 's' : ''} (minimum ${MIN_TASKS}).`;
+    errorEl.classList.add('show');
+  } else if (count > MAX_TASKS) {
+    previewEl.textContent = `${MAX_TASKS} max — trim ${count - MAX_TASKS}`;
+    errorEl.textContent = `You've entered ${count} tasks — please trim to ${MAX_TASKS} maximum.`;
+    errorEl.classList.add('show');
+  } else {
+    previewEl.textContent = `${n}×${n} grid`;
+    errorEl.classList.remove('show');
+  }
+});
+
+let board = [], done = {}, colorMap = {}, taskCount = 0, gridSize = 5;
+
+function buildBoard() {
+  const raw = document.getElementById('task-input').value;
+  const tasks = cleanTasks(raw);
+  const errorEl = document.getElementById('error-msg');
+
+  if (tasks.length < MIN_TASKS) {
+    errorEl.textContent = `Please enter at least ${MIN_TASKS} tasks to build your board.`;
+    errorEl.classList.add('show');
+    return;
+  }
+  if (tasks.length > MAX_TASKS) {
+    errorEl.textContent = `Please trim your list to ${MAX_TASKS} tasks maximum.`;
+    errorEl.classList.add('show');
+    return;
+  }
+  errorEl.classList.remove('show');
+
+  const titleInput = document.getElementById('board-title').value.trim();
+  initBoard(tasks, titleInput);
+  showBoard();
+}
+
+function initBoard(tasks, title) {
+  const n = getGridSize(tasks.length);
+  gridSize = n;
+  const totalCells = n * n;
+  const freeIndex = Math.floor(totalCells / 2);
+
+  const shuffledTasks = shuffle(tasks);
+  const shuffledIcons = shuffle([...ICONS]);
+  board = [];
+
+  let taskIdx = 0;
+  for (let i = 0; i < totalCells; i++) {
+    if (i === freeIndex) {
+      board.push({ label: 'FREE', icon: 'ti-star', free: true });
+    } else if (taskIdx < shuffledTasks.length) {
+      board.push({ label: shuffledTasks[taskIdx], icon: shuffledIcons[taskIdx % shuffledIcons.length] });
+      taskIdx++;
+    } else {
+      board.push({ label: '', icon: '', empty: true });
+    }
+  }
+
+  done = {};
+  taskCount = tasks.length;
+
+  const colors = shuffle([...Array(totalCells)].map((_,i) => COLORS[i % 5]));
+  colorMap = {};
+  colors.forEach((c,i) => colorMap[i] = c);
+
+  saveState();
+}
+
+function saveState() {
+  localStorage.setItem('custom_initialized',  'true');
+  localStorage.setItem('custom_board',      JSON.stringify(board));
+  localStorage.setItem('custom_done',       JSON.stringify(done));
+  localStorage.setItem('custom_colors',     JSON.stringify(colorMap));
+  localStorage.setItem('custom_title',      localStorage.getItem('custom_title') || '');
+  localStorage.setItem('custom_task_count', taskCount);
+  localStorage.setItem('custom_grid_size',  gridSize);
+}
+
+function showBoard() {
+  document.getElementById('setup-screen').style.display = 'none';
+  document.getElementById('board-screen').classList.add('show');
+  const title = localStorage.getItem('custom_title') || '';
+  const titleEl = document.getElementById('board-title-display');
+  titleEl.innerHTML = title ? `<span>${title}</span>` : `My <span>Focus Board</span>`;
+  render();
+}
+
+function render() {
+  const grid = document.getElementById('grid');
+  grid.style.gridTemplateColumns = `repeat(${gridSize}, 1fr)`;
+
+  const maxWidths  = { 2:400, 3:600, 4:800, 5:1100, 6:1200, 7:1300, 8:1400, 9:1400, 10:1400 };
+  const iconSizes  = { 2:64,  3:52,  4:46,  5:38,   6:32,   7:28,   8:24,   9:22,   10:20   };
+  const labelSizes = { 2:20,  3:16,  4:14,  5:13,   6:12,   7:11,   8:10,   9:10,   10:9    };
+  const mw     = (maxWidths[gridSize]  || 1100) + 'px';
+  const iconPx  = iconSizes[gridSize]  || 36;
+  const labelPx = labelSizes[gridSize] || 12;
+  grid.style.maxWidth = mw;
+
+  grid.innerHTML = '';
+  let doneCount = 0;
+  const total = taskCount;
+  const bingoLines = getBingoLines(gridSize);
+
+  board.forEach((task, i) => {
+    const isDone = !task.free && !task.empty && !!done[i];
+    if (isDone) doneCount++;
+
+    const cell = document.createElement('div');
+    let cls = 'cell';
+    if (isDone) cls += ' done';
+    if (task.free) cls += ' free';
+    if (task.empty) cls += ' empty';
+    cell.className = cls;
+    if (!task.free && !task.empty) cell.setAttribute('data-color', colorMap[i] || '0');
+
+    if (task.free) {
+      cell.innerHTML = `<i class="ti ti-star free-icon" aria-hidden="true" style="font-size:${iconPx}px"></i><span class="free-label">FREE</span>`;
+    } else if (task.empty) {
+      // Clickable empty cell — click to add a task
+      cell.innerHTML = `<div class="empty-plus">+</div><div class="empty-hint">add task</div>`;
+      cell.addEventListener('click', () => activateEmptyCell(cell, i, iconPx, labelPx));
+    } else {
+      cell.innerHTML = `
+        <div class="check-badge"><i class="ti ti-check" aria-hidden="true"></i></div>
+        <i class="ti ${task.icon} cell-icon" aria-hidden="true" style="font-size:${iconPx}px;margin-bottom:${Math.max(4,iconPx/5)}px"></i>
+        <span class="cell-label" style="font-size:${labelPx}px">${task.label}</span>`;
+      cell.addEventListener('click', () => {
+        const wasDone = !!done[i];
+        done[i] = !done[i];
+        saveState();
+        if (!wasDone) showCelebration(task.label);
+        render();
+      });
+    }
+
+    grid.appendChild(cell);
+  });
+
+  document.querySelectorAll('.bingo-banner, .progress-section, .footer').forEach(el => el.style.maxWidth = mw);
+  document.getElementById('done-num').textContent = doneCount;
+  document.getElementById('left-num').textContent = Math.max(0, total - doneCount);
+  document.getElementById('prog-fill').style.width = total > 0 ? Math.round(doneCount / total * 100) + '%' : '0%';
+  document.getElementById('prog-text').textContent = doneCount + ' / ' + total;
+
+  const hasBingo = bingoLines.some(line => line.every(i => board[i] && (board[i].free || done[i])));
+  document.getElementById('banner').classList.toggle('show', hasBingo);
+}
+
+function activateEmptyCell(cell, index, iconPx, labelPx) {
+  // Don't open two at once
+  if (cell.classList.contains('editing')) return;
+
+  cell.classList.remove('empty');
+  cell.classList.add('editing');
+  cell.innerHTML = `<textarea class="cell-inline-input" placeholder="Type task…" rows="3" maxlength="60"></textarea>`;
+
+  const ta = cell.querySelector('textarea');
+  ta.focus();
+
+  function commit() {
+    const val = ta.value.trim();
+    if (val) {
+      // Pick an icon not already used on the board
+      const usedIcons = board.filter(t => t.icon).map(t => t.icon);
+      const available = ICONS.filter(ic => !usedIcons.includes(ic));
+      const icon = available.length ? available[Math.floor(Math.random() * available.length)] : ICONS[Math.floor(Math.random() * ICONS.length)];
+      const color = COLORS[Math.floor(Math.random() * COLORS.length)];
+
+      board[index] = { label: val, icon };
+      colorMap[index] = color;
+      taskCount++;
+      saveState();
+      render();
+    } else {
+      // Restore empty state without full re-render
+      cell.classList.remove('editing');
+      cell.classList.add('empty');
+      cell.innerHTML = `<div class="empty-plus">+</div><div class="empty-hint">add task</div>`;
+      cell.addEventListener('click', () => activateEmptyCell(cell, index, iconPx, labelPx));
+    }
+  }
+
+  ta.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); commit(); }
+    if (e.key === 'Escape') { ta.value = ''; commit(); }
+  });
+  ta.addEventListener('blur', commit);
+}
+
+function spinPick() {
+  const undone = board.map((t,i) => (!t.free && !t.empty && !done[i]) ? i : null).filter(i => i !== null);
+  if (!undone.length) return;
+
+  const btn = document.getElementById('pick-btn');
+  btn.disabled = true;
+  const cells = document.getElementById('grid').children;
+  let current = -1, ticks = 0;
+  const totalTicks = 30;
+  const finalIndex = undone[Math.floor(Math.random() * undone.length)];
+
+  function step() {
+    if (current >= 0) cells[current].classList.remove('spinning','picked');
+    if (ticks >= totalTicks) {
+      cells[finalIndex].classList.add('picked');
+      cells[finalIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      btn.disabled = false;
+      showEncouragement(board[finalIndex].label);
+      return;
+    }
+    let next;
+    do { next = undone[Math.floor(Math.random() * undone.length)]; }
+    while (next === current && undone.length > 1);
+    current = next;
+    cells[current].classList.add('spinning');
+    const delay = 55 + Math.pow(ticks / totalTicks, 1.9) * 360;
+    ticks++;
+    setTimeout(step, delay);
+  }
+
+  Array.from(cells).forEach(c => c.classList.remove('picked'));
+  step();
+}
+
+function reshuffleBoard() {
+  const tasks = board.filter(t => !t.free && !t.empty).map(t => t.label);
+  const title = localStorage.getItem('custom_title') || '';
+  localStorage.setItem('custom_title', title);
+  initBoard(tasks, title);
+  render();
+}
+
+// Go back to setup with current tasks pre-loaded for editing
+function editList() {
+  const tasks = board.filter(t => !t.free && !t.empty).map(t => t.label);
+  const title = localStorage.getItem('custom_title') || '';
+
+  document.getElementById('board-screen').classList.remove('show');
+  document.getElementById('setup-screen').style.display = 'flex';
+  document.getElementById('board-title').value = title;
+  document.getElementById('task-input').value = tasks.join('\n');
+
+  // Trigger counter update
+  document.getElementById('task-input').dispatchEvent(new Event('input'));
+}
+
+function startOver() {
+  ['custom_board','custom_done','custom_colors','custom_title','custom_task_count','custom_grid_size'].forEach(k => localStorage.removeItem(k));
+  document.getElementById('board-screen').classList.remove('show');
+  document.getElementById('setup-screen').style.display = 'flex';
+  document.getElementById('task-input').value = '';
+  document.getElementById('board-title').value = '';
+  document.getElementById('task-counter').innerHTML = '<span>0</span> tasks → <span id="grid-preview">–</span>';
+  document.getElementById('error-msg').classList.remove('show');
+}
+
+
+// Resume saved board if this person has been here before
+if (localStorage.getItem('custom_initialized')) {
+  try {
+    board     = JSON.parse(localStorage.getItem('custom_board')   || 'null') || [];
+    done      = JSON.parse(localStorage.getItem('custom_done')    || '{}');
+    colorMap  = JSON.parse(localStorage.getItem('custom_colors')  || '{}');
+    taskCount = parseInt(localStorage.getItem('custom_task_count') || '0');
+    gridSize  = parseInt(localStorage.getItem('custom_grid_size')  || '5');
+    if (board.length) showBoard();
+  } catch(e) { localStorage.clear(); }
+}
+</script>
+</body>
+</html>
