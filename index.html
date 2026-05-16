@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tools</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f7f6f2;
+    --surface: #ffffff;
+    --border: #e8e5de;
+    --text-primary: #1a1814;
+    --text-secondary: #7a7670;
+    --text-muted: #b0ada6;
+    --accent: #2d2926;
+    --tag-bg: #f0ede6;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 4rem 2rem 6rem;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 3.5rem;
+    animation: fade-up 0.5s ease forwards;
+  }
+
+  .eyebrow {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+  }
+
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: -0.5px;
+    line-height: 1.1;
+  }
+
+  header p {
+    font-size: 15px;
+    color: var(--text-secondary);
+    margin-top: 12px;
+    font-weight: 400;
+    line-height: 1.6;
+  }
+
+  .divider {
+    width: 40px;
+    height: 2px;
+    background: var(--text-primary);
+    margin: 20px auto 0;
+    opacity: 0.15;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1px;
+    width: 100%;
+    max-width: 900px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .card {
+    background: var(--surface);
+    padding: 2.25rem 2rem;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    transition: background 0.2s ease;
+    animation: fade-up 0.5s ease forwards;
+    opacity: 0;
+    position: relative;
+  }
+
+  .card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 2rem; right: 2rem;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .card:hover { background: #faf9f6; }
+
+  .card:nth-child(1) { animation-delay: 0.05s; }
+  .card:nth-child(2) { animation-delay: 0.12s; }
+  .card:nth-child(3) { animation-delay: 0.19s; }
+  .card:nth-child(4) { animation-delay: 0.26s; }
+
+  @keyframes fade-up {
+    0%   { opacity: 0; transform: translateY(12px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  .card-tag {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    background: var(--tag-bg);
+    padding: 4px 10px;
+    border-radius: 100px;
+  }
+
+  .card-arrow {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-size: 15px;
+    transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.2s;
+    flex-shrink: 0;
+  }
+
+  .card:hover .card-arrow {
+    background: var(--text-primary);
+    color: #fff;
+    border-color: var(--text-primary);
+    transform: rotate(-45deg);
+  }
+
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--text-primary);
+    line-height: 1.2;
+    letter-spacing: -0.2px;
+  }
+
+  .card-desc {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    font-weight: 400;
+    flex: 1;
+  }
+
+  footer {
+    margin-top: 3rem;
+    font-size: 12px;
+    color: var(--text-muted);
+    animation: fade-up 0.5s 0.4s ease forwards;
+    opacity: 0;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Cecmecca2482</div>
+  <h1>My Tools</h1>
+  <p>A collection of utilities, built with AI.</p>
+  <div class="divider"></div>
+</header>
+
+<div class="grid">
+
+  <a class="card" href="Focus Board.html">
+    <div class="card-top">
+      <span class="card-tag">Productivity</span>
+      <div class="card-arrow"><i class="ti ti-arrow-up-right"></i></div>
+    </div>
+    <div class="card-title">Focus Board</div>
+    <div class="card-desc">A bingo-style task board that removes the overwhelm of a long to-do list. Paste your tasks, let it pick one for you, and get moving.</div>
+  </a>
+
+  <a class="card" href="cash-runway.html">
+    <div class="card-top">
+      <span class="card-tag">Finance</span>
+      <div class="card-arrow"><i class="ti ti-arrow-up-right"></i></div>
+    </div>
+    <div class="card-title">Cash Runway Calculator</div>
+    <div class="card-desc">Calculate how long your cash reserves will last based on current balance and monthly burn rate.</div>
+  </a>
+
+  <a class="card" href="courtney-ai-learning-map-v2 (2).html">
+    <div class="card-top">
+      <span class="card-tag">Learning</span>
+      <div class="card-arrow"><i class="ti ti-arrow-up-right"></i></div>
+    </div>
+    <div class="card-title">Courtney's AI Learning Map</div>
+    <div class="card-desc">An interactive roadmap for navigating AI tools, concepts, and learning resources — built for Courtney.</div>
+  </a>
+
+  <a class="card" href="courtney-ai-portal.html">
+    <div class="card-top">
+      <span class="card-tag">Portal</span>
+      <div class="card-arrow"><i class="ti ti-arrow-up-right"></i></div>
+    </div>
+    <div class="card-title">Courtney's AI Portal</div>
+    <div class="card-desc">A personal hub for accessing AI tools and resources, all in one place — built for Courtney.</div>
+  </a>
+
+</div>
+
+<footer>Built with Claude &nbsp;·&nbsp; cecmecca2482.github.io/tools</footer>
+
+</body>
+</html>
