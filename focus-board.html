@@ -35,7 +35,6 @@
 
   body > * { position: relative; z-index: 1; }
 
-  /* ── SETUP SCREEN ── */
   #setup-screen {
     width: 100%;
     max-width: 700px;
@@ -162,8 +161,6 @@
 
   .build-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(168,110,240,0.6); }
   .build-btn:active { transform: scale(0.98); }
-  .build-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
-  .build-btn i { font-size: 22px; }
 
   .error-msg {
     display: none;
@@ -179,7 +176,6 @@
 
   .error-msg.show { display: block; }
 
-  /* ── BOARD SCREEN ── */
   #board-screen { display: none; width: 100%; flex-direction: column; align-items: center; }
   #board-screen.show { display: flex; }
 
@@ -233,7 +229,6 @@
 
   .bingo-grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
     gap: 14px;
     width: 100%;
     max-width: 1100px;
@@ -278,60 +273,6 @@
   .cell[data-color="4"] .cell-icon { color: #8030e8; }
   .cell[data-color="4"] .cell-label { color: #420a8a; }
 
-  /* Empty cell — clickable to add a task */
-  .cell.empty {
-    background: rgba(255,255,255,0.05) !important;
-    border: 2.5px dashed rgba(255,255,255,0.2) !important;
-    cursor: pointer;
-  }
-  .cell.empty:hover {
-    background: rgba(255,255,255,0.1) !important;
-    border-color: rgba(255,255,255,0.4) !important;
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
-  }
-  .cell.empty .empty-plus {
-    font-size: 32px;
-    color: rgba(255,255,255,0.25);
-    transition: color 0.15s;
-    line-height: 1;
-  }
-  .cell.empty:hover .empty-plus { color: rgba(255,255,255,0.55); }
-  .cell.empty .empty-hint {
-    font-size: 11px;
-    color: rgba(255,255,255,0.2);
-    margin-top: 5px;
-    font-weight: 600;
-  }
-  .cell.empty:hover .empty-hint { color: rgba(255,255,255,0.45); }
-
-  /* Inline task input inside a cell */
-  .cell.editing {
-    background: rgba(255,255,255,0.12) !important;
-    border: 2.5px solid rgba(167,139,250,0.8) !important;
-    box-shadow: 0 0 0 3px rgba(167,139,250,0.25) !important;
-    cursor: default;
-    transform: scale(1.04);
-    padding: 8px;
-  }
-  .cell.editing:hover { transform: scale(1.04); }
-
-  .cell-inline-input {
-    width: 100%;
-    background: transparent;
-    border: none;
-    outline: none;
-    font-family: 'Nunito', sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    color: #fff;
-    text-align: center;
-    line-height: 1.4;
-    resize: none;
-    overflow: hidden;
-  }
-  .cell-inline-input::placeholder { color: rgba(255,255,255,0.3); }
-
   .cell.done {
     opacity: 0.6;
     background: #e2fce8 !important;
@@ -349,6 +290,51 @@
 
   .cell.free:hover { transform: none; box-shadow: none; }
 
+  .cell.empty {
+    background: rgba(255,255,255,0.05) !important;
+    border: 2.5px dashed rgba(255,255,255,0.2) !important;
+    cursor: pointer;
+  }
+
+  .cell.empty:hover {
+    background: rgba(255,255,255,0.1) !important;
+    border-color: rgba(255,255,255,0.4) !important;
+    transform: translateY(-2px) scale(1.02);
+  }
+
+  .cell.empty .empty-plus { font-size: 32px; color: rgba(255,255,255,0.25); line-height: 1; }
+  .cell.empty:hover .empty-plus { color: rgba(255,255,255,0.55); }
+  .cell.empty .empty-hint { font-size: 11px; color: rgba(255,255,255,0.2); margin-top: 5px; font-weight: 600; }
+  .cell.empty:hover .empty-hint { color: rgba(255,255,255,0.45); }
+
+  .cell.editing {
+    background: rgba(255,255,255,0.12) !important;
+    border: 2.5px solid rgba(167,139,250,0.8) !important;
+    box-shadow: 0 0 0 3px rgba(167,139,250,0.25) !important;
+    cursor: default;
+    transform: scale(1.04);
+    padding: 8px;
+  }
+
+  .cell.editing:hover { transform: scale(1.04); }
+
+  .cell-inline-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: 'Nunito', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    text-align: center;
+    line-height: 1.4;
+    resize: none;
+    overflow: hidden;
+  }
+
+  .cell-inline-input::placeholder { color: rgba(255,255,255,0.3); }
+
   .check-badge {
     display: none;
     position: absolute;
@@ -365,7 +351,6 @@
 
   .cell-icon { font-size: 40px; margin-bottom: 10px; transition: color 0.2s; }
   .cell-label { font-size: 13.5px; line-height: 1.35; font-weight: 700; }
-
   .free-icon { font-size: 44px; color: rgba(255,255,255,0.45); margin-bottom: 8px; }
   .free-label { font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 900; font-style: italic; color: rgba(255,255,255,0.45); }
 
@@ -491,7 +476,6 @@
   .secondary-btn:hover { background: rgba(255,255,255,0.18); color: #fff; }
   .secondary-btn i { font-size: 16px; }
 
-  /* ── ENCOURAGEMENT TOAST (after spin lands) ── */
   .encourage-toast {
     display: none;
     position: fixed;
@@ -512,13 +496,13 @@
     transition: opacity 0.3s ease, transform 0.3s ease;
     pointer-events: none;
   }
+
   .encourage-toast.show {
     display: block;
     opacity: 1;
     transform: translateX(-50%) translateY(0);
   }
 
-  /* ── COMPLETION CELEBRATION OVERLAY ── */
   .celebration-overlay {
     display: none;
     position: fixed;
@@ -527,7 +511,9 @@
     align-items: center;
     justify-content: center;
     pointer-events: none;
+    background: rgba(0,0,0,0.5);
   }
+
   .celebration-overlay.show { display: flex; }
 
   .celebration-card {
@@ -581,19 +567,17 @@
     cursor: pointer;
     transition: transform 0.1s;
   }
-  .celebration-close:hover { transform: scale(1.05); }
-  .celebration-close:active { transform: scale(0.97); }
 
-  /* Confetti pieces */
+  .celebration-close:hover { transform: scale(1.05); }
+
   .confetti-piece {
     position: fixed;
-    width: 10px;
-    height: 10px;
     border-radius: 2px;
     pointer-events: none;
     z-index: 199;
     animation: confetti-fall linear forwards;
   }
+
   @keyframes confetti-fall {
     0%   { transform: translateY(-20px) rotate(0deg); opacity: 1; }
     100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
@@ -602,513 +586,506 @@
 </head>
 <body>
 
-<!-- ── ENCOURAGEMENT TOAST ── -->
 <div class="encourage-toast" id="encourage-toast"></div>
 
-<!-- ── COMPLETION CELEBRATION ── -->
 <div class="celebration-overlay" id="celebration-overlay">
   <div class="celebration-card">
     <div class="celebration-emoji" id="celebration-emoji">🎉</div>
     <div class="celebration-headline" id="celebration-headline">You did it!</div>
     <div class="celebration-task" id="celebration-task"></div>
-    <button class="celebration-close" onclick="closeCelebration()">Keep going! ✨</button>
+    <button class="celebration-close" id="celebration-close">Keep going! ✨</button>
   </div>
 </div>
 
-<!-- ── SETUP SCREEN ── -->
 <div id="setup-screen">
   <header>
     <h1>My <span>Focus Board</span></h1>
     <p>Paste your task list and build your board.</p>
   </header>
-
   <div class="setup-card">
     <label for="board-title">Board title (optional)</label>
-    <input type="text" id="board-title" placeholder="e.g. Q3 Goals, Weekly Wins, Study Plan…" maxlength="60">
-
+    <input type="text" id="board-title" placeholder="e.g. Q3 Goals, Weekly Wins, Study Plan..." maxlength="60">
     <label for="task-input">Your tasks — one per line</label>
-    <textarea id="task-input" placeholder="Finish SQL class&#10;Learn Git / GitHub&#10;Watch saved AI video&#10;Practice ETL&#10;…paste as many tasks as you like"></textarea>
-
-    <div class="task-counter" id="task-counter"><span>0</span> tasks → <span id="grid-preview">–</span></div>
-    <div class="setup-hint">Paste a numbered list, bullet list, or plain lines — the board cleans it up automatically. Minimum 8 tasks, maximum 24. The grid size adjusts to fit. The center square is always a free space.</div>
-
+    <textarea id="task-input" placeholder="Finish SQL class&#10;Learn Git / GitHub&#10;Watch saved AI video&#10;...paste as many tasks as you like"></textarea>
+    <div class="task-counter" id="task-counter"><span id="task-count-num">0</span> tasks &rarr; <span id="grid-preview">&ndash;</span></div>
+    <div class="setup-hint">Paste a numbered list, bullet list, or plain lines. Minimum 8 tasks, maximum 24. The center square is always a free space.</div>
     <div class="error-msg" id="error-msg"></div>
-
-    <button class="build-btn" id="build-btn" onclick="buildBoard()">
+    <button class="build-btn" id="build-btn">
       <i class="ti ti-layout-grid"></i> Build my board!
     </button>
   </div>
 </div>
 
-<!-- ── BOARD SCREEN ── -->
 <div id="board-screen">
   <header class="board-header">
     <h1 id="board-title-display">My <span>Focus Board</span></h1>
     <p>Pick one square. Just one. That's enough.</p>
   </header>
-
   <div class="stats-row">
     <div class="stat-pill"><i class="ti ti-check"></i> <strong id="done-num">0</strong> completed</div>
     <div class="stat-pill"><i class="ti ti-target"></i> <strong id="left-num">0</strong> remaining</div>
   </div>
-
   <div class="bingo-grid" id="grid"></div>
-
   <div class="bingo-banner" id="banner">🎉 BINGO! You completed a full row, column, or diagonal!</div>
-
   <div class="progress-section">
     <div class="progress-bar-bg"><div class="progress-bar-fill" id="prog-fill"></div></div>
     <span class="progress-text" id="prog-text">0 / 0</span>
   </div>
-
   <div class="footer">
-    <button class="pick-btn" id="pick-btn" onclick="spinPick()">
+    <button class="pick-btn" id="pick-btn">
       <i class="ti ti-dice-3"></i> Pick one for me!
     </button>
     <div class="btn-group">
-      <button class="secondary-btn" onclick="reshuffleBoard()">
-        <i class="ti ti-refresh"></i> Reshuffle
-      </button>
-      <button class="secondary-btn" onclick="editList()">
-        <i class="ti ti-edit"></i> Edit list
-      </button>
-      <button class="secondary-btn" onclick="startOver()">
-        <i class="ti ti-plus"></i> New list
-      </button>
+      <button class="secondary-btn" id="reshuffle-btn"><i class="ti ti-refresh"></i> Reshuffle</button>
+      <button class="secondary-btn" id="edit-btn"><i class="ti ti-edit"></i> Edit list</button>
+      <button class="secondary-btn" id="new-btn"><i class="ti ti-plus"></i> New list</button>
     </div>
   </div>
 </div>
 
 <script>
-// Safe localStorage wrapper — handles browsers that block storage (e.g. Edge tracking prevention)
-const store = {
-  get(k) { try { return localStorage.getItem(k); } catch(e) { return null; } },
-  set(k, v) { try { localStorage.setItem(k, v); } catch(e) {} },
-  remove(k) { try { localStorage.removeItem(k); } catch(e) {} },
-  clear() { try { localStorage.clear(); } catch(e) {} }
-};
+(function() {
 
-// If this file has never been opened before, wipe any stale state from a previous user.
-if (!store.get('custom_initialized')) {
-  ['custom_board','custom_done','custom_colors','custom_title','custom_task_count','custom_grid_size'].forEach(k => store.remove(k));
-}
+  // ── Safe storage (handles browsers that block localStorage) ──
+  var store = {
+    get: function(k) { try { return localStorage.getItem(k); } catch(e) { return null; } },
+    set: function(k, v) { try { localStorage.setItem(k, String(v)); } catch(e) {} },
+    remove: function(k) { try { localStorage.removeItem(k); } catch(e) {} },
+    clear: function() { try { localStorage.clear(); } catch(e) {} }
+  };
 
-// Safety check — if initialized flag is set but board data is missing/invalid, reset
-if (store.get('custom_initialized')) {
-  try {
-    const testBoard = JSON.parse(store.get('custom_board') || 'null');
-    if (!testBoard || !testBoard.length) {
-      ['custom_board','custom_done','custom_colors','custom_title','custom_task_count','custom_grid_size','custom_initialized'].forEach(k => store.remove(k));
+  // ── Constants ──
+  var MIN_TASKS = 8;
+  var MAX_TASKS = 24;
+  var COLORS = ['0','1','2','3','4'];
+  var ICONS = [
+    'ti-star','ti-heart','ti-bolt','ti-rocket','ti-flame',
+    'ti-trophy','ti-target','ti-bulb','ti-brush','ti-code',
+    'ti-book','ti-camera','ti-music','ti-plant','ti-puzzle',
+    'ti-crown','ti-diamond','ti-flag','ti-gift','ti-leaf',
+    'ti-moon','ti-sun','ti-cloud','ti-compass','ti-anchor',
+    'ti-fish','ti-bird','ti-cat','ti-dog','ti-horse'
+  ];
+
+  var ENCOURAGE = [
+    "You've got this! 💪",
+    "Start here — one step at a time!",
+    "This one's yours today. Go!",
+    "You can do this. I believe in you! ⭐",
+    "Small steps add up. Let's go!",
+    "Just this one thing. That's all. 🙌",
+    "You're more capable than you think! ✨",
+    "One task. That's the whole plan. 🎯",
+    "Today's win is right here. 🌟",
+    "Start anywhere. Start here!"
+  ];
+
+  var CELEBRATE = [
+    { headline: "Yes!! Look at you go!", emoji: "🎉" },
+    { headline: "That's a win!", emoji: "⭐" },
+    { headline: "You crushed it!", emoji: "🙌" },
+    { headline: "One down, more to come!", emoji: "🚀" },
+    { headline: "Nailed it!", emoji: "💥" },
+    { headline: "You showed up today!", emoji: "✨" },
+    { headline: "Look at you making moves!", emoji: "💪" },
+    { headline: "Done and done!", emoji: "🏆" },
+    { headline: "You are on a roll!", emoji: "🌟" }
+  ];
+
+  // ── State ──
+  var board = [];
+  var done = {};
+  var colorMap = {};
+  var taskCount = 0;
+  var gridSize = 5;
+  var toastTimer = null;
+
+  // ── Helpers ──
+  function shuffle(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
     }
-  } catch(e) {
-    ['custom_board','custom_done','custom_colors','custom_title','custom_task_count','custom_grid_size','custom_initialized'].forEach(k => store.remove(k));
+    return a;
   }
-}
 
-const ENCOURAGE_MESSAGES = [
-  "You've got this! 💪",
-  "Start here — one step at a time!",
-  "This one's yours today. Go!",
-  "You can do this. I believe in you! ⭐",
-  "Small steps add up. Let's go!",
-  "Just this one thing. That's all. 🙌",
-  "Pick this up and put it down done.",
-  "You're more capable than you think! ✨",
-  "One task. That's the whole plan. 🎯",
-  "You've handled harder things. Go for it!",
-  "Today's win is right here. 🌟",
-  "Start anywhere. Start here!",
-];
-
-const CELEBRATE_MESSAGES = [
-  { headline: "Yes!! Look at you go!", emoji: "🎉" },
-  { headline: "That's a win!", emoji: "⭐" },
-  { headline: "You crushed it!", emoji: "🙌" },
-  { headline: "One down, more to come!", emoji: "🚀" },
-  { headline: "Nailed it!", emoji: "💥" },
-  { headline: "That's what I'm talking about!", emoji: "🔥" },
-  { headline: "You showed up today!", emoji: "✨" },
-  { headline: "Look at you making moves!", emoji: "💪" },
-  { headline: "Done and done!", emoji: "🏆" },
-  { headline: "You are on a roll!", emoji: "🌟" },
-];
-
-let toastTimer = null;
-
-function showEncouragement(taskLabel) {
-  const msg = ENCOURAGE_MESSAGES[Math.floor(Math.random() * ENCOURAGE_MESSAGES.length)];
-  const toast = document.getElementById('encourage-toast');
-  toast.textContent = msg;
-  toast.classList.add('show');
-  if (toastTimer) clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => toast.classList.remove('show'), 3500);
-}
-
-function showCelebration(taskLabel) {
-  const msg = CELEBRATE_MESSAGES[Math.floor(Math.random() * CELEBRATE_MESSAGES.length)];
-  document.getElementById('celebration-emoji').textContent = msg.emoji;
-  document.getElementById('celebration-headline').textContent = msg.headline;
-  document.getElementById('celebration-task').textContent = `"${taskLabel}" — complete!`;
-  document.getElementById('celebration-overlay').classList.add('show');
-  launchConfetti();
-}
-
-function closeCelebration() {
-  document.getElementById('celebration-overlay').classList.remove('show');
-}
-
-function launchConfetti() {
-  const colors = ['#ff6eb4','#ffb347','#7ee8fa','#a78bfa','#7cef9c','#ffd700','#ff8c69'];
-  for (let i = 0; i < 60; i++) {
-    const piece = document.createElement('div');
-    piece.className = 'confetti-piece';
-    piece.style.left = Math.random() * 100 + 'vw';
-    piece.style.top = '-10px';
-    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
-    piece.style.width  = (6 + Math.random() * 8) + 'px';
-    piece.style.height = (6 + Math.random() * 8) + 'px';
-    piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
-    piece.style.animationDuration = (1.5 + Math.random() * 2) + 's';
-    piece.style.animationDelay = (Math.random() * 0.5) + 's';
-    document.body.appendChild(piece);
-    setTimeout(() => piece.remove(), 3500);
+  function getGridSize(n) {
+    var total = n + 1;
+    for (var s = 2; s <= 10; s++) {
+      if (s * s >= total) return s;
+    }
+    return 10;
   }
-}
-const ICONS = [
-  'ti-star','ti-heart','ti-bolt','ti-rocket','ti-flame',
-  'ti-trophy','ti-target','ti-bulb','ti-brush','ti-code',
-  'ti-book','ti-camera','ti-music','ti-plant','ti-puzzle',
-  'ti-crown','ti-diamond','ti-flag','ti-gift','ti-leaf',
-  'ti-moon','ti-sun','ti-cloud','ti-compass','ti-anchor',
-  'ti-fish','ti-bird','ti-cat','ti-dog','ti-horse',
-  'ti-car','ti-plane','ti-ship','ti-train','ti-bike'
-];
 
-const MIN_TASKS = 8;
-const MAX_TASKS = 24;
-
-function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
-
-function getGridSize(taskCount) {
-  const total = taskCount + 1;
-  for (let n = 2; n <= 10; n++) {
-    if (n * n >= total) return n;
+  function getBingoLines(n) {
+    var lines = [];
+    var i, r, c;
+    for (r = 0; r < n; r++) {
+      var row = [];
+      for (c = 0; c < n; c++) row.push(r * n + c);
+      lines.push(row);
+    }
+    for (c = 0; c < n; c++) {
+      var col = [];
+      for (r = 0; r < n; r++) col.push(r * n + c);
+      lines.push(col);
+    }
+    var d1 = [], d2 = [];
+    for (i = 0; i < n; i++) { d1.push(i * n + i); d2.push(i * n + (n - 1 - i)); }
+    lines.push(d1);
+    lines.push(d2);
+    return lines;
   }
-  return 10;
-}
 
-function getBingoLines(n) {
-  const lines = [];
-  for (let r = 0; r < n; r++) {
-    const row = [];
-    for (let c = 0; c < n; c++) row.push(r * n + c);
-    lines.push(row);
+  function cleanTasks(raw) {
+    return raw.split('\n')
+      .map(function(l) {
+        return l
+          .replace(/^\s*\d+[\.\):]\s*/, '')
+          .replace(/^\s*[-\*\u2022]\s+/, '')
+          .trim();
+      })
+      .filter(function(l) { return l.length > 0; });
   }
-  for (let c = 0; c < n; c++) {
-    const col = [];
-    for (let r = 0; r < n; r++) col.push(r * n + c);
-    lines.push(col);
+
+  function saveState() {
+    store.set('custom_initialized', 'true');
+    store.set('custom_board', JSON.stringify(board));
+    store.set('custom_done', JSON.stringify(done));
+    store.set('custom_colors', JSON.stringify(colorMap));
+    store.set('custom_task_count', taskCount);
+    store.set('custom_grid_size', gridSize);
   }
-  const d1 = [], d2 = [];
-  for (let i = 0; i < n; i++) { d1.push(i * n + i); d2.push(i * n + (n - 1 - i)); }
-  lines.push(d1); lines.push(d2);
-  return lines;
-}
 
-function cleanTasks(raw) {
-  return raw.split('\n')
-    .map(l => l
-      .replace(/^[\s]*\d+[\.\):][\s]*/, '')   // strip "1. " / "15) " / "2: " list prefixes only
-      .replace(/^[\s]*[-\*\•][\s]+/, '')        // strip bullet prefixes: "- " / "* " / "• "
-      .trim()
-    )
-    .filter(l => l.length > 0);
-}
-
-// Live counter + validation feedback
-document.getElementById('task-input').addEventListener('input', function() {
-  const tasks = cleanTasks(this.value);
-  const count = tasks.length;
-  const n = getGridSize(Math.min(count, MAX_TASKS));
-  const counterEl = document.getElementById('task-counter');
-  const previewEl = document.getElementById('grid-preview');
-  const errorEl   = document.getElementById('error-msg');
-
-  counterEl.querySelector('span').textContent = count;
-
-  if (count === 0) {
-    previewEl.textContent = '–';
-    errorEl.classList.remove('show');
-  } else if (count < MIN_TASKS) {
-    previewEl.textContent = `need ${MIN_TASKS - count} more`;
-    errorEl.textContent = `Add at least ${MIN_TASKS - count} more task${MIN_TASKS - count > 1 ? 's' : ''} (minimum ${MIN_TASKS}).`;
-    errorEl.classList.add('show');
-  } else if (count > MAX_TASKS) {
-    previewEl.textContent = `${MAX_TASKS} max — trim ${count - MAX_TASKS}`;
-    errorEl.textContent = `You've entered ${count} tasks — please trim to ${MAX_TASKS} maximum.`;
-    errorEl.classList.add('show');
-  } else {
-    previewEl.textContent = `${n}×${n} grid`;
-    errorEl.classList.remove('show');
+  function loadState() {
+    try {
+      var b = JSON.parse(store.get('custom_board') || 'null');
+      if (!b || !b.length) return false;
+      board     = b;
+      done      = JSON.parse(store.get('custom_done')   || '{}');
+      colorMap  = JSON.parse(store.get('custom_colors') || '{}');
+      taskCount = parseInt(store.get('custom_task_count') || '0', 10);
+      gridSize  = parseInt(store.get('custom_grid_size')  || '5', 10);
+      return true;
+    } catch(e) {
+      return false;
+    }
   }
-});
 
-let board = [], done = {}, colorMap = {}, taskCount = 0, gridSize = 5;
-
-function buildBoard() {
-  const raw = document.getElementById('task-input').value;
-  const tasks = cleanTasks(raw);
-  const errorEl = document.getElementById('error-msg');
-
-  if (tasks.length < MIN_TASKS) {
-    errorEl.textContent = `Please enter at least ${MIN_TASKS} tasks to build your board.`;
-    errorEl.classList.add('show');
-    return;
-  }
-  if (tasks.length > MAX_TASKS) {
-    errorEl.textContent = `Please trim your list to ${MAX_TASKS} tasks maximum.`;
-    errorEl.classList.add('show');
-    return;
-  }
-  errorEl.classList.remove('show');
-
-  const titleInput = document.getElementById('board-title').value.trim();
-  initBoard(tasks, titleInput);
-  showBoard();
-}
-
-function initBoard(tasks, title) {
-  const n = getGridSize(tasks.length);
-  gridSize = n;
-  const totalCells = n * n;
-  const freeIndex = Math.floor(totalCells / 2);
-
-  const shuffledTasks = shuffle(tasks);
-  const shuffledIcons = shuffle([...ICONS]);
-  board = [];
-
-  let taskIdx = 0;
-  for (let i = 0; i < totalCells; i++) {
-    if (i === freeIndex) {
-      board.push({ label: 'FREE', icon: 'ti-star', free: true });
-    } else if (taskIdx < shuffledTasks.length) {
-      board.push({ label: shuffledTasks[taskIdx], icon: shuffledIcons[taskIdx % shuffledIcons.length] });
-      taskIdx++;
+  // ── Setup counter ──
+  document.getElementById('task-input').addEventListener('input', function() {
+    var tasks = cleanTasks(this.value);
+    var count = tasks.length;
+    var n = getGridSize(Math.min(count, MAX_TASKS));
+    document.getElementById('task-count-num').textContent = count;
+    var preview = document.getElementById('grid-preview');
+    var errorEl = document.getElementById('error-msg');
+    if (count === 0) {
+      preview.textContent = '-';
+      errorEl.classList.remove('show');
+    } else if (count < MIN_TASKS) {
+      preview.textContent = 'need ' + (MIN_TASKS - count) + ' more';
+      errorEl.textContent = 'Add at least ' + (MIN_TASKS - count) + ' more task(s) (minimum ' + MIN_TASKS + ').';
+      errorEl.classList.add('show');
+    } else if (count > MAX_TASKS) {
+      preview.textContent = MAX_TASKS + ' max';
+      errorEl.textContent = 'Please trim to ' + MAX_TASKS + ' tasks maximum.';
+      errorEl.classList.add('show');
     } else {
-      board.push({ label: '', icon: '', empty: true });
+      preview.textContent = n + 'x' + n + ' grid';
+      errorEl.classList.remove('show');
     }
-  }
-
-  done = {};
-  taskCount = tasks.length;
-
-  const colors = shuffle([...Array(totalCells)].map((_,i) => COLORS[i % 5]));
-  colorMap = {};
-  colors.forEach((c,i) => colorMap[i] = c);
-
-  saveState();
-}
-
-function saveState() {
-  store.set('custom_initialized', 'true');
-  store.set('custom_board', JSON.stringify(board));
-  store.set('custom_done', JSON.stringify(done));
-  store.set('custom_colors', JSON.stringify(colorMap));
-  store.set('custom_title', store.get('custom_title') || '');
-  store.set('custom_task_count', taskCount);
-  store.set('custom_grid_size', gridSize);
-}
-
-function showBoard() {
-  document.getElementById('setup-screen').style.display = 'none';
-  document.getElementById('board-screen').classList.add('show');
-  const title = store.get('custom_title') || '';
-  const titleEl = document.getElementById('board-title-display');
-  titleEl.innerHTML = title ? `<span>${title}</span>` : `My <span>Focus Board</span>`;
-  render();
-}
-
-function render() {
-  const grid = document.getElementById('grid');
-  grid.style.gridTemplateColumns = `repeat(${gridSize}, 1fr)`;
-
-  const maxWidths  = { 2:400, 3:600, 4:800, 5:1100, 6:1200, 7:1300, 8:1400, 9:1400, 10:1400 };
-  const iconSizes  = { 2:64,  3:52,  4:46,  5:38,   6:32,   7:28,   8:24,   9:22,   10:20   };
-  const labelSizes = { 2:20,  3:16,  4:14,  5:13,   6:12,   7:11,   8:10,   9:10,   10:9    };
-  const mw     = (maxWidths[gridSize]  || 1100) + 'px';
-  const iconPx  = iconSizes[gridSize]  || 36;
-  const labelPx = labelSizes[gridSize] || 12;
-  grid.style.maxWidth = mw;
-
-  grid.innerHTML = '';
-  let doneCount = 0;
-  const total = taskCount;
-  const bingoLines = getBingoLines(gridSize);
-
-  board.forEach((task, i) => {
-    const isDone = !task.free && !task.empty && !!done[i];
-    if (isDone) doneCount++;
-
-    const cell = document.createElement('div');
-    let cls = 'cell';
-    if (isDone) cls += ' done';
-    if (task.free) cls += ' free';
-    if (task.empty) cls += ' empty';
-    cell.className = cls;
-    if (!task.free && !task.empty) cell.setAttribute('data-color', colorMap[i] || '0');
-
-    if (task.free) {
-      cell.innerHTML = `<i class="ti ti-star free-icon" aria-hidden="true" style="font-size:${iconPx}px"></i><span class="free-label">FREE</span>`;
-    } else if (task.empty) {
-      // Clickable empty cell — click to add a task
-      cell.innerHTML = `<div class="empty-plus">+</div><div class="empty-hint">add task</div>`;
-      cell.addEventListener('click', () => activateEmptyCell(cell, i, iconPx, labelPx));
-    } else {
-      cell.innerHTML = `
-        <div class="check-badge"><i class="ti ti-check" aria-hidden="true"></i></div>
-        <i class="ti ${task.icon} cell-icon" aria-hidden="true" style="font-size:${iconPx}px;margin-bottom:${Math.max(4,iconPx/5)}px"></i>
-        <span class="cell-label" style="font-size:${labelPx}px">${task.label}</span>`;
-      cell.addEventListener('click', () => {
-        const wasDone = !!done[i];
-        done[i] = !done[i];
-        saveState();
-        if (!wasDone) showCelebration(task.label);
-        render();
-      });
-    }
-
-    grid.appendChild(cell);
   });
 
-  document.querySelectorAll('.bingo-banner, .progress-section, .footer').forEach(el => el.style.maxWidth = mw);
-  document.getElementById('done-num').textContent = doneCount;
-  document.getElementById('left-num').textContent = Math.max(0, total - doneCount);
-  document.getElementById('prog-fill').style.width = total > 0 ? Math.round(doneCount / total * 100) + '%' : '0%';
-  document.getElementById('prog-text').textContent = doneCount + ' / ' + total;
-
-  const hasBingo = bingoLines.some(line => line.every(i => board[i] && (board[i].free || done[i])));
-  document.getElementById('banner').classList.toggle('show', hasBingo);
-}
-
-function activateEmptyCell(cell, index, iconPx, labelPx) {
-  // Don't open two at once
-  if (cell.classList.contains('editing')) return;
-
-  cell.classList.remove('empty');
-  cell.classList.add('editing');
-  cell.innerHTML = `<textarea class="cell-inline-input" placeholder="Type task…" rows="3" maxlength="60"></textarea>`;
-
-  const ta = cell.querySelector('textarea');
-  ta.focus();
-
-  function commit() {
-    const val = ta.value.trim();
-    if (val) {
-      // Pick an icon not already used on the board
-      const usedIcons = board.filter(t => t.icon).map(t => t.icon);
-      const available = ICONS.filter(ic => !usedIcons.includes(ic));
-      const icon = available.length ? available[Math.floor(Math.random() * available.length)] : ICONS[Math.floor(Math.random() * ICONS.length)];
-      const color = COLORS[Math.floor(Math.random() * COLORS.length)];
-
-      board[index] = { label: val, icon };
-      colorMap[index] = color;
-      taskCount++;
-      saveState();
-      render();
-    } else {
-      // Restore empty state without full re-render
-      cell.classList.remove('editing');
-      cell.classList.add('empty');
-      cell.innerHTML = `<div class="empty-plus">+</div><div class="empty-hint">add task</div>`;
-      cell.addEventListener('click', () => activateEmptyCell(cell, index, iconPx, labelPx));
-    }
-  }
-
-  ta.addEventListener('keydown', e => {
-    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); commit(); }
-    if (e.key === 'Escape') { ta.value = ''; commit(); }
-  });
-  ta.addEventListener('blur', commit);
-}
-
-function spinPick() {
-  const undone = board.map((t,i) => (!t.free && !t.empty && !done[i]) ? i : null).filter(i => i !== null);
-  if (!undone.length) return;
-
-  const btn = document.getElementById('pick-btn');
-  btn.disabled = true;
-  const cells = document.getElementById('grid').children;
-  let current = -1, ticks = 0;
-  const totalTicks = 30;
-  const finalIndex = undone[Math.floor(Math.random() * undone.length)];
-
-  function step() {
-    if (current >= 0) cells[current].classList.remove('spinning','picked');
-    if (ticks >= totalTicks) {
-      cells[finalIndex].classList.add('picked');
-      cells[finalIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
-      btn.disabled = false;
-      showEncouragement(board[finalIndex].label);
+  // ── Build button ──
+  document.getElementById('build-btn').addEventListener('click', function() {
+    var raw = document.getElementById('task-input').value;
+    var tasks = cleanTasks(raw);
+    var errorEl = document.getElementById('error-msg');
+    if (tasks.length < MIN_TASKS) {
+      errorEl.textContent = 'Please enter at least ' + MIN_TASKS + ' tasks.';
+      errorEl.classList.add('show');
       return;
     }
-    let next;
-    do { next = undone[Math.floor(Math.random() * undone.length)]; }
-    while (next === current && undone.length > 1);
-    current = next;
-    cells[current].classList.add('spinning');
-    const delay = 55 + Math.pow(ticks / totalTicks, 1.9) * 360;
-    ticks++;
-    setTimeout(step, delay);
+    if (tasks.length > MAX_TASKS) {
+      errorEl.textContent = 'Please trim to ' + MAX_TASKS + ' tasks maximum.';
+      errorEl.classList.add('show');
+      return;
+    }
+    errorEl.classList.remove('show');
+    var title = document.getElementById('board-title').value.trim();
+    store.set('custom_title', title);
+    initBoard(tasks);
+    showBoard();
+  });
+
+  // ── Init board ──
+  function initBoard(tasks) {
+    var n = getGridSize(tasks.length);
+    gridSize = n;
+    var totalCells = n * n;
+    var freeIndex = Math.floor(totalCells / 2);
+    var shuffledTasks = shuffle(tasks);
+    var shuffledIcons = shuffle(ICONS.slice());
+    board = [];
+    done = {};
+    taskCount = tasks.length;
+    var taskIdx = 0;
+    for (var i = 0; i < totalCells; i++) {
+      if (i === freeIndex) {
+        board.push({ label: 'FREE', icon: 'ti-star', free: true });
+      } else if (taskIdx < shuffledTasks.length) {
+        board.push({ label: shuffledTasks[taskIdx], icon: shuffledIcons[taskIdx % shuffledIcons.length] });
+        taskIdx++;
+      } else {
+        board.push({ label: '', icon: '', empty: true });
+      }
+    }
+    var colorPool = shuffle(COLORS.concat(COLORS).concat(COLORS).concat(COLORS).concat(COLORS).slice(0, totalCells));
+    colorMap = {};
+    for (var j = 0; j < colorPool.length; j++) colorMap[j] = colorPool[j];
+    saveState();
   }
 
-  Array.from(cells).forEach(c => c.classList.remove('picked'));
-  step();
-}
+  // ── Show board ──
+  function showBoard() {
+    document.getElementById('setup-screen').style.display = 'none';
+    document.getElementById('board-screen').classList.add('show');
+    var title = store.get('custom_title') || '';
+    var titleEl = document.getElementById('board-title-display');
+    if (title) {
+      titleEl.innerHTML = '<span>' + title + '</span>';
+    } else {
+      titleEl.innerHTML = 'My <span>Focus Board</span>';
+    }
+    render();
+  }
 
-function reshuffleBoard() {
-  const tasks = board.filter(t => !t.free && !t.empty).map(t => t.label);
-  const title = store.get('custom_title') || '';
-  store.set('custom_title', title);
-  initBoard(tasks, title);
-  render();
-}
+  // ── Render ──
+  function render() {
+    var maxWidths  = { 2:400, 3:600, 4:800, 5:1100, 6:1200, 7:1300, 8:1400, 9:1400, 10:1400 };
+    var iconSizes  = { 2:64,  3:52,  4:46,  5:38,   6:32,   7:28,   8:24,   9:22,   10:20   };
+    var labelSizes = { 2:20,  3:16,  4:14,  5:13,   6:12,   7:11,   8:10,   9:10,   10:9    };
+    var mw     = (maxWidths[gridSize]  || 1100) + 'px';
+    var iconPx  = iconSizes[gridSize]  || 36;
+    var labelPx = labelSizes[gridSize] || 12;
 
-// Go back to setup with current tasks pre-loaded for editing
-function editList() {
-  const tasks = board.filter(t => !t.free && !t.empty).map(t => t.label);
-  const title = store.get('custom_title') || '';
+    var grid = document.getElementById('grid');
+    grid.style.gridTemplateColumns = 'repeat(' + gridSize + ', 1fr)';
+    grid.style.maxWidth = mw;
+    grid.innerHTML = '';
 
-  document.getElementById('board-screen').classList.remove('show');
-  document.getElementById('setup-screen').style.display = 'flex';
-  document.getElementById('board-title').value = title;
-  document.getElementById('task-input').value = tasks.join('\n');
+    var doneCount = 0;
+    var bingoLines = getBingoLines(gridSize);
 
-  // Trigger counter update
-  document.getElementById('task-input').dispatchEvent(new Event('input'));
-}
+    for (var i = 0; i < board.length; i++) {
+      (function(idx) {
+        var task = board[idx];
+        var isDone = !task.free && !task.empty && !!done[idx];
+        if (isDone) doneCount++;
 
-function startOver() {
-  ['custom_board','custom_done','custom_colors','custom_title','custom_task_count','custom_grid_size'].forEach(k => store.remove(k));
-  document.getElementById('board-screen').classList.remove('show');
-  document.getElementById('setup-screen').style.display = 'flex';
-  document.getElementById('task-input').value = '';
-  document.getElementById('board-title').value = '';
-  document.getElementById('task-counter').innerHTML = '<span>0</span> tasks → <span id="grid-preview">–</span>';
-  document.getElementById('error-msg').classList.remove('show');
-}
+        var cell = document.createElement('div');
+        var cls = 'cell';
+        if (isDone) cls += ' done';
+        if (task.free) cls += ' free';
+        if (task.empty) cls += ' empty';
+        cell.className = cls;
+        if (!task.free && !task.empty) cell.setAttribute('data-color', colorMap[idx] || '0');
 
+        if (task.free) {
+          cell.innerHTML = '<i class="ti ti-star free-icon" style="font-size:' + iconPx + 'px"></i><span class="free-label">FREE</span>';
+        } else if (task.empty) {
+          cell.innerHTML = '<div class="empty-plus">+</div><div class="empty-hint">add task</div>';
+          cell.addEventListener('click', (function(i2, ip, lp) {
+            return function() { activateEmpty(cell, i2, ip, lp); };
+          })(idx, iconPx, labelPx));
+        } else {
+          cell.innerHTML =
+            '<div class="check-badge"><i class="ti ti-check"></i></div>' +
+            '<i class="ti ' + task.icon + ' cell-icon" style="font-size:' + iconPx + 'px;margin-bottom:' + Math.max(4, iconPx/5) + 'px"></i>' +
+            '<span class="cell-label" style="font-size:' + labelPx + 'px">' + task.label + '</span>';
+          cell.addEventListener('click', (function(i2) {
+            return function() {
+              var wasDone = !!done[i2];
+              done[i2] = !done[i2];
+              saveState();
+              if (!wasDone) showCelebration(board[i2].label);
+              render();
+            };
+          })(idx));
+        }
+        grid.appendChild(cell);
+      })(i);
+    }
 
-// Resume saved board if this person has been here before
-if (store.get('custom_initialized')) {
-  try {
-    board     = JSON.parse(store.get('custom_board')   || 'null') || [];
-    done      = JSON.parse(store.get('custom_done')    || '{}');
-    colorMap  = JSON.parse(store.get('custom_colors')  || '{}');
-    taskCount = parseInt(store.get('custom_task_count') || '0');
-    gridSize  = parseInt(store.get('custom_grid_size')  || '5');
-    if (board.length) showBoard();
-  } catch(e) { store.clear(); }
-}
+    var total = taskCount;
+    document.getElementById('done-num').textContent = doneCount;
+    document.getElementById('left-num').textContent = Math.max(0, total - doneCount);
+    document.getElementById('prog-fill').style.width = total > 0 ? Math.round(doneCount / total * 100) + '%' : '0%';
+    document.getElementById('prog-text').textContent = doneCount + ' / ' + total;
+
+    var hasBingo = bingoLines.some(function(line) {
+      return line.every(function(i) { return board[i] && (board[i].free || done[i]); });
+    });
+    document.getElementById('banner').classList.toggle('show', hasBingo);
+
+    var sections = document.querySelectorAll('.bingo-banner, .progress-section, .footer');
+    for (var s = 0; s < sections.length; s++) sections[s].style.maxWidth = mw;
+  }
+
+  // ── Empty cell edit ──
+  function activateEmpty(cell, idx, iconPx, labelPx) {
+    if (cell.classList.contains('editing')) return;
+    cell.className = 'cell editing';
+    cell.innerHTML = '<textarea class="cell-inline-input" placeholder="Type task..." rows="3" maxlength="60"></textarea>';
+    var ta = cell.querySelector('textarea');
+    ta.focus();
+
+    function commit() {
+      var val = ta.value.trim();
+      if (val) {
+        var usedIcons = board.filter(function(t) { return t.icon; }).map(function(t) { return t.icon; });
+        var avail = ICONS.filter(function(ic) { return usedIcons.indexOf(ic) === -1; });
+        var icon = avail.length ? avail[Math.floor(Math.random() * avail.length)] : ICONS[Math.floor(Math.random() * ICONS.length)];
+        board[idx] = { label: val, icon: icon };
+        colorMap[idx] = COLORS[Math.floor(Math.random() * COLORS.length)];
+        taskCount++;
+        saveState();
+        render();
+      } else {
+        cell.className = 'cell empty';
+        cell.innerHTML = '<div class="empty-plus">+</div><div class="empty-hint">add task</div>';
+        cell.addEventListener('click', function() { activateEmpty(cell, idx, iconPx, labelPx); });
+      }
+    }
+
+    ta.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); commit(); }
+      if (e.key === 'Escape') { ta.value = ''; commit(); }
+    });
+    ta.addEventListener('blur', commit);
+  }
+
+  // ── Spin pick ──
+  document.getElementById('pick-btn').addEventListener('click', function() {
+    var undone = [];
+    for (var i = 0; i < board.length; i++) {
+      if (!board[i].free && !board[i].empty && !done[i]) undone.push(i);
+    }
+    if (!undone.length) return;
+
+    var btn = document.getElementById('pick-btn');
+    btn.disabled = true;
+    var cells = document.getElementById('grid').children;
+    var current = -1, ticks = 0, totalTicks = 30;
+    var finalIndex = undone[Math.floor(Math.random() * undone.length)];
+
+    function step() {
+      if (current >= 0) {
+        cells[current].classList.remove('spinning', 'picked');
+      }
+      if (ticks >= totalTicks) {
+        cells[finalIndex].classList.add('picked');
+        cells[finalIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        btn.disabled = false;
+        showEncouragement(board[finalIndex].label);
+        return;
+      }
+      var next;
+      do { next = undone[Math.floor(Math.random() * undone.length)]; }
+      while (next === current && undone.length > 1);
+      current = next;
+      cells[current].classList.add('spinning');
+      var delay = 55 + Math.pow(ticks / totalTicks, 1.9) * 360;
+      ticks++;
+      setTimeout(step, delay);
+    }
+
+    for (var i = 0; i < cells.length; i++) cells[i].classList.remove('picked');
+    step();
+  });
+
+  // ── Reshuffle ──
+  document.getElementById('reshuffle-btn').addEventListener('click', function() {
+    var tasks = board.filter(function(t) { return !t.free && !t.empty; }).map(function(t) { return t.label; });
+    initBoard(tasks);
+    render();
+  });
+
+  // ── Edit list ──
+  document.getElementById('edit-btn').addEventListener('click', function() {
+    var tasks = board.filter(function(t) { return !t.free && !t.empty; }).map(function(t) { return t.label; });
+    document.getElementById('board-screen').classList.remove('show');
+    document.getElementById('setup-screen').style.display = 'flex';
+    document.getElementById('board-title').value = store.get('custom_title') || '';
+    document.getElementById('task-input').value = tasks.join('\n');
+    document.getElementById('task-input').dispatchEvent(new Event('input'));
+  });
+
+  // ── New list ──
+  document.getElementById('new-btn').addEventListener('click', function() {
+    store.clear();
+    document.getElementById('board-screen').classList.remove('show');
+    document.getElementById('setup-screen').style.display = 'flex';
+    document.getElementById('task-input').value = '';
+    document.getElementById('board-title').value = '';
+    document.getElementById('task-count-num').textContent = '0';
+    document.getElementById('grid-preview').textContent = '-';
+    document.getElementById('error-msg').classList.remove('show');
+  });
+
+  // ── Encouragement toast ──
+  function showEncouragement() {
+    var msg = ENCOURAGE[Math.floor(Math.random() * ENCOURAGE.length)];
+    var toast = document.getElementById('encourage-toast');
+    toast.textContent = msg;
+    toast.classList.add('show');
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function() { toast.classList.remove('show'); }, 3500);
+  }
+
+  // ── Celebration ──
+  function showCelebration(label) {
+    var msg = CELEBRATE[Math.floor(Math.random() * CELEBRATE.length)];
+    document.getElementById('celebration-emoji').textContent = msg.emoji;
+    document.getElementById('celebration-headline').textContent = msg.headline;
+    document.getElementById('celebration-task').textContent = '"' + label + '" — complete!';
+    document.getElementById('celebration-overlay').classList.add('show');
+    launchConfetti();
+  }
+
+  document.getElementById('celebration-close').addEventListener('click', function() {
+    document.getElementById('celebration-overlay').classList.remove('show');
+  });
+
+  function launchConfetti() {
+    var colors = ['#ff6eb4','#ffb347','#7ee8fa','#a78bfa','#7cef9c','#ffd700'];
+    for (var i = 0; i < 60; i++) {
+      (function() {
+        var piece = document.createElement('div');
+        piece.className = 'confetti-piece';
+        piece.style.left = Math.random() * 100 + 'vw';
+        piece.style.top = '-10px';
+        piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+        var sz = (6 + Math.random() * 8) + 'px';
+        piece.style.width = sz;
+        piece.style.height = sz;
+        piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+        piece.style.animationDuration = (1.5 + Math.random() * 2) + 's';
+        piece.style.animationDelay = (Math.random() * 0.5) + 's';
+        document.body.appendChild(piece);
+        setTimeout(function() { piece.remove(); }, 3500);
+      })();
+    }
+  }
+
+  // ── Resume or start fresh ──
+  if (store.get('custom_initialized') && loadState()) {
+    showBoard();
+  }
+
+})();
 </script>
 </body>
 </html>
