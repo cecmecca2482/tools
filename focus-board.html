@@ -680,10 +680,29 @@
 </div>
 
 <script>
+// Safe localStorage wrapper — handles browsers that block storage (e.g. Edge tracking prevention)
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch(e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch(e) {} },
+  remove(k) { try { store.remove(k); } catch(e) {} },
+  clear() { try { store.clear(); } catch(e) {} }
+};
+
 // If this file has never been opened before, wipe any stale state from a previous user.
-// Once someone builds a board, 'custom_initialized' is set and progress persists.
-if (!localStorage.getItem('custom_initialized')) {
-  ['custom_board','custom_done','custom_colors','custom_title','custom_task_count','custom_grid_size'].forEach(k => localStorage.removeItem(k));
+if (!store.get('custom_initialized')) {
+  ['custom_board','custom_done','custom_colors','custom_title','custom_task_count','custom_grid_size'].forEach(k => store.remove(k));
+}
+
+// Safety check — if initialized flag is set but board data is missing/invalid, reset
+if (store.get('custom_initialized')) {
+  try {
+    const testBoard = JSON.parse(store.get('custom_board') || 'null');
+    if (!testBoard || !testBoard.length) {
+      ['custom_board','custom_done','custom_colors','custom_title','custom_task_count','custom_grid_size','custom_initialized'].forEach(k => store.remove(k));
+    }
+  } catch(e) {
+    ['custom_board','custom_done','custom_colors','custom_title','custom_task_count','custom_grid_size','custom_initialized'].forEach(k => store.remove(k));
+  }
 }
 
 const ENCOURAGE_MESSAGES = [
@@ -891,19 +910,19 @@ function initBoard(tasks, title) {
 }
 
 function saveState() {
-  localStorage.setItem('custom_initialized',  'true');
-  localStorage.setItem('custom_board',      JSON.stringify(board));
-  localStorage.setItem('custom_done',       JSON.stringify(done));
-  localStorage.setItem('custom_colors',     JSON.stringify(colorMap));
-  localStorage.setItem('custom_title',      localStorage.getItem('custom_title') || '');
-  localStorage.setItem('custom_task_count', taskCount);
-  localStorage.setItem('custom_grid_size',  gridSize);
+  store.set('custom_initialized', 'true');
+  store.set('custom_board', JSON.stringify(board));
+  store.set('custom_done', JSON.stringify(done));
+  store.set('custom_colors', JSON.stringify(colorMap));
+  store.set('custom_title', store.get('custom_title') || '');
+  store.set('custom_task_count', taskCount);
+  store.set('custom_grid_size', gridSize);
 }
 
 function showBoard() {
   document.getElementById('setup-screen').style.display = 'none';
   document.getElementById('board-screen').classList.add('show');
-  const title = localStorage.getItem('custom_title') || '';
+  const title = store.get('custom_title') || '';
   const titleEl = document.getElementById('board-title-display');
   titleEl.innerHTML = title ? `<span>${title}</span>` : `My <span>Focus Board</span>`;
   render();
@@ -1048,8 +1067,8 @@ function spinPick() {
 
 function reshuffleBoard() {
   const tasks = board.filter(t => !t.free && !t.empty).map(t => t.label);
-  const title = localStorage.getItem('custom_title') || '';
-  localStorage.setItem('custom_title', title);
+  const title = store.get('custom_title') || '';
+  store.set('custom_title', title);
   initBoard(tasks, title);
   render();
 }
@@ -1057,7 +1076,7 @@ function reshuffleBoard() {
 // Go back to setup with current tasks pre-loaded for editing
 function editList() {
   const tasks = board.filter(t => !t.free && !t.empty).map(t => t.label);
-  const title = localStorage.getItem('custom_title') || '';
+  const title = store.get('custom_title') || '';
 
   document.getElementById('board-screen').classList.remove('show');
   document.getElementById('setup-screen').style.display = 'flex';
@@ -1069,7 +1088,7 @@ function editList() {
 }
 
 function startOver() {
-  ['custom_board','custom_done','custom_colors','custom_title','custom_task_count','custom_grid_size'].forEach(k => localStorage.removeItem(k));
+  ['custom_board','custom_done','custom_colors','custom_title','custom_task_count','custom_grid_size'].forEach(k => store.remove(k));
   document.getElementById('board-screen').classList.remove('show');
   document.getElementById('setup-screen').style.display = 'flex';
   document.getElementById('task-input').value = '';
@@ -1080,15 +1099,15 @@ function startOver() {
 
 
 // Resume saved board if this person has been here before
-if (localStorage.getItem('custom_initialized')) {
+if (store.get('custom_initialized')) {
   try {
-    board     = JSON.parse(localStorage.getItem('custom_board')   || 'null') || [];
-    done      = JSON.parse(localStorage.getItem('custom_done')    || '{}');
-    colorMap  = JSON.parse(localStorage.getItem('custom_colors')  || '{}');
-    taskCount = parseInt(localStorage.getItem('custom_task_count') || '0');
-    gridSize  = parseInt(localStorage.getItem('custom_grid_size')  || '5');
+    board     = JSON.parse(store.get('custom_board')   || 'null') || [];
+    done      = JSON.parse(store.get('custom_done')    || '{}');
+    colorMap  = JSON.parse(store.get('custom_colors')  || '{}');
+    taskCount = parseInt(store.get('custom_task_count') || '0');
+    gridSize  = parseInt(store.get('custom_grid_size')  || '5');
     if (board.length) showBoard();
-  } catch(e) { localStorage.clear(); }
+  } catch(e) { store.clear(); }
 }
 </script>
 </body>
